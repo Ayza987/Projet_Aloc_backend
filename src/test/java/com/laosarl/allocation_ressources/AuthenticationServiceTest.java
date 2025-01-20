@@ -59,10 +59,10 @@ class AuthenticationServiceTest {
         when(jwtService.generateToken(user)).thenReturn(expectedToken);
         when(userMapper.userToAuthResponse(user, expectedToken)).thenReturn(expectedResponse);
 
-        // When
+
         AuthenticationResponseDTO response = authenticationService.authenticate(request);
 
-        System.out.println("Authentication Response: " + response);
+       // System.out.println("Authentication Response: " + response);
 
         // Then
         assertNotNull(response);

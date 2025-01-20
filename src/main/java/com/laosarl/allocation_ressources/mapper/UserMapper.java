@@ -10,5 +10,4 @@ import org.mapstruct.Mapper;
 public interface UserMapper {
 User authRequestToUser(AuthenticationRequestDTO dto);
 AuthenticationResponseDTO userToAuthResponse(User user, String token);
-
 }

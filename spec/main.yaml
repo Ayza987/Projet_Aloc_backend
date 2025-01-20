@@ -37,7 +37,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDTO'
-
+#  /auth/signup:
+#    post:
+#      tags:
+#        - sign up
+#      summary: Signup a user
+#      description: Create an endpoint for signing up the users
+#      operationId: signup
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#'#/components/schemas/SignupRequestDTO'
+#        responses:
+#          '200':
+#            description: Success
+#
 
 
 
