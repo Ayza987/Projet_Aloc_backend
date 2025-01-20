@@ -37,23 +37,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDTO'
-#  /auth/signup:
-#    post:
-#      tags:
-#        - sign up
-#      summary: Signup a user
-#      description: Create an endpoint for signing up the users
-#      operationId: signup
-#      requestBody:
-#        required: true
-#        content:
-#          application/json:
-#            schema:
-#              $ref: '#'#/components/schemas/SignupRequestDTO'
-#        responses:
-#          '200':
-#            description: Success
-#
+  /auth/signup:
+    post:
+      tags:
+        - sign up
+      summary: Signup a user
+      description: Create an endpoint for signing up the users
+      operationId: signup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequestDTO'
+      responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/SignupResponseDTO'
+          '400':
+            description: Signup failed
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorDTO'
+
 
 
 
@@ -90,4 +100,34 @@ components:
         message:
           type: string
           example: "Invalid credentials"
+
+    SignupRequestDTO:
+      type: object
+      required:
+        - name
+        - surname
+        - email
+      properties:
+        name:
+          type: string
+          example: "name"
+        surname:
+          type: string
+          example: "surname"
+        email:
+          type: string
+          format: email
+          example: "user@entreprise.com"
+
+    SignupResponseDTO:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+          example: "User created successfully"
+
+
+
 
