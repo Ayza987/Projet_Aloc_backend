@@ -53,6 +53,7 @@ class AuthenticationServiceTest {
         expectedResponse.setToken(expectedToken);
         expectedResponse.setIsAdmin(false);
 
+        // When
         when(userRepository.findByEmail("test@test.com")).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("password", "encoded_password")).thenReturn(true);
         when(jwtService.generateToken(user)).thenReturn(expectedToken);
