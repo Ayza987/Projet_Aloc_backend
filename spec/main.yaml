@@ -1,0 +1,77 @@
+openapi: "3.0.3"
+info:
+  title: Allocation API
+  description: "Backend application for resources allocation system"
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+tags:
+  - name: Authentication
+    description: Authentication
+paths:
+  /auth/login:
+    post:
+      tags:
+        - authentication
+      summary: Authenticate a user
+      description: Create an endpoint for authentication of users
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequestDTO'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/AuthenticationResponseDTO'
+        404:
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+
+
+
+
+components:
+  schemas:
+    AuthenticationRequestDTO:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@entreprise.com"
+        password:
+          type: string
+          format: password
+
+    AuthenticationResponseDTO:
+      type: object
+      properties:
+        token:
+          type: string
+        isAdmin:
+          type: boolean
+          example: true
+
+    ErrorDTO:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+          example: "Invalid credentials"
+
