@@ -57,12 +57,18 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/SignupResponseDTO'
-          '400':
-            description: Signup failed
+          '403':
+            description: Forbidden access
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/ErrorDTO'
+                  $ref: '#/components/schemas/ForbiddenAccessDTO'
+          '400':
+            description: Bad Request
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/BadRequestDTO'
 
 
 
@@ -127,6 +133,24 @@ components:
         message:
           type: string
           example: "User created successfully"
+
+    ForbiddenAccessDTO:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+          example: "User has not access"
+
+    BadRequestDTO:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+          example: "Invalid data"
 
 
 
