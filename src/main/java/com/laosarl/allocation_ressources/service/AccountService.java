@@ -44,7 +44,7 @@ public class AccountService {
         return userMapper.toSignUpResponse("200", "User created successfully");
     }
 
-    private String generateSecurePassword() {
+    public String generateSecurePassword() {
         StringBuilder password = new StringBuilder(8);
         password.append(CHARS.substring(0, 26).charAt(RANDOM.nextInt(26)));
         password.append(CHARS.substring(52).charAt(RANDOM.nextInt(10)));
@@ -64,7 +64,7 @@ public class AccountService {
         return new String(passwordArray);
     }
 
-    private void sendAccountCreationEmail(String email, String password) {
+    public void sendAccountCreationEmail(String email, String password) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject("Création de votre compte");

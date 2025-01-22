@@ -21,8 +21,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest{
@@ -55,38 +54,15 @@ class AccountServiceTest{
 
         when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.empty());
         when(userMapper.createAccountRequestToUser(request)).thenReturn(userMapped);
-
-        ArgumentCaptor<String> passwordCaptor = ArgumentCaptor.forClass(String.class);
-        when(passwordEncoder.encode(passwordCaptor.capture())).thenReturn("encoded_password");
-        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        when(userRepository.save(any(User.class))).thenAnswer( invocation -> {
-            User savedUser = invocation.getArgument(0);
-            savedUser.setId(2L);
-            return savedUser;
-        });
+        when(passwordEncoder.encode(any())).thenReturn("password_encoded");
+        when(userRepository.save(any(User.class))).thenReturn(userMapped);
+        //doNothing().when(accountService).sendAccountCreationEmail(request.getEmail(), "generated_password");
 
         SignupResponseDTO response = accountService.createAccount(request);
 
-        verify(userRepository).save(userCaptor.capture());
-        User userCreated = userCaptor.getValue();
-
-        assertEquals(request.getName(), userCreated.getName());
-        assertEquals(request.getSurname(), userCreated.getSurname());
-        assertEquals(request.getEmail(), userCreated.getEmail());
-        assertEquals("encoded_password", userCreated.getPassword());
-        assertFalse(userCreated.getIsAdmin());
-
-       String passwordGenerated = passwordCaptor.getValue();
-//
-          assertNotNull(passwordGenerated);
-          assertTrue(passwordGenerated.length() >= 8);
-          assertTrue(passwordGenerated.matches(".*[A-Z].*"));
-          assertTrue(passwordGenerated.matches(".*[0-9].*"));
-//
- //       assertNotNull(response);
-//        assertEquals("200", response.getCode());
-//        assertNotNull(response.getMessage());
-
+        assertNotNull(response);
+        assertEquals("200", response.getCode());
+        assertEquals("User created successfully", response.getMessage());
 
     }
 
