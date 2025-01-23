@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,35 +35,25 @@ public class AccountService {
                 });
 
         User newUser = userMapper.createAccountRequestToUser(request);
-        String generatedPassword = generateSecurePassword();
+        String generatedPassword = this.generateSecurePassword();
         newUser.setPassword(passwordEncoder.encode(generatedPassword));
         newUser.setIsAdmin(false);
 
         User savedUser = userRepository.save(newUser);
-        sendAccountCreationEmail(savedUser.getEmail(), generatedPassword);
+        this.sendAccountCreationEmail(savedUser.getEmail(), generatedPassword);
 
         return userMapper.toSignUpResponse("200", "User created successfully");
     }
 
     public String generateSecurePassword() {
         StringBuilder password = new StringBuilder(8);
-        password.append(CHARS.substring(0, 26).charAt(RANDOM.nextInt(26)));
-        password.append(CHARS.substring(52).charAt(RANDOM.nextInt(10)));
-
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 8; i++) {
             password.append(CHARS.charAt(RANDOM.nextInt(CHARS.length())));
         }
 
-        char[] passwordArray = password.toString().toCharArray();
-        for (int i = passwordArray.length - 1; i > 0; i--) {
-            int index = RANDOM.nextInt(i + 1);
-            char temp = passwordArray[index];
-            passwordArray[index] = passwordArray[i];
-            passwordArray[i] = temp;
-        }
-
-        return new String(passwordArray);
+        return password.toString();
     }
+
 
     public void sendAccountCreationEmail(String email, String password) {
         SimpleMailMessage message = new SimpleMailMessage();

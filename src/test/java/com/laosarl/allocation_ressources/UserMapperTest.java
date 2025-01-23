@@ -16,13 +16,10 @@ class UserMapperTest {
 
     @Test
     void authRequestToUser_ShouldMapFieldsCorrectly() {
-        // Given
         AuthenticationRequestDTO requestDTO = new AuthenticationRequestDTO("test@test.com", "password");
 
-        // When
         User user = userMapper.authRequestToUser(requestDTO);
 
-        // Then
         assertNotNull(user);
         assertEquals(requestDTO.getEmail(), user.getEmail());
         assertEquals(requestDTO.getPassword(), user.getPassword());
@@ -30,17 +27,14 @@ class UserMapperTest {
 
     @Test
     void userToAuthResponse_ShouldMapFieldsCorrectly() {
-        // Given
         User user = User.builder()
                 .email("test@test.com")
                 .isAdmin(true)
                 .build();
         String token = "jwt_token";
 
-        // When
         AuthenticationResponseDTO responseDTO = userMapper.userToAuthResponse(user, token);
 
-        // Then
         assertNotNull(responseDTO);
         assertEquals(token, responseDTO.getToken());
         assertEquals(user.getIsAdmin(), responseDTO.getIsAdmin());
