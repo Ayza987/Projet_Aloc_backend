@@ -1,47 +1,19 @@
 openapi: "3.0.3"
 info:
-  title: Allocation API
+  title: "Allocation API"
   description: "Backend application for resources allocation system"
-  version: 1.0.0
+  version: "1.0.0"
 servers:
-  - url: http://localhost:8080
-    description: Local server
+  - url: "http://localhost:8080"
+    description: "Local server"
 
-tags:
-  - name: Authentication
-    description: Authentication
+
 paths:
-  /auth/login:
-    post:
-      tags:
-        - authentication
-      summary: Authenticate a user
-      description: Create an endpoint for authentication of users
-      operationId: login
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AuthenticationRequestDTO'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/AuthenticationResponseDTO'
-        404:
-          description: Authentication failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDTO'
   /auth/signup:
     post:
       tags:
-        - sign up
-      summary: Signup a user
+        - "User"
+      summary: "Create an account"
       description: Create an endpoint for signing up the users
       operationId: signup
       requestBody:
@@ -142,7 +114,6 @@ components:
         message:
           type: string
           example: "User has not access"
-
     BadRequestDTO:
       type: object
       properties:

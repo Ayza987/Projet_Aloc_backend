@@ -1,7 +1,7 @@
 package com.laosarl.allocation_ressources;
 
 import com.laosarl.allocation_ressources.domain.User;
-import com.laosarl.allocation_ressources.mapper.UserMapper;
+import com.laosarl.allocation_ressources.service.mapper.UserMapper;
 import com.laosarl.allocation_ressources.model.AuthenticationRequestDTO;
 import com.laosarl.allocation_ressources.model.AuthenticationResponseDTO;
 import org.junit.jupiter.api.Test;

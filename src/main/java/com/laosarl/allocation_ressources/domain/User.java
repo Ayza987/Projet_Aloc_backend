@@ -21,6 +21,7 @@ public class User {
     private String surname;
     private String email;
     private String password;
-    private Boolean isAdmin;
+    @Builder.Default
+    private Boolean isAdmin = false;
 }
 
