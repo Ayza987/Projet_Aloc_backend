@@ -14,7 +14,7 @@ paths:
       tags:
         - "User"
       summary: "Create an account"
-      description: Create an endpoint for signing up the users
+      description: "Create an endpoint for signing up the users"
       operationId: signup
       requestBody:
         required: true
@@ -23,24 +23,51 @@ paths:
             schema:
               $ref: '#/components/schemas/SignupRequestDTO'
       responses:
-          '200':
-            description: Success
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/SignupResponseDTO'
-          '403':
-            description: Forbidden access
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ForbiddenAccessDTO'
-          '400':
-            description: Bad Request
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/BadRequestDTO'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignupResponseDTO'
+        '403':
+          description: Forbidden access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenAccessDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestDTO'
+  /users/{id}:
+    patch:
+      description: "Create an endpoint for updating a user"
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "The id of the user to update"
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequestDTO'
+      responses:
+        '200':
+          description: "User updated successfully"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+
 
 
 
@@ -122,6 +149,20 @@ components:
         message:
           type: string
           example: "Invalid data"
+
+
+    UpdateUserRequestDTO:
+          type: object
+          properties:
+            email:
+              type: string
+            name:
+              type: string
+            surname:
+              type: string
+
+
+
 
 
 

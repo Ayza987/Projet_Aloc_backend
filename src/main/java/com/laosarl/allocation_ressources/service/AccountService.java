@@ -2,6 +2,7 @@ package com.laosarl.allocation_ressources.service;
 
 import com.laosarl.allocation_ressources.domain.User;
 import com.laosarl.allocation_ressources.model.SignupRequestDTO;
+import com.laosarl.allocation_ressources.model.UpdateUserRequestDTO;
 import com.laosarl.allocation_ressources.repository.UserRepository;
 import com.laosarl.allocation_ressources.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +40,21 @@ public class AccountService {
         return password.toString();
     }
 
+    public void updateAccount(Long id, UpdateUserRequestDTO updateRequest) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (updateRequest.getEmail() != null) {
+            user.setEmail(updateRequest.getEmail());
+        }
+        if (updateRequest.getName() != null) {
+            user.setName(updateRequest.getName());
+        }
+        if (updateRequest.getSurname() != null) {
+            user.setSurname(updateRequest.getSurname());
+        }
+
+        userRepository.save(user);
+    }
 
 }

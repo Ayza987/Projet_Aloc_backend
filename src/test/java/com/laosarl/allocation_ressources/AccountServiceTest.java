@@ -2,6 +2,7 @@ package com.laosarl.allocation_ressources;
 
 import com.laosarl.allocation_ressources.domain.User;
 import com.laosarl.allocation_ressources.model.SignupRequestDTO;
+import com.laosarl.allocation_ressources.model.UpdateUserRequestDTO;
 import com.laosarl.allocation_ressources.repository.UserRepository;
 import com.laosarl.allocation_ressources.service.AccountService;
 import com.laosarl.allocation_ressources.service.mapper.UserMapper;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,6 +56,45 @@ class AccountServiceTest {
         //When//Then
         assertThrows(RuntimeException.class, () -> objectUnderTest.createAccount(signupRequestDTO));
         verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    void updateAccount_shouldUpdateUserSuccessfully() {
+        // Given
+        Long userId = 1L;
+        User existingUser = new User();
+        existingUser.setId(userId);
+        existingUser.setEmail("old@email.com");
+        existingUser.setName("Old Name");
+
+        UpdateUserRequestDTO updateRequest = new UpdateUserRequestDTO();
+        updateRequest.setEmail("new@email.com");
+        updateRequest.setName("New Name");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
+        when(userRepository.save(existingUser)).thenReturn(existingUser);
+
+        // When
+        objectUnderTest.updateAccount(userId, updateRequest);
+
+        // Then
+        verify(userRepository).save(existingUser);
+        assertEquals("new@email.com", existingUser.getEmail());
+        assertEquals("New Name", existingUser.getName());
+    }
+
+    @Test
+    void updateAccount_shouldThrowExceptionWhenUserNotFound() {
+        // Arrange
+        Long userId = 1L;
+        UpdateUserRequestDTO updateRequest = new UpdateUserRequestDTO();
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> {
+            objectUnderTest.updateAccount(userId, updateRequest);
+        });
     }
 
     @Test
