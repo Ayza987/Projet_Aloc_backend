@@ -101,6 +101,11 @@ class AccountServiceTest {
     }
 
     @Test
+    void getAllUsers_ShouldThrowException_WhenUsersAreNotFound(){
+
+    }
+
+    @Test
     void updateAccount_shouldThrowExceptionWhenUserNotFound() {
         // Arrange
         Long userId = 1L;
