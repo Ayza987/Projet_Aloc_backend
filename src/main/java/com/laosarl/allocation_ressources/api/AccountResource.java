@@ -1,6 +1,5 @@
 package com.laosarl.allocation_ressources.api;
 
-
 import com.laosarl.allocation_ressources.model.SignupRequestDTO;
 import com.laosarl.allocation_ressources.model.SignupResponseDTO;
 import com.laosarl.allocation_ressources.model.UpdateUserRequestDTO;
@@ -19,7 +18,7 @@ public class AccountResource {
     private final AccountService accountService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponseDTO> signup(@RequestBody SignupRequestDTO request) {
+    public ResponseEntity<Void> signup(@RequestBody SignupRequestDTO request) {
         accountService.createAccount(request);
         return ResponseEntity.ok().build();
     }

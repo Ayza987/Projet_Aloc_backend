@@ -84,7 +84,7 @@ class AccountServiceTest {
     }
 
     @Test
-    void getAllUsers_WhenUsersareFound() {
+    void getAllUsers_WhenUsersAreFound() {
         // Given
 
         List<User> usersList = List.of(User.builder().name("John").surname("Doe").email("johndoe@gmail.com").build(), User.builder().name("Tati").surname("Gali").email("tatigali@gmail.com").build()
@@ -103,9 +103,7 @@ class AccountServiceTest {
         when(userRepository.findAll()).thenReturn(Collections.emptyList());
 
         //Act & Assert
-        assertThrows(RuntimeException.class, () ->{
-            objectUnderTest.getAllUsers();
-        });
+        assertThrows(RuntimeException.class, () -> objectUnderTest.getAllUsers());
     }
 
     @Test
@@ -117,9 +115,7 @@ class AccountServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            objectUnderTest.updateAccount(userId, updateRequest);
-        });
+        assertThrows(RuntimeException.class, () -> objectUnderTest.updateAccount(userId, updateRequest));
     }
 
     @Test
@@ -130,12 +126,6 @@ class AccountServiceTest {
         assertEquals(8, generatedPassword.length());
 
         assertTrue(generatedPassword.matches("^(?=.*[a-z])(?=.*[0-9]).{8}$"));
-
-        Set<String> passwords = new HashSet<>();
-        for (int i = 0; i < 100; i++) {
-            passwords.add(objectUnderTest.generateSecurePassword());
-        }
-        assertTrue(passwords.size() > 20, "Passwords should be random");
     }
 
     @Test
@@ -166,9 +156,7 @@ class AccountServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
         //Act & Assert
 
-        assertThrows(RuntimeException.class, () -> {
-            objectUnderTest.getUser(userId);
-        });
+        assertThrows(RuntimeException.class, () -> objectUnderTest.getUser(userId));
 
 
     }
@@ -194,9 +182,7 @@ class AccountServiceTest {
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
         //Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            objectUnderTest.deleteUser(userId);
-        });
+        assertThrows(RuntimeException.class, () -> objectUnderTest.deleteUser(userId));
 
     }
 

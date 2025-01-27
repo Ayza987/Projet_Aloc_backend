@@ -58,7 +58,6 @@ public class AccountService {
         userRepository.save(user);
     }
 
-
     public List<UserDTO> getAllUsers() {
 
         List<User> users = userRepository.findAll();
