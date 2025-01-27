@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -63,7 +64,7 @@ public class AccountService {
         List<User> users = userRepository.findAll();
 
         if (users.isEmpty()) {
-            throw new RuntimeException("No users found");
+            return Collections.emptyList();
         }
         return users.stream().map(userMapper::toUserDTO).toList();
     }

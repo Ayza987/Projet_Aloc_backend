@@ -98,12 +98,14 @@ class AccountServiceTest {
     }
 
     @Test
-    void getAllUsers_ShouldThrowException_WhenUsersAreNotFound(){
-        //Arrange
+    void getAllUsers_ShouldReturnEmptyList_WhenUsersAreNotFound(){
+        //Given
         when(userRepository.findAll()).thenReturn(Collections.emptyList());
-
-        //Act & Assert
-        assertThrows(RuntimeException.class, () -> objectUnderTest.getAllUsers());
+        //When
+        List<UserDTO> usersfound = objectUnderTest.getAllUsers();
+        //Then
+        assertNotNull(usersfound);
+        assertThat(usersfound).isEmpty();
     }
 
     @Test
