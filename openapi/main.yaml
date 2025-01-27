@@ -41,7 +41,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequestDTO'
-  /users/{id}:
+  /user/{id}:
     patch:
       description: "Create an endpoint for updating a user"
       operationId: updateUser
@@ -67,6 +67,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDTO'
+  /users:
+    get:
+      description: "Get all users"
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+
 
 
 
@@ -160,6 +179,19 @@ components:
               type: string
             surname:
               type: string
+
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: long
+        name:
+          type: string
+        surname:
+          type: string
+        email:
+          type: string
+
 
 
 

@@ -15,7 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
@@ -81,6 +83,30 @@ class AccountServiceTest {
         verify(userRepository).save(existingUser);
         assertEquals("new@email.com", existingUser.getEmail());
         assertEquals("New Name", existingUser.getName());
+    }
+
+    @Test
+    void getAllUsers_WhenUsersareFound(){
+        // Given
+
+        List<User> usersList = List.of(
+                User.builder()
+                        .name("John")
+                        .surname("Doe")
+                        .email("johndoe@gmail.com")
+                        .build(),
+                User.builder()
+                        .name("Tati")
+                        .surname("Gali")
+                        .email("tatigali@gmail.com")
+                        .build()
+
+        );
+        when(userRepository.findAll()).thenReturn(usersList);
+        // When
+        objectUnderTest.getAllUsers();
+        // Then
+       assertThat(usersList).hasSize(2);
     }
 
     @Test
