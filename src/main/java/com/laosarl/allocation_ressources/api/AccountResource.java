@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -26,18 +25,21 @@ public class AccountResource {
     }
 
     @PatchMapping("/user/{id}")
-    public ResponseEntity<Void> updateUser(
-            @PathVariable Long id,
-            @RequestBody UpdateUserRequestDTO updateUserRequestDTO
-    ) {
-       accountService.updateAccount(id, updateUserRequestDTO);
-       return ResponseEntity.ok().build();
+    public ResponseEntity<Void> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
+        accountService.updateAccount(id, updateUserRequestDTO);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<UserDTO> >getAllUsers(){
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> user = accountService.getAllUsers();
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+        UserDTO userDTO = accountService.getUser(id);
+        return ResponseEntity.ok(userDTO);
     }
 }
 

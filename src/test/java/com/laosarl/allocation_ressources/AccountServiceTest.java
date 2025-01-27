@@ -3,6 +3,7 @@ package com.laosarl.allocation_ressources;
 import com.laosarl.allocation_ressources.domain.User;
 import com.laosarl.allocation_ressources.model.SignupRequestDTO;
 import com.laosarl.allocation_ressources.model.UpdateUserRequestDTO;
+import com.laosarl.allocation_ressources.model.UserDTO;
 import com.laosarl.allocation_ressources.repository.UserRepository;
 import com.laosarl.allocation_ressources.service.AccountService;
 import com.laosarl.allocation_ressources.service.mapper.UserMapper;
@@ -13,9 +14,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -86,27 +87,17 @@ class AccountServiceTest {
     }
 
     @Test
-    void getAllUsers_WhenUsersareFound(){
+    void getAllUsers_WhenUsersareFound() {
         // Given
 
-        List<User> usersList = List.of(
-                User.builder()
-                        .name("John")
-                        .surname("Doe")
-                        .email("johndoe@gmail.com")
-                        .build(),
-                User.builder()
-                        .name("Tati")
-                        .surname("Gali")
-                        .email("tatigali@gmail.com")
-                        .build()
+        List<User> usersList = List.of(User.builder().name("John").surname("Doe").email("johndoe@gmail.com").build(), User.builder().name("Tati").surname("Gali").email("tatigali@gmail.com").build()
 
         );
         when(userRepository.findAll()).thenReturn(usersList);
         // When
         objectUnderTest.getAllUsers();
         // Then
-       assertThat(usersList).hasSize(2);
+        assertThat(usersList).hasSize(2);
     }
 
     @Test
@@ -137,6 +128,41 @@ class AccountServiceTest {
             passwords.add(objectUnderTest.generateSecurePassword());
         }
         assertTrue(passwords.size() > 20, "Passwords should be random");
+    }
+
+    @Test
+    void getUser_WhenIdisFound() {
+        //Given
+        Long userId = 3L;
+        User existingUser = User.builder().email("johndoe@gmail.com").name("John").surname("doe").build();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(3L);
+        userDTO.setName("John");
+        userDTO.setSurname("Doe");
+        userDTO.setEmail("johndoe@gmail.com");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
+        when(userMapper.toUserDTO(existingUser)).thenReturn(userDTO);
+
+        //When
+        UserDTO expectedDTO = objectUnderTest.getUser(userId);
+        //Then
+        assertThat(userDTO).isEqualTo(expectedDTO);
+    }
+
+    @Test
+    void getUser_ShouldThrowException_WhenUserNotFound() {
+        //Arrange
+        Long userId = 1L;
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+        //Act & Assert
+
+        assertThrows(RuntimeException.class, () -> {
+            objectUnderTest.getUser(userId);
+        });
+
+
     }
 
 }

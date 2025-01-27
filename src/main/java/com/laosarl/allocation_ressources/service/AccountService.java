@@ -68,4 +68,11 @@ public class AccountService {
         }
         return users.stream().map(userMapper::toUserDTO).toList();
     }
+
+    public UserDTO getUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("No user found"));
+        return userMapper.toUserDTO(user);
+    }
+
+
 }

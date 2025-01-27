@@ -78,7 +78,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserDTO'
-
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+  /users/{id}:
+    get:
+      description: "Get a user by its id"
+      operationId: getUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "The id of the user to get"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
         '404':
           description: Not found
           content:
@@ -171,14 +194,14 @@ components:
 
 
     UpdateUserRequestDTO:
-          type: object
-          properties:
-            email:
-              type: string
-            name:
-              type: string
-            surname:
-              type: string
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        surname:
+          type: string
 
     UserDTO:
       type: object
@@ -191,6 +214,8 @@ components:
           type: string
         email:
           type: string
+
+
 
 
 
