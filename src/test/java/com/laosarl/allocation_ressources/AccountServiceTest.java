@@ -13,10 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -102,7 +99,13 @@ class AccountServiceTest {
 
     @Test
     void getAllUsers_ShouldThrowException_WhenUsersAreNotFound(){
+        //Arrange
+        when(userRepository.findAll()).thenReturn(Collections.emptyList());
 
+        //Act & Assert
+        assertThrows(RuntimeException.class, () ->{
+            objectUnderTest.getAllUsers();
+        });
     }
 
     @Test
