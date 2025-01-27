@@ -75,4 +75,9 @@ public class AccountService {
     }
 
 
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("No user found"));
+
+        userRepository.delete(user);
+    }
 }

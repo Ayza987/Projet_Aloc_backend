@@ -41,5 +41,11 @@ public class AccountResource {
         UserDTO userDTO = accountService.getUser(id);
         return ResponseEntity.ok(userDTO);
     }
+
+    @DeleteMapping("/users/delete/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
+        accountService.deleteUser(id);
+        return ResponseEntity.ok().build();
+    }
 }
 

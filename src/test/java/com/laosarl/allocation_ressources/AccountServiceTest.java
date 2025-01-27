@@ -131,7 +131,7 @@ class AccountServiceTest {
     }
 
     @Test
-    void getUser_WhenIdisFound() {
+    void getUser_WhenIdIsFound() {
         //Given
         Long userId = 3L;
         User existingUser = User.builder().email("johndoe@gmail.com").name("John").surname("doe").build();
@@ -162,6 +162,33 @@ class AccountServiceTest {
             objectUnderTest.getUser(userId);
         });
 
+
+    }
+
+    @Test
+    void deleteUser_WhenIdIsFound() {
+        //Given
+        Long userId = 1L;
+        User existingUser = User.builder().email("johndoe@gmail.com").name("John").surname("Doe").build();
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
+
+        //When
+        objectUnderTest.deleteUser(userId);
+        //Then
+        verify(userRepository).delete(existingUser);
+    }
+
+    @Test
+    void deleteUser_ShouldThrowException_WhenUserIsNotFound() {
+        //Arrange
+        Long userId = 1L;
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+        //Act & Assert
+        assertThrows(RuntimeException.class, () -> {
+            objectUnderTest.deleteUser(userId);
+        });
 
     }
 
