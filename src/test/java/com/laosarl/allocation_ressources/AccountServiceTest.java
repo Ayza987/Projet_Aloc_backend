@@ -13,7 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -98,7 +100,7 @@ class AccountServiceTest {
     }
 
     @Test
-    void getAllUsers_ShouldReturnEmptyList_WhenUsersAreNotFound(){
+    void getAllUsers_ShouldReturnEmptyList_WhenUsersAreNotFound() {
         //Given
         when(userRepository.findAll()).thenReturn(Collections.emptyList());
         //When

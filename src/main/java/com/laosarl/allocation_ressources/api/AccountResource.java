@@ -1,7 +1,6 @@
 package com.laosarl.allocation_ressources.api;
 
 import com.laosarl.allocation_ressources.model.SignupRequestDTO;
-import com.laosarl.allocation_ressources.model.SignupResponseDTO;
 import com.laosarl.allocation_ressources.model.UpdateUserRequestDTO;
 import com.laosarl.allocation_ressources.model.UserDTO;
 import com.laosarl.allocation_ressources.service.AccountService;
@@ -42,7 +41,7 @@ public class AccountResource {
     }
 
     @DeleteMapping("/users/delete/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         accountService.deleteUser(id);
         return ResponseEntity.ok().build();
     }
