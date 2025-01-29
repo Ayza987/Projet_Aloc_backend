@@ -35,7 +35,7 @@ public class DemandServiceTest {
         CreateDemandRequestDTO request = new CreateDemandRequestDTO().resourceName("stylo").quantity("1").description("stylo à bille").justification("Pour écrire").urgency("urgent").dueDate("2024/05/05");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDate formattedDueDate = LocalDate.parse(request.getDueDate(), formatter);
-        LocalDateTime formattedDateTime = LocalDateTime.now();
+
 
         //When
         objectUnderTest.createDemand(request);
