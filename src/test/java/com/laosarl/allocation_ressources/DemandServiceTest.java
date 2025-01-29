@@ -110,8 +110,10 @@ public class DemandServiceTest {
         Long userId = 1L;
         Demand existingDemand = Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity("azertyu").urgency("urgent").status("PENDING").build();
         when(demandRepository.findById(userId)).thenReturn(Optional.of(existingDemand));
+
         //When
         objectUnderTest.deleteDemand(userId);
+
         //Then
         verify(demandRepository).delete(existingDemand);
     }
