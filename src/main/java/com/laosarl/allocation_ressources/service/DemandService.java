@@ -3,6 +3,7 @@ package com.laosarl.allocation_ressources.service;
 import com.laosarl.allocation_ressources.domain.Demand;
 import com.laosarl.allocation_ressources.model.CreateDemandRequestDTO;
 import com.laosarl.allocation_ressources.model.DemandDTO;
+import com.laosarl.allocation_ressources.model.UpdateDemandDTO;
 import com.laosarl.allocation_ressources.repository.DemandRepository;
 import com.laosarl.allocation_ressources.service.mapper.DemandMapper;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +47,13 @@ public class DemandService {
             return Collections.emptyList();
         }
         return demands.stream().map(demandMapper::toDemandDTO).toList();
+    }
+
+    public void updateDemand(Long id, UpdateDemandDTO updateRequest) {
+        Demand demand = demandRepository.findById(id).orElseThrow(() -> new RuntimeException("User Not found"));
+
+        demandMapper.updateDemandFromDto(updateRequest, demand);
+
+        demandRepository.save(demand);
     }
 }

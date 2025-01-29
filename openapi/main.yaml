@@ -165,6 +165,32 @@ paths:
                   $ref: '#/components/schemas/DemandDTO'
           '404':
             description: Not found
+  /request/{id}:
+    patch:
+      tags:
+        - "Demand"
+      summary: "Update a demand"
+      description: "Create an endpoint to update a demand"
+      operationId: updateDemand
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "The id of the user to update"
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDemandDTO'
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Not Found
+
 
 
 
@@ -318,6 +344,33 @@ components:
           type: string
         date_time:
           type: string
+
+    UpdateDemandDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_name:
+          type: string
+        user_email:
+          type: string
+        resource_name:
+          type: string
+        description:
+          type: string
+        justification:
+          type: string
+        urgency:
+          type: string
+        due_date:
+          type: string
+        quantity:
+          type: string
+        status:
+          type: string
+        date_time:
+          type: string
+
 
 
 
