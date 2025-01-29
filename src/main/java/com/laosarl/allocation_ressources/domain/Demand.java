@@ -23,7 +23,7 @@ public class Demand {
     @Column(name = "resource_name")
     private String resourceName;
     @Column(name = "userName")
-    private String user_name;
+    private String userName;
     @Column(name = "user_email")
     private String userEmail;
     @Column(name = "description")

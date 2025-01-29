@@ -2,6 +2,7 @@ package com.laosarl.allocation_ressources;
 
 import com.laosarl.allocation_ressources.domain.Demand;
 import com.laosarl.allocation_ressources.model.CreateDemandRequestDTO;
+import com.laosarl.allocation_ressources.model.DemandDTO;
 import com.laosarl.allocation_ressources.repository.DemandRepository;
 import com.laosarl.allocation_ressources.service.DemandService;
 import com.laosarl.allocation_ressources.service.mapper.DemandMapper;
@@ -13,7 +14,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
@@ -35,11 +41,39 @@ public class DemandServiceTest {
         CreateDemandRequestDTO request = new CreateDemandRequestDTO().resourceName("stylo").quantity("1").description("stylo à bille").justification("Pour écrire").urgency("urgent").dueDate("2024/05/05");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDate formattedDueDate = LocalDate.parse(request.getDueDate(), formatter);
-
-
         //When
         objectUnderTest.createDemand(request);
         //Then
         verify(demandRepository).save(argThat(demand -> demand.getResourceName().equals(request.getResourceName()) && demand.getDescription().equals(request.getDescription()) && demand.getJustification().equals(request.getJustification()) && demand.getDueDate().equals(formattedDueDate)));
+    }
+
+    @Test
+    void createDemand_ShouldThrowException_WhenFormatIsInvalid(){
+        //Arrange
+        CreateDemandRequestDTO request = new CreateDemandRequestDTO().resourceName("stylo").quantity("1").description("stylo à bille").justification("Pour écrire").urgency("urgent").dueDate("2024-05-05");
+        //Act & Assert
+        assertThrows(RuntimeException.class, () -> objectUnderTest.createDemand(request));
+    }
+
+    @Test
+    void getAllDemands_ShouldReturnAListOfDemands(){
+        //Given
+        List<Demand> demandsList = List.of(Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity("azertyu").urgency("urgent").status("PENDING").build());
+        when(demandRepository.findAll()).thenReturn(demandsList);
+        //When
+        objectUnderTest.getAllDemands();
+        //Then
+        assertThat(demandsList).hasSize(1);
+    }
+
+    @Test
+    void getAllDemands_ShouldReturnEmptyList_IfNoDemandsAreFound(){
+        //Given
+        when(demandRepository.findAll()).thenReturn(Collections.emptyList());
+        //When
+        List<DemandDTO> response = objectUnderTest.getAllDemands();
+        //Then
+        assertNotNull(response);
+        assertThat(response).isEmpty();
     }
 }

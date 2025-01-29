@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,7 +25,14 @@ public class DemandService {
     public void createDemand(CreateDemandRequestDTO request) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
-        LocalDate dueDateFormatted = request.getDueDate() != null ? LocalDate.parse(request.getDueDate(), formatter) : null;
+        LocalDate dueDateFormatted = null;
+        if (request.getDueDate() != null && !request.getDueDate().isEmpty()) {
+            try {
+                dueDateFormatted = LocalDate.parse(request.getDueDate(), formatter);
+            } catch (DateTimeParseException e) {
+                throw new RuntimeException("Invalid Format Date");
+            }
+        }
         LocalDateTime currentDateTime = LocalDateTime.now();
 
         Demand demand = Demand.builder().resourceName(request.getResourceName()).quantity(request.getQuantity()).description(request.getDescription()).justification(request.getJustification()).urgency(request.getUrgency()).dueDate(dueDateFormatted).dateTime(currentDateTime).build();
