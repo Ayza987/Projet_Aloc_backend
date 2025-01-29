@@ -97,7 +97,7 @@ public class DemandServiceTest {
     void updateDemand_ShouldThrowException_WhenUserNotFound() {
         //Arrange
         Long userId = 1L;
-        UpdateDemandDTO request = new UpdateDemandDTO().status("APPROVED");
+        UpdateDemandDTO request = new UpdateDemandDTO();
         when(demandRepository.findById(userId)).thenReturn(Optional.empty());
 
         //Act & Assert

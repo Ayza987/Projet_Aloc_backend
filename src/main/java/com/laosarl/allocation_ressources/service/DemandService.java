@@ -50,10 +50,15 @@ public class DemandService {
     }
 
     public void updateDemand(Long id, UpdateDemandDTO updateRequest) {
-        Demand demand = demandRepository.findById(id).orElseThrow(() -> new RuntimeException("User Not found"));
+        Demand demand = demandRepository.findById(id).orElseThrow(() -> new RuntimeException("Demand Not found"));
 
         demandMapper.updateDemandFromDto(updateRequest, demand);
 
         demandRepository.save(demand);
+    }
+
+    public void deleteDemand(Long id) {
+        Demand demand = demandRepository.findById(id).orElseThrow(() -> new RuntimeException("Demand Not found"));
+        demandRepository.delete(demand);
     }
 }

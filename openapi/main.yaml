@@ -47,6 +47,8 @@ paths:
                 $ref: '#/components/schemas/BadRequestDTO'
   /user/{id}:
     patch:
+      tags:
+        - "User"
       description: "Create an endpoint for updating a user"
       operationId: updateUser
       parameters:
@@ -73,6 +75,8 @@ paths:
                 $ref: '#/components/schemas/ErrorDTO'
   /users:
     get:
+      tags:
+        - "User"
       description: "Get all users"
       operationId: getAllUsers
       responses:
@@ -90,6 +94,8 @@ paths:
                 $ref: '#/components/schemas/ErrorDTO'
   /users/{id}:
     get:
+      tags:
+        - "User"
       description: "Get a user by its id"
       operationId: getUser
       parameters:
@@ -114,6 +120,8 @@ paths:
                 $ref: '#/components/schemas/ErrorDTO'
   /users/delete/{id}:
       delete:
+        tags:
+          - "User"
         description: "Delete a user"
         operationId: deleteUser
         parameters:
@@ -190,6 +198,21 @@ paths:
           description: Success
         '404':
           description: Not Found
+  /requests/delete/{id}:
+    delete:
+      description: "Delete a demand"
+      operationId: deleteDemand
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "Demand deleted successfully"
+        '404':
+          description: "Not Found"
 
 
 

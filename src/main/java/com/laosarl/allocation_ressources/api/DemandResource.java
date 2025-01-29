@@ -34,4 +34,10 @@ public class DemandResource {
         demandService.updateDemand(id, demandDTO);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/requests/delete/{id}")
+    public ResponseEntity<Void> deleteDemand(@PathVariable Long id){
+        demandService.deleteDemand(id);
+        return ResponseEntity.ok().build();
+    }
 }
