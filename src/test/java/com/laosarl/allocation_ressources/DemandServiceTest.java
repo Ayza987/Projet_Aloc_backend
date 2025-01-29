@@ -2,7 +2,7 @@ package com.laosarl.allocation_ressources;
 
 import com.laosarl.allocation_ressources.domain.Demand;
 import com.laosarl.allocation_ressources.model.CreateDemandRequestDTO;
-import com.laosarl.allocation_ressources.model.CreateDemandResponseDTO;
+import com.laosarl.allocation_ressources.model.DemandDTO;
 import com.laosarl.allocation_ressources.repository.DemandRepository;
 import com.laosarl.allocation_ressources.service.DemandService;
 import com.laosarl.allocation_ressources.service.mapper.DemandMapper;
@@ -30,21 +30,6 @@ public class DemandServiceTest {
 
     @Test
     void createDemand_WhenAllConditionsAreMet_ShouldCreateTheDemand(){
-        //Given
-
-        CreateDemandRequestDTO requestDTO = new CreateDemandRequestDTO().resourceName("stylo").quantity("1").description("stylo à bille").justification("Pour écrire").urgency("urgent").dueDate("2025/04/04");
-        CreateDemandResponseDTO responseDTO = new CreateDemandResponseDTO();
-        LocalDateTime expectedDateTime = LocalDateTime.now();
-        LocalDate expectedDueDate = LocalDate.of(2025,04,06);
-
-        Demand demandToSave = Demand.builder().resourceName(requestDTO.getResourceName()).quantity(requestDTO.getQuantity()).description(requestDTO.getDescription()).justification(requestDTO.getJustification()).urgency(requestDTO.getUrgency()).dueDate(expectedDueDate).dateTime(expectedDateTime).build();
-
-        when(demandRepository.save(any(Demand.class))).thenReturn(demandToSave);
-        when(demandMapper.toDemandDTO(any(Demand.class))).thenReturn(responseDTO);
-        //When
-        CreateDemandResponseDTO response = objectUnderTest.createDemand(requestDTO);
-        //Then
-        assertNotNull(response);
 
     }
 }

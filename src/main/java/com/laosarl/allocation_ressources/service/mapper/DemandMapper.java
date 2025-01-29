@@ -1,10 +1,10 @@
 package com.laosarl.allocation_ressources.service.mapper;
 
-import com.laosarl.allocation_ressources.model.CreateDemandResponseDTO;
+import com.laosarl.allocation_ressources.model.DemandDTO;
 import com.laosarl.allocation_ressources.domain.Demand;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface DemandMapper {
-    CreateDemandResponseDTO toDemandDTO (Demand demand);
+    DemandDTO toDemandDTO (Demand demand);
 }

@@ -127,7 +127,7 @@ paths:
             description: "User deleted successfully"
           '404':
               description: "Not Found"
-  /request:
+  /createrequest:
     post:
       tags:
         - "Demand"
@@ -143,16 +143,29 @@ paths:
       responses:
         '200':
           description: "Request created successfully"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateDemandResponseDTO'
         '400':
           description: "Bad Request"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequestDTO'
+  /requests:
+      get:
+        tags:
+          - "Demand"
+        summary: "Get all demands"
+        description: "Create an endpoint to get all the demands"
+        operationId: getAllDemands
+        responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/DemandDTO'
+          '404':
+            description: Not found
+
 
 
 
@@ -280,12 +293,24 @@ components:
        due_date:
          type: string
 
-    CreateDemandResponseDTO:
+    DemandDTO:
       type: object
       properties:
         id:
           type: integer
+        user_name:
+          type: string
+        user_email:
+          type: string
         resource_name:
+          type: string
+        description:
+          type: string
+        justification:
+          type: string
+        urgency:
+          type: string
+        due_date:
           type: string
         quantity:
           type: string
