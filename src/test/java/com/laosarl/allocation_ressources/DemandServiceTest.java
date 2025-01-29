@@ -3,6 +3,7 @@ package com.laosarl.allocation_ressources;
 import com.laosarl.allocation_ressources.domain.Demand;
 import com.laosarl.allocation_ressources.model.CreateDemandRequestDTO;
 import com.laosarl.allocation_ressources.model.DemandDTO;
+import com.laosarl.allocation_ressources.model.UpdateDemandDTO;
 import com.laosarl.allocation_ressources.repository.DemandRepository;
 import com.laosarl.allocation_ressources.service.DemandService;
 import com.laosarl.allocation_ressources.service.mapper.DemandMapper;
@@ -13,14 +14,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -48,7 +49,7 @@ public class DemandServiceTest {
     }
 
     @Test
-    void createDemand_ShouldThrowException_WhenFormatIsInvalid(){
+    void createDemand_ShouldThrowException_WhenFormatIsInvalid() {
         //Arrange
         CreateDemandRequestDTO request = new CreateDemandRequestDTO().resourceName("stylo").quantity("1").description("stylo à bille").justification("Pour écrire").urgency("urgent").dueDate("2024-05-05");
         //Act & Assert
@@ -56,7 +57,7 @@ public class DemandServiceTest {
     }
 
     @Test
-    void getAllDemands_ShouldReturnAListOfDemands(){
+    void getAllDemands_ShouldReturnAListOfDemands() {
         //Given
         List<Demand> demandsList = List.of(Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity("azertyu").urgency("urgent").status("PENDING").build());
         when(demandRepository.findAll()).thenReturn(demandsList);
@@ -67,7 +68,7 @@ public class DemandServiceTest {
     }
 
     @Test
-    void getAllDemands_ShouldReturnEmptyList_IfNoDemandsAreFound(){
+    void getAllDemands_ShouldReturnEmptyList_IfNoDemandsAreFound() {
         //Given
         when(demandRepository.findAll()).thenReturn(Collections.emptyList());
         //When
@@ -75,5 +76,31 @@ public class DemandServiceTest {
         //Then
         assertNotNull(response);
         assertThat(response).isEmpty();
+    }
+
+    @Test
+    void updateDemand_ShouldUpdateDemandSuccessfully() {
+        //Given
+        Long userId = 1L;
+        UpdateDemandDTO request = new UpdateDemandDTO().status("APPROVED");
+        Demand existingDemand = Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity("azertyu").urgency("urgent").status("PENDING").build();
+
+        when(demandRepository.findById(userId)).thenReturn(Optional.of(existingDemand));
+        //When
+        objectUnderTest.updateDemand(userId, request);
+        //Then
+        verify(demandMapper).updateDemandFromDto(request, existingDemand);
+        verify(demandRepository).save(existingDemand);
+    }
+
+    @Test
+    void updateDemand_ShouldThrowException_WhenUserNotFound() {
+        //Arrange
+        Long userId = 1L;
+        UpdateDemandDTO request = new UpdateDemandDTO().status("APPROVED");
+
+        when(demandRepository.findById(userId)).thenReturn(Optional.empty());
+        //Act & Assert
+        assertThrows(RuntimeException.class, () -> objectUnderTest.updateDemand(userId, request));
     }
 }
