@@ -98,8 +98,8 @@ public class DemandServiceTest {
         //Arrange
         Long userId = 1L;
         UpdateDemandDTO request = new UpdateDemandDTO().status("APPROVED");
-
         when(demandRepository.findById(userId)).thenReturn(Optional.empty());
+
         //Act & Assert
         assertThrows(RuntimeException.class, () -> objectUnderTest.updateDemand(userId, request));
     }
