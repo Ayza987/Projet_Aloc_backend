@@ -12,6 +12,8 @@ tags:
     description: "Operations on users"
   - name: "Demand"
     description: "Operations on requests"
+  - name: "Resource"
+    description: "Operations on resources"
 paths:
   /auth/signup:
     post:
@@ -200,7 +202,10 @@ paths:
           description: Not Found
   /requests/delete/{id}:
     delete:
-      description: "Delete a demand"
+      tags:
+        - "Demand"
+      summary: "Delete a demand"
+      description: "Create an endpoint to delete a demand"
       operationId: deleteDemand
       parameters:
         - name: id
@@ -213,6 +218,24 @@ paths:
           description: "Demand deleted successfully"
         '404':
           description: "Not Found"
+  /createresource:
+    post:
+      tags:
+        - "Resource"
+      summary: "Create a resource"
+      description: "Create and endpoint to add a new resource"
+      operationId: createResource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateResourceRequestDTO'
+      responses:
+        '200':
+          description: "Resource created successfully"
+        '400':
+          description: "Bad Request"
 
 
 
@@ -393,6 +416,18 @@ components:
           type: string
         date_time:
           type: string
+
+    CreateResourceRequestDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        isAvailable:
+          type: boolean
 
 
 
