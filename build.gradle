@@ -49,6 +49,12 @@ openApiGenerate {
 	outputDir = "$buildDir/generated"
 	apiPackage = 'com.laosarl.allocation_ressources.api'
 	modelPackage = 'com.laosarl.allocation_ressources.model'
+	globalProperties = [
+	        skipFormModel: "false"
+	]
+	additionalProperties = [
+			supportMultipart: "true"
+	]
 	configOptions = [
 			delegatePattern: "true",
 			dateLibrary: "java8",

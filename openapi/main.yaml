@@ -236,6 +236,87 @@ paths:
           description: "Resource created successfully"
         '400':
           description: "Bad Request"
+  /resources:
+    get:
+      tags:
+        - "Resource"
+      summary: "Get all resources"
+      description: "Get the list of all the resources"
+      operationId: getAllResources
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceDTO'
+        '404':
+          description: Not found
+  /resources/{id}:
+    get:
+      tags:
+        - "Resource"
+      summary: "Get a resource"
+      description: "Create an endpoint to get a resource by its id"
+      operationId: getResource
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceDTO'
+        '404':
+          description: Not found
+  /resource/{id}:
+    patch:
+      tags:
+        - "Resource"
+      summary: "Update a resource"
+      description: "Create an endpoint to update a resource"
+      operationId: updateResource
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceDTO'
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Not found
+  /resources/delete/{id}:
+    delete:
+      tags:
+        - "Resource"
+      summary: "Delete a resource"
+      description: "Create an endpoint to delete a resource"
+      operationId: deleteResource
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "Resource deleted successfully"
+        '404':
+          description: "Not Found"
+
 
 
 
@@ -394,8 +475,6 @@ components:
     UpdateDemandDTO:
       type: object
       properties:
-        id:
-          type: integer
         user_name:
           type: string
         user_email:
@@ -414,8 +493,6 @@ components:
           type: string
         status:
           type: string
-        date_time:
-          type: string
 
     CreateResourceRequestDTO:
       type: object
@@ -428,6 +505,21 @@ components:
           type: string
         isAvailable:
           type: boolean
+
+    ResourceDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        isAvailable:
+          type: boolean
+
+
+
 
 
 
