@@ -33,4 +33,25 @@ public class ResourceMapperTest {
         assertThat(resourceToMap.getIsAvailable()).isEqualTo(resourceMapped.getIsAvailable());
     }
 
+    @Test
+    void shouldUpdateResourceFromDto() {
+        Resource resource = new Resource();
+        resource.setName("Ancien Nom");
+        resource.setType("Ancien Type");
+        resource.setDescription("Ancienne Description");
+        resource.setIsAvailable(true);
+
+        ResourceDTO dto = new ResourceDTO();
+        dto.setName("Nouveau Nom");
+        dto.setType(null);
+        dto.setDescription("Nouvelle Description");
+
+        resourceMapper.updateResourceFromDto(dto, resource);
+
+        assertThat(resource.getName()).isEqualTo("Nouveau Nom");
+        assertThat(resource.getType()).isEqualTo("Ancien Type");
+        assertThat(resource.getDescription()).isEqualTo("Nouvelle Description");
+        assertThat(resource.getIsAvailable()).isTrue();
+    }
+
 }
