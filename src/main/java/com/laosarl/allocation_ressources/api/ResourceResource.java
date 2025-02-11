@@ -1,8 +1,10 @@
 package com.laosarl.allocation_ressources.api;
 
+import com.laosarl.allocation_ressources.domain.Resource;
 import com.laosarl.allocation_ressources.model.CreateResourceRequestDTO;
 import com.laosarl.allocation_ressources.model.ResourceDTO;
 import com.laosarl.allocation_ressources.service.ResourceService;
+import com.laosarl.allocation_ressources.service.mapper.ResourceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResourceResource {
     private final ResourceService resourceService;
+    private final ResourceMapper resourceMapper;
 
     @PostMapping("/createresource")
     public ResponseEntity<Void> createResource(@RequestBody CreateResourceRequestDTO requestDTO) {
@@ -42,5 +45,11 @@ public class ResourceResource {
     public ResponseEntity<Void> deleteResource(@PathVariable Long id) {
         resourceService.deleteDemand(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/resources/availability/{id}")
+    public ResponseEntity<ResourceDTO> changeStatus(@PathVariable Long id) {
+        Resource updatedResource = resourceService.changeAvailability(id);
+        return ResponseEntity.ok(resourceMapper.toDto(updatedResource));
     }
 }

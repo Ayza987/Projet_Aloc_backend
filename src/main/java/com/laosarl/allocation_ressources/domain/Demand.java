@@ -1,5 +1,5 @@
 package com.laosarl.allocation_ressources.domain;
-
+import com.laosarl.allocation_ressources.model.DemandUrgency;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,7 +33,8 @@ public class Demand {
     @Column(name = "quantity")
     private String quantity;
     @Column(name = "urgency")
-    private String urgency;
+    @Enumerated(EnumType.STRING)
+    private DemandUrgency urgency;
     @Column(name = "due_date")
     private LocalDate dueDate;
     @Column(name = "date_time")

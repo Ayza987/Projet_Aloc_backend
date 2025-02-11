@@ -316,6 +316,27 @@ paths:
           description: "Resource deleted successfully"
         '404':
           description: "Not Found"
+  /resources/availability/{id}:
+    patch:
+      tags:
+        - "Resource"
+      description: "Change the availability status of a resource"
+      operationId: changeStatus
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceDTO'
+        '404':
+          description: Not found
 
 
 
@@ -430,6 +451,12 @@ components:
        email:
           type: string
 
+    DemandUrgency:
+      type: string
+      enum:
+        - URGENT
+        - NOT_URGENT
+
     CreateDemandRequestDTO:
      type: object
      properties:
@@ -442,7 +469,7 @@ components:
        justification:
          type: string
        urgency:
-         type: string
+           $ref: '#/components/schemas/DemandUrgency'
        due_date:
          type: string
 
@@ -462,7 +489,7 @@ components:
         justification:
           type: string
         urgency:
-          type: string
+            $ref: '#/components/schemas/DemandUrgency'
         due_date:
           type: string
         quantity:
@@ -486,7 +513,7 @@ components:
         justification:
           type: string
         urgency:
-          type: string
+            $ref: '#/components/schemas/DemandUrgency'
         due_date:
           type: string
         quantity:
@@ -494,17 +521,26 @@ components:
         status:
           type: string
 
+    ResourceType:
+      type: string
+      enum:
+        - HARDWARE
+        - SOFTWARE
+        - OTHER
+
     CreateResourceRequestDTO:
       type: object
       properties:
         name:
           type: string
         type:
-          type: string
+            $ref: '#/components/schemas/ResourceType'
         description:
           type: string
         isAvailable:
           type: boolean
+
+
 
     ResourceDTO:
       type: object
@@ -512,7 +548,7 @@ components:
         name:
           type: string
         type:
-          type: string
+            $ref: '#/components/schemas/ResourceType'
         description:
           type: string
         isAvailable:

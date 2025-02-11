@@ -1,8 +1,6 @@
 package com.laosarl.allocation_ressources.api;
 
-import com.laosarl.allocation_ressources.model.SignupRequestDTO;
-import com.laosarl.allocation_ressources.model.UpdateUserRequestDTO;
-import com.laosarl.allocation_ressources.model.UserDTO;
+import com.laosarl.allocation_ressources.model.*;
 import com.laosarl.allocation_ressources.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +10,7 @@ import java.util.List;
 
 
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AccountResource {
     private final AccountService accountService;

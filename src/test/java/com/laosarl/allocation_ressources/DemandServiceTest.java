@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.laosarl.allocation_ressources.model.DemandUrgency.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -39,7 +40,7 @@ public class DemandServiceTest {
     void createDemand_WhenAllConditionsAreMet_ShouldCreateTheDemand() {
 
         //Given
-        CreateDemandRequestDTO request = new CreateDemandRequestDTO().resourceName("stylo").quantity("1").description("stylo à bille").justification("Pour écrire").urgency("urgent").dueDate("2024/05/05");
+        CreateDemandRequestDTO request = new CreateDemandRequestDTO().resourceName("stylo").quantity("1").description("stylo à bille").justification("Pour écrire").urgency(URGENT).dueDate("2024/05/05");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDate formattedDueDate = LocalDate.parse(request.getDueDate(), formatter);
         //When
@@ -51,7 +52,7 @@ public class DemandServiceTest {
     @Test
     void createDemand_ShouldThrowException_WhenFormatIsInvalid() {
         //Arrange
-        CreateDemandRequestDTO request = new CreateDemandRequestDTO().resourceName("stylo").quantity("1").description("stylo à bille").justification("Pour écrire").urgency("urgent").dueDate("2024-05-05");
+        CreateDemandRequestDTO request = new CreateDemandRequestDTO().resourceName("stylo").quantity("1").description("stylo à bille").justification("Pour écrire").urgency(URGENT).dueDate("2024-05-05");
         //Act & Assert
         assertThrows(RuntimeException.class, () -> objectUnderTest.createDemand(request));
     }
@@ -59,7 +60,7 @@ public class DemandServiceTest {
     @Test
     void getAllDemands_ShouldReturnAListOfDemands() {
         //Given
-        List<Demand> demandsList = List.of(Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity("azertyu").urgency("urgent").status("PENDING").build());
+        List<Demand> demandsList = List.of(Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity("azertyu").urgency(URGENT).status("PENDING").build());
         when(demandRepository.findAll()).thenReturn(demandsList);
         //When
         objectUnderTest.getAllDemands();
@@ -83,7 +84,7 @@ public class DemandServiceTest {
         //Given
         Long userId = 1L;
         UpdateDemandDTO request = new UpdateDemandDTO().status("APPROVED");
-        Demand existingDemand = Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity("azertyu").urgency("urgent").status("PENDING").build();
+        Demand existingDemand = Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity("azertyu").urgency(URGENT).status("PENDING").build();
 
         when(demandRepository.findById(userId)).thenReturn(Optional.of(existingDemand));
         //When
@@ -108,7 +109,7 @@ public class DemandServiceTest {
     void deleteDemand_ShouldDeleteTheDemand_WhenIdIsFound(){
         //Given
         Long userId = 1L;
-        Demand existingDemand = Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity("azertyu").urgency("urgent").status("PENDING").build();
+        Demand existingDemand = Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity("azertyu").urgency(URGENT).status("PENDING").build();
         when(demandRepository.findById(userId)).thenReturn(Optional.of(existingDemand));
 
         //When

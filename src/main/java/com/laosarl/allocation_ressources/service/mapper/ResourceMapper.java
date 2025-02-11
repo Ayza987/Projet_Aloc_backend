@@ -15,4 +15,6 @@ public interface ResourceMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateResourceFromDto(ResourceDTO dto, @MappingTarget Resource resource);
+
+    ResourceDTO toDto(Resource updatedResource);
 }

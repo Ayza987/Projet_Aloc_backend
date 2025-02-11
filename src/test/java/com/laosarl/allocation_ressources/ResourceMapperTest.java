@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.laosarl.allocation_ressources.model.ResourceType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -21,7 +22,7 @@ public class ResourceMapperTest {
     @Test
     void toResourceDTO_ShouldMapFieldsCorrectly(){
         //Given
-        Resource resourceToMap = Resource.builder().name("azert").type("azet").description("").isAvailable(true).build();
+        Resource resourceToMap = Resource.builder().name("azert").type(HARDWARE).description("").isAvailable(true).build();
 
         //When
         ResourceDTO resourceMapped = resourceMapper.toResourceDTO(resourceToMap);
@@ -35,9 +36,10 @@ public class ResourceMapperTest {
 
     @Test
     void shouldUpdateResourceFromDto() {
+        //Given
         Resource resource = new Resource();
         resource.setName("Ancien Nom");
-        resource.setType("Ancien Type");
+        resource.setType(HARDWARE);
         resource.setDescription("Ancienne Description");
         resource.setIsAvailable(true);
 
@@ -46,10 +48,12 @@ public class ResourceMapperTest {
         dto.setType(null);
         dto.setDescription("Nouvelle Description");
 
+        //When
         resourceMapper.updateResourceFromDto(dto, resource);
 
+        //Then
         assertThat(resource.getName()).isEqualTo("Nouveau Nom");
-        assertThat(resource.getType()).isEqualTo("Ancien Type");
+        assertThat(resource.getType()).isEqualTo(HARDWARE);
         assertThat(resource.getDescription()).isEqualTo("Nouvelle Description");
         assertThat(resource.getIsAvailable()).isTrue();
     }

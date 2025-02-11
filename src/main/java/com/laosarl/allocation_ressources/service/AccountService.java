@@ -23,7 +23,6 @@ public class AccountService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-
     @Transactional
     public void createAccount(SignupRequestDTO request) {
 
@@ -80,4 +79,5 @@ public class AccountService {
 
         userRepository.delete(user);
     }
+
 }

@@ -53,4 +53,11 @@ public class ResourceService {
         Resource resource = resourceRepository.findById(id).orElseThrow(() -> new RuntimeException("Demand Not found"));
         resourceRepository.delete(resource);
     }
+
+    public Resource changeAvailability(Long id) {
+        Resource resource = resourceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Resource Not found"));
+        resource.setIsAvailable(!resource.getIsAvailable());
+        return resourceRepository.save(resource);
+    }
 }

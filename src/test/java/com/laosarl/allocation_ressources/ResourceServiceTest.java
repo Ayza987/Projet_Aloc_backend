@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.laosarl.allocation_ressources.model.ResourceType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -41,7 +42,7 @@ public class ResourceServiceTest {
     @Test
     void ShouldCreateResourceSuccessfully(){
         //Given
-        CreateResourceRequestDTO requestDTO = new CreateResourceRequestDTO().name("azert").type("azet").description("").isAvailable(true);
+        CreateResourceRequestDTO requestDTO = new CreateResourceRequestDTO().name("azert").type(HARDWARE).description("").isAvailable(true);
 
         //When
         objectUnderTest.createResource(requestDTO);
@@ -53,7 +54,7 @@ public class ResourceServiceTest {
     @Test
     void getAllResources_ShouldReturnAListOfResources() {
         //Given
-        List<Resource> resourceList = List.of(Resource.builder().id(1L).name("azert").type("azet").description("").isAvailable(true).build());
+        List<Resource> resourceList = List.of(Resource.builder().id(1L).name("azert").type(HARDWARE).description("").isAvailable(true).build());
         when(resourceRepository.findAll()).thenReturn(resourceList);
         //When
         objectUnderTest.getAllResources();
@@ -77,7 +78,7 @@ public class ResourceServiceTest {
         //Given
         Long userId = 1L;
         ResourceDTO request = new ResourceDTO().isAvailable(false);
-        Resource existingResource = Resource.builder().id(1L).name("azert").type("azet").description("").isAvailable(true).build();
+        Resource existingResource = Resource.builder().id(1L).name("azert").type(HARDWARE).description("").isAvailable(true).build();
 
         when(resourceRepository.findById(userId)).thenReturn(Optional.of(existingResource));
         //When
@@ -102,7 +103,7 @@ public class ResourceServiceTest {
     void deleteDemand_ShouldDeleteTheDemand_WhenIdIsFound(){
         //Given
         Long userId = 1L;
-        Resource existingResource = Resource.builder().id(1L).name("azert").type("azet").description("").isAvailable(true).build();
+        Resource existingResource = Resource.builder().id(1L).name("azert").type(HARDWARE).description("").isAvailable(true).build();
         when(resourceRepository.findById(userId)).thenReturn(Optional.of(existingResource));
 
         //When

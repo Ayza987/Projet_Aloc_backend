@@ -1,4 +1,5 @@
 package com.laosarl.allocation_ressources.domain;
+import com.laosarl.allocation_ressources.model.ResourceType;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,8 @@ public class Resource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private ResourceType type;
     private String description;
     private Boolean isAvailable;
 }
