@@ -130,10 +130,13 @@ public class DemandService {
         dto.setDemandDate(savedAllocation.getDemandDate().toString());
         dto.setAllocationDate(savedAllocation.getAllocationDate().toString());
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedDate = LocalDateTime.now().format(formatter);
+
         String subject = "Votre demande de ressource a été approuvée";
         String body = "Bonjour,\n\nVotre demande de " + request.getResourceName() + " a été approuvée.\n"
                 + "Quantité allouée : " + request.getQuantity() + "\n"
-                + "Date d'allocation : " + LocalDateTime.now() + "\n\n"
+                + "Date et heure d'allocation : " + formattedDate + "\n\n"
                 + "Merci de récupérer votre ressource.";
 
         emailService.sendEmail(request.getUserEmail(), subject, body);
