@@ -111,7 +111,6 @@ public class DemandServiceTest {
         Long userId = 1L;
         UpdateDemandDTO request = new UpdateDemandDTO();
         when(demandRepository.findById(userId)).thenReturn(Optional.empty());
-
         //Act & Assert
         assertThrows(RuntimeException.class, () -> objectUnderTest.updateDemand(userId, request));
     }
@@ -122,10 +121,8 @@ public class DemandServiceTest {
         Long userId = 1L;
         Demand existingDemand = Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(1).urgency(URGENT).status(PENDING).build();
         when(demandRepository.findById(userId)).thenReturn(Optional.of(existingDemand));
-
         //When
         objectUnderTest.deleteDemand(userId);
-
         //Then
         verify(demandRepository).delete(existingDemand);
     }
@@ -169,13 +166,13 @@ public class DemandServiceTest {
         Long Id = 1L;
         AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(1L).resourceName("crayon").userEmail("titi@gmail.com").quantity(2);
         when(demandRepository.findById(Id)).thenReturn(Optional.empty());
-
         //When & Then
         assertThrows(RuntimeException.class, ()->objectUnderTest.allocateResource(request));
     }
 
     @Test
     void allocateResource_DemandNotPending() {
+        //Arrange
         AllocateResourceRequestDTO request = new AllocateResourceRequestDTO();
         request.setDemandId(1L);
 
@@ -183,30 +180,28 @@ public class DemandServiceTest {
         demand.setStatus(DemandStatus.APPROVED);
 
         when(demandRepository.findById(1L)).thenReturn(Optional.of(demand));
-
+        //Act & Assert
         assertThrows(IllegalStateException.class, () -> objectUnderTest.allocateResource(request));
     }
 
     @Test
     void allocateResource_ResourceNotFound() {
-        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO();
-        request.setDemandId(1L);
-        request.setResourceName("Laptop");
+        //Arrange
+        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(1L).resourceName("Laptop");
 
         Demand demand = new Demand();
         demand.setStatus(DemandStatus.PENDING);
 
         when(demandRepository.findById(1L)).thenReturn(Optional.of(demand));
         when(resourceRepository.findByName("Laptop")).thenReturn(Optional.empty());
-
+        //Act & Assert
         assertThrows(RuntimeException.class, () -> objectUnderTest.allocateResource(request));
     }
 
     @Test
     void allocateResource_ResourceNotAvailable() {
-        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO();
-        request.setDemandId(1L);
-        request.setResourceName("Laptop");
+        //Arrange
+        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(1L).resourceName("Laptop");
 
         Demand demand = new Demand();
         demand.setStatus(DemandStatus.PENDING);
@@ -216,16 +211,14 @@ public class DemandServiceTest {
 
         when(demandRepository.findById(1L)).thenReturn(Optional.of(demand));
         when(resourceRepository.findByName("Laptop")).thenReturn(Optional.of(resource));
-
+        //Act & Assert
         assertThrows(IllegalStateException.class, () -> objectUnderTest.allocateResource(request));
     }
 
     @Test
     void allocateResource_QuantityExceedsStock() {
-        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO();
-        request.setDemandId(1L);
-        request.setResourceName("Laptop");
-        request.setQuantity(3);
+        //Arrange
+        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(1L).resourceName("Laptop").quantity(3);
 
         Demand demand = new Demand();
         demand.setStatus(DemandStatus.PENDING);
@@ -236,7 +229,7 @@ public class DemandServiceTest {
 
         when(demandRepository.findById(1L)).thenReturn(Optional.of(demand));
         when(resourceRepository.findByName("Laptop")).thenReturn(Optional.of(resource));
-
+        //Act & Assert
         assertThrows(IllegalStateException.class, () -> objectUnderTest.allocateResource(request));
     }
 }
