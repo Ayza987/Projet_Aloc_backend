@@ -2,11 +2,7 @@ package com.laosarl.allocation_ressources;
 
 
 import com.laosarl.allocation_ressources.domain.Resource;
-import com.laosarl.allocation_ressources.domain.Resource;
-import com.laosarl.allocation_ressources.domain.Resource;
 import com.laosarl.allocation_ressources.model.CreateResourceRequestDTO;
-import com.laosarl.allocation_ressources.model.DemandDTO;
-import com.laosarl.allocation_ressources.model.ResourceDTO;
 import com.laosarl.allocation_ressources.model.ResourceDTO;
 import com.laosarl.allocation_ressources.repository.ResourceRepository;
 import com.laosarl.allocation_ressources.service.ResourceService;
@@ -21,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.laosarl.allocation_ressources.model.ResourceType.*;
+import static com.laosarl.allocation_ressources.model.ResourceType.HARDWARE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -40,7 +36,7 @@ public class ResourceServiceTest {
     ResourceService objectUnderTest;
 
     @Test
-    void ShouldCreateResourceSuccessfully(){
+    void ShouldCreateResourceSuccessfully() {
         //Given
         CreateResourceRequestDTO requestDTO = new CreateResourceRequestDTO().name("azert").type(HARDWARE).description("").isAvailable(true).quantity(2);
 
@@ -100,7 +96,7 @@ public class ResourceServiceTest {
     }
 
     @Test
-    void deleteDemand_ShouldDeleteTheDemand_WhenIdIsFound(){
+    void deleteDemand_ShouldDeleteTheDemand_WhenIdIsFound() {
         //Given
         Long userId = 1L;
         Resource existingResource = Resource.builder().id(1L).name("azert").type(HARDWARE).description("").isAvailable(true).quantity(2).build();

@@ -24,8 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DemandService {
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
     private final DemandRepository demandRepository;
     private final ResourceRepository resourceRepository;
     private final AllocatedResourceRepository allocatedResourceRepository;
