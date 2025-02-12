@@ -10,6 +10,7 @@ import com.laosarl.allocation_ressources.repository.ResourceRepository;
 import com.laosarl.allocation_ressources.service.mapper.DemandMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,6 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DemandService {
 
+    @Autowired
+    private EmailService emailService;
     private final DemandRepository demandRepository;
     private final ResourceRepository resourceRepository;
     private final AllocatedResourceRepository allocatedResourceRepository;
@@ -126,6 +129,14 @@ public class DemandService {
         dto.setQuantity(savedAllocation.getQuantity());
         dto.setDemandDate(savedAllocation.getDemandDate().toString());
         dto.setAllocationDate(savedAllocation.getAllocationDate().toString());
+
+        String subject = "Votre demande de ressource a été approuvée";
+        String body = "Bonjour,\n\nVotre demande de " + request.getResourceName() + " a été approuvée.\n"
+                + "Quantité allouée : " + request.getQuantity() + "\n"
+                + "Date d'allocation : " + LocalDateTime.now() + "\n\n"
+                + "Merci de récupérer votre ressource.";
+
+        emailService.sendEmail(request.getUserEmail(), subject, body);
 
         return dto;
 
