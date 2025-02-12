@@ -22,4 +22,5 @@ public class Resource {
     private ResourceType type;
     private String description;
     private Boolean isAvailable;
+    private Integer quantity;
 }

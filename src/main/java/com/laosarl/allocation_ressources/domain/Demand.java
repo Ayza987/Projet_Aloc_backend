@@ -1,5 +1,6 @@
 package com.laosarl.allocation_ressources.domain;
 import com.laosarl.allocation_ressources.model.DemandUrgency;
+import com.laosarl.allocation_ressources.model.DemandStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import static com.laosarl.allocation_ressources.model.DemandStatus.PENDING;
 
 @Data
 @NoArgsConstructor
@@ -22,7 +25,7 @@ public class Demand {
     private Long id;
     @Column(name = "resource_name")
     private String resourceName;
-    @Column(name = "userName")
+    @Column(name = "user_name")
     private String userName;
     @Column(name = "user_email")
     private String userEmail;
@@ -31,7 +34,7 @@ public class Demand {
     @Column(name = "justification")
     private String justification;
     @Column(name = "quantity")
-    private String quantity;
+    private Integer quantity;
     @Column(name = "urgency")
     @Enumerated(EnumType.STRING)
     private DemandUrgency urgency;
@@ -40,6 +43,7 @@ public class Demand {
     @Column(name = "date_time")
     private LocalDateTime dateTime;
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     @Builder.Default
-    private String status = "PENDING";
+    private DemandStatus status = PENDING;
 }

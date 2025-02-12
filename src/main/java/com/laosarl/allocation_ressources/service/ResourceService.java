@@ -24,7 +24,7 @@ public class ResourceService {
 
     @Transactional
     public void createResource(CreateResourceRequestDTO request) {
-        resourceRepository.save(Resource.builder().name(request.getName()).type(request.getType()).description(request.getDescription()).isAvailable(request.getIsAvailable()).build());
+        resourceRepository.save(Resource.builder().name(request.getName()).type(request.getType()).description(request.getDescription()).isAvailable(request.getIsAvailable()).quantity(request.getQuantity()).build());
     }
 
     public List<ResourceDTO> getAllResources() {

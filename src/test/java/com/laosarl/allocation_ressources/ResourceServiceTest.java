@@ -42,19 +42,19 @@ public class ResourceServiceTest {
     @Test
     void ShouldCreateResourceSuccessfully(){
         //Given
-        CreateResourceRequestDTO requestDTO = new CreateResourceRequestDTO().name("azert").type(HARDWARE).description("").isAvailable(true);
+        CreateResourceRequestDTO requestDTO = new CreateResourceRequestDTO().name("azert").type(HARDWARE).description("").isAvailable(true).quantity(2);
 
         //When
         objectUnderTest.createResource(requestDTO);
 
         //Then
-        verify(resourceRepository).save(argThat(resource -> resource.getName().equals(requestDTO.getName()) && resource.getType().equals(requestDTO.getType()) && resource.getDescription().equals(requestDTO.getDescription()) && resource.getIsAvailable().equals(requestDTO.getIsAvailable())));
+        verify(resourceRepository).save(argThat(resource -> resource.getName().equals(requestDTO.getName()) && resource.getType().equals(requestDTO.getType()) && resource.getDescription().equals(requestDTO.getDescription()) && resource.getIsAvailable().equals(requestDTO.getIsAvailable() && resource.getQuantity().equals(requestDTO.getQuantity()))));
     }
 
     @Test
     void getAllResources_ShouldReturnAListOfResources() {
         //Given
-        List<Resource> resourceList = List.of(Resource.builder().id(1L).name("azert").type(HARDWARE).description("").isAvailable(true).build());
+        List<Resource> resourceList = List.of(Resource.builder().id(1L).name("azert").type(HARDWARE).description("").isAvailable(true).quantity(2).build());
         when(resourceRepository.findAll()).thenReturn(resourceList);
         //When
         objectUnderTest.getAllResources();
@@ -78,7 +78,7 @@ public class ResourceServiceTest {
         //Given
         Long userId = 1L;
         ResourceDTO request = new ResourceDTO().isAvailable(false);
-        Resource existingResource = Resource.builder().id(1L).name("azert").type(HARDWARE).description("").isAvailable(true).build();
+        Resource existingResource = Resource.builder().id(1L).name("azert").type(HARDWARE).description("").isAvailable(true).quantity(2).build();
 
         when(resourceRepository.findById(userId)).thenReturn(Optional.of(existingResource));
         //When
@@ -103,7 +103,7 @@ public class ResourceServiceTest {
     void deleteDemand_ShouldDeleteTheDemand_WhenIdIsFound(){
         //Given
         Long userId = 1L;
-        Resource existingResource = Resource.builder().id(1L).name("azert").type(HARDWARE).description("").isAvailable(true).build();
+        Resource existingResource = Resource.builder().id(1L).name("azert").type(HARDWARE).description("").isAvailable(true).quantity(2).build();
         when(resourceRepository.findById(userId)).thenReturn(Optional.of(existingResource));
 
         //When

@@ -14,6 +14,8 @@ tags:
     description: "Operations on requests"
   - name: "Resource"
     description: "Operations on resources"
+  - name: "Allocation"
+    description: "Operations on allocations"
 paths:
   /auth/signup:
     post:
@@ -321,7 +323,7 @@ paths:
       tags:
         - "Resource"
       description: "Change the availability status of a resource"
-      operationId: changeStatus
+      operationId: updateAvailability
       parameters:
         - name: id
           in: path
@@ -337,6 +339,46 @@ paths:
                 $ref: '#/components/schemas/ResourceDTO'
         '404':
           description: Not found
+  /requests/updateUrgency/{id}:
+    patch:
+      tags:
+        - "Demand"
+      description: "Change the urgency of a demand"
+      operationId: updateUrgency
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Not found
+  /demand/allocate:
+    post:
+      tags:
+        - "Demands"
+      description: "Allocate a resource"
+      operationId: allocateResource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllocateResourceRequestDTO'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllocatedResourceDTO'
+        '400':
+          description: Bad request
+
+
 
 
 
@@ -427,7 +469,6 @@ components:
           type: string
           example: "Invalid data"
 
-
     UpdateUserRequestDTO:
       type: object
       properties:
@@ -457,13 +498,20 @@ components:
         - URGENT
         - NOT_URGENT
 
+    DemandStatus:
+      type: string
+      enum:
+        - PENDING
+        - APPROVED
+        - REJECTED
+
     CreateDemandRequestDTO:
      type: object
      properties:
        resource_name:
          type: string
        quantity:
-         type: string
+         type: integer
        description:
          type: string
        justification:
@@ -478,6 +526,7 @@ components:
       properties:
         id:
           type: integer
+          format: int64
         user_name:
           type: string
         user_email:
@@ -493,9 +542,9 @@ components:
         due_date:
           type: string
         quantity:
-          type: string
+          type: integer
         status:
-          type: string
+          $ref: '#/components/schemas/DemandStatus'
         date_time:
           type: string
 
@@ -517,9 +566,9 @@ components:
         due_date:
           type: string
         quantity:
-          type: string
+          type: integer
         status:
-          type: string
+          $ref: '#/components/schemas/DemandStatus'
 
     ResourceType:
       type: string
@@ -527,7 +576,7 @@ components:
         - HARDWARE
         - SOFTWARE
         - OTHER
-
+        -
     CreateResourceRequestDTO:
       type: object
       properties:
@@ -539,8 +588,8 @@ components:
           type: string
         isAvailable:
           type: boolean
-
-
+        quantity:
+          type: integer
 
     ResourceDTO:
       type: object
@@ -553,6 +602,41 @@ components:
           type: string
         isAvailable:
           type: boolean
+        quantity:
+          type: integer
+
+    AllocateResourceRequestDTO:
+      type: object
+      properties:
+        demand_id:
+          type: integer
+          format: int64
+        user_email:
+          type: string
+        resource_name:
+          type: string
+        quantity:
+          type: integer
+
+    AllocatedResourceDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        demand_id:
+          type: integer
+          format: int64
+        user_email:
+          type: string
+        resource_name:
+          type: string
+        quantity:
+          type: integer
+        demand_date:
+          type: string
+        allocation_date:
+          type: string
 
 
 

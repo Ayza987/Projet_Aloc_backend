@@ -1,9 +1,7 @@
 package com.laosarl.allocation_ressources.api;
 
 
-import com.laosarl.allocation_ressources.model.CreateDemandRequestDTO;
-import com.laosarl.allocation_ressources.model.DemandDTO;
-import com.laosarl.allocation_ressources.model.UpdateDemandDTO;
+import com.laosarl.allocation_ressources.model.*;
 import com.laosarl.allocation_ressources.service.DemandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class DemandResource {
 
@@ -39,5 +38,17 @@ public class DemandResource {
     public ResponseEntity<Void> deleteDemand(@PathVariable Long id){
         demandService.deleteDemand(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/requests/updateUrgency/{id}")
+    public ResponseEntity<Void> updateUrgency(@PathVariable Long id) {
+        demandService.updateUrgency(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/allocate")
+    public ResponseEntity<AllocatedResourceDTO> allocateResource(
+            @RequestBody AllocateResourceRequestDTO request) {
+        return ResponseEntity.ok(demandService.allocateResource(request));
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ResourceResource {
     private final ResourceService resourceService;
@@ -48,7 +49,7 @@ public class ResourceResource {
     }
 
     @PatchMapping("/resources/availability/{id}")
-    public ResponseEntity<ResourceDTO> changeStatus(@PathVariable Long id) {
+    public ResponseEntity<ResourceDTO> updateAvailability(@PathVariable Long id) {
         Resource updatedResource = resourceService.changeAvailability(id);
         return ResponseEntity.ok(resourceMapper.toDto(updatedResource));
     }
