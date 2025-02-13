@@ -137,4 +137,21 @@ public class DemandService {
 
 
     }
+
+    public void rejectDemand(AllocateResourceRequestDTO request) {
+        Demand demand = demandRepository.findById((request.getDemandId()))
+                .orElseThrow(() -> new RuntimeException("Demand not found"));
+
+        if (demand.getStatus() != DemandStatus.PENDING) {
+            throw new IllegalStateException("Demand is not in PENDING status");
+        }
+
+        String subject = "Votre demande de ressource a été rejetée";
+        String body = "Bonjour,\n\nVotre demande de " + request.getResourceName() + " a été rejetée.\n";
+
+        emailService.sendEmail(request.getUserEmail(), subject, body);
+
+        demand.setStatus(DemandStatus.REJECTED);
+        demandRepository.save(demand);
+    }
 }

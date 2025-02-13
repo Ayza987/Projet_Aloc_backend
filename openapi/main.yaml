@@ -377,6 +377,28 @@ paths:
                 $ref: '#/components/schemas/AllocatedResourceDTO'
         '400':
           description: Bad request
+        '404':
+          description: Not found
+  /demand/reject:
+    post:
+      tags:
+        - "Demands"
+      description: "Reject an allocation demand"
+      operationId: rejectDemand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllocateResourceRequestDTO'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
 
 
 

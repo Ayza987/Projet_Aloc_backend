@@ -46,9 +46,16 @@ public class DemandResource {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/allocate")
+    @PostMapping("/demand/allocate")
     public ResponseEntity<AllocatedResourceDTO> allocateResource(
             @RequestBody AllocateResourceRequestDTO request) {
         return ResponseEntity.ok(demandService.allocateResource(request));
+    }
+
+    @PostMapping("/demand/reject")
+    public ResponseEntity<Void> rejectDemand(
+            @RequestBody AllocateResourceRequestDTO request) {
+        demandService.rejectDemand(request);
+        return ResponseEntity.ok().build();
     }
 }
