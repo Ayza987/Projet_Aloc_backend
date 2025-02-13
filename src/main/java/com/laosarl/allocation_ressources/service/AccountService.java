@@ -92,4 +92,12 @@ public class AccountService {
         userRepository.delete(user);
     }
 
+    public List<UserDTO> searchUsers(String name) {
+        List<User> userList = userRepository.findByNameContainingIgnoreCase(name);
+
+        if(userList.isEmpty()){
+            throw new RuntimeException("No results found");
+        }
+        return userList.stream().map(userMapper::toUserDTO).toList();
+    }
 }

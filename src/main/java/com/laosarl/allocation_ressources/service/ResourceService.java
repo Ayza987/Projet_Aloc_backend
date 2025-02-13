@@ -73,3 +73,4 @@ public class ResourceService {
         return resources.stream().map(resourceMapper::toResourceDTO).toList();
     }
 }
+

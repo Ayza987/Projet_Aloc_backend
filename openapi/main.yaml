@@ -139,6 +139,28 @@ paths:
             description: "User deleted successfully"
           '404':
               description: "Not Found"
+  /users/search:
+    get:
+      tags:
+        - "User"
+      summary: "Search users"
+      description: "Get the list of all the users according to a research"
+      operationId: searchUsers
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '404':
+          description: Not found
   /createDemand:
     post:
       tags:

@@ -44,5 +44,11 @@ public class AccountResource {
         accountService.deleteUser(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/users/search")
+    public ResponseEntity<List<UserDTO>> searchUsers(@RequestParam String name) {
+        List<UserDTO> List = accountService.searchUsers(name);
+        return ResponseEntity.ok(List);
+    }
 }
 
