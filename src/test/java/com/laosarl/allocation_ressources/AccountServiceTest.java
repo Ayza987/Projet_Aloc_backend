@@ -6,6 +6,7 @@ import com.laosarl.allocation_ressources.model.UpdateUserRequestDTO;
 import com.laosarl.allocation_ressources.model.UserDTO;
 import com.laosarl.allocation_ressources.repository.UserRepository;
 import com.laosarl.allocation_ressources.service.AccountService;
+import com.laosarl.allocation_ressources.service.EmailService;
 import com.laosarl.allocation_ressources.service.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +29,8 @@ class AccountServiceTest {
     private UserRepository userRepository;
     @Mock
     private UserMapper userMapper;
+    @Mock
+    EmailService emailService;
     @InjectMocks
     private AccountService objectUnderTest;
 
@@ -40,16 +43,17 @@ class AccountServiceTest {
 
         when(userRepository.existsByEmail(signupRequestDTO.getEmail())).thenReturn(false);
         when(objectUnderTest.generateSecurePassword()).thenReturn(generatedPassword);
-
+        doNothing().when(emailService).sendEmail(anyString(), anyString(), anyString());
         //When
         objectUnderTest.createAccount(signupRequestDTO);
         //Then
         verify(userRepository).save(argThat(user -> user.getEmail().equals(signupRequestDTO.getEmail()) && user.getName().equals(signupRequestDTO.getName()) && user.getSurname().equals(signupRequestDTO.getSurname()) && user.getPassword().equals(generatedPassword)));
+        verify(emailService).sendEmail(eq("test@gmail.com"), anyString(), anyString());
 
     }
 
     @Test
-    void createAccount_whenEmailexists_ShouldThrowException() {
+    void createAccount_whenEmailExists_ShouldThrowException() {
         //Given
         SignupRequestDTO signupRequestDTO = new SignupRequestDTO().email("test@123.com").surname("john").name("doe");
 
