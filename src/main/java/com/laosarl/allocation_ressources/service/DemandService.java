@@ -96,7 +96,7 @@ public class DemandService {
             throw new IllegalStateException("Resource not available");
         }
 
-        if (request.getQuantity() > resource.getQuantity()) {
+        if (request.getQuantity() >= resource.getQuantity()) {
             throw new IllegalStateException("Requested quantity exceeds available stock");
         }
 
@@ -115,7 +115,7 @@ public class DemandService {
 
         int remainingQuantity = (resource.getQuantity()) - request.getQuantity();
         resource.setQuantity(remainingQuantity);
-        if (remainingQuantity <= 0) {
+        if (remainingQuantity == 1) {
             resource.setIsAvailable(false);
         }
         resourceRepository.save(resource);
@@ -153,5 +153,14 @@ public class DemandService {
 
         demand.setStatus(DemandStatus.REJECTED);
         demandRepository.save(demand);
+    }
+
+    public List<DemandDTO> getDemandsByEmail(String userEmail) {
+        List<Demand> demands = demandRepository.findAllByUserEmail(userEmail);
+
+        if (demands.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return demands.stream().map(demandMapper::toDemandDTO).toList();
     }
 }

@@ -133,14 +133,19 @@ public class DemandServiceTest {
         Long Id = 1L;
         String Name = "crayon";
         AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(1L).resourceName("crayon").userEmail("titi@gmail.com").quantity(2);
+
         Demand existingDemand = Demand.builder().id(1L).resourceName("crayon").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(2).urgency(URGENT).status(PENDING).build();
-        Resource existingResource = Resource.builder().id(1L).name("crayon").type(HARDWARE).description("").isAvailable(true).quantity(3).build();
+
+        Resource existingResource = Resource.builder().id(1L).name("crayon").type(HARDWARE).description("").isAvailable(true).quantity(4).build();
+
         AllocatedResource allocatedResource = AllocatedResource.builder().id(1L).demandId(1L).resourceName("crayon").userEmail("titi@gmail.com").quantity(2).demandDate(LocalDateTime.of(2025, 2, 2, 12, 0)).allocationDate(LocalDateTime.of(2025, 2, 2, 12, 0)).build();
+
+        AllocatedResourceDTO expectedDto = new AllocatedResourceDTO().id(1L).demandId(1L).resourceName("crayon").quantity(2).demandDate("2025/02/02").allocationDate("2025/02/02");
 
         when(demandRepository.findById(Id)).thenReturn(Optional.of(existingDemand));
         when(resourceRepository.findByName(Name)).thenReturn(Optional.of(existingResource));
         when(allocatedResourceRepository.save(any())).thenReturn(allocatedResource);
-
+        when(demandMapper.toAllocatedResourceDTO(any())).thenReturn(expectedDto);
         doNothing().when(emailService).sendEmail(anyString(), anyString(), anyString());
 
         //When
@@ -148,26 +153,28 @@ public class DemandServiceTest {
 
         //Then
         assertNotNull(result);
-        assertEquals(Id, result.getId());
+        assertEquals(request.getDemandId(), result.getId());
         assertEquals(Name, result.getResourceName());
         assertEquals(2, result.getQuantity());
 
         verify(demandRepository).save(existingDemand);
         verify(resourceRepository).save(existingResource);
         verify(emailService).sendEmail(eq("titi@gmail.com"), anyString(), anyString());
+        verify(demandMapper).toAllocatedResourceDTO(any());
 
         assertEquals(DemandStatus.APPROVED, existingDemand.getStatus());
-        assertEquals(1, existingResource.getQuantity());
+        assertEquals(2, existingResource.getQuantity());
+        assertTrue(existingResource.getIsAvailable());
     }
 
     @Test
-    void AllocateResource_ShouldThrowException_WhenResourceNotFound(){
+    void AllocateResource_ShouldThrowException_WhenResourceNotFound() {
         //Given
         Long Id = 1L;
         AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(1L).resourceName("crayon").userEmail("titi@gmail.com").quantity(2);
         when(demandRepository.findById(Id)).thenReturn(Optional.empty());
         //When & Then
-        assertThrows(RuntimeException.class, ()->objectUnderTest.allocateResource(request));
+        assertThrows(RuntimeException.class, () -> objectUnderTest.allocateResource(request));
     }
 
     @Test
@@ -220,14 +227,41 @@ public class DemandServiceTest {
 
         Demand demand = new Demand();
         demand.setStatus(DemandStatus.PENDING);
-        demand.setQuantity(2);
+        demand.setQuantity(3);
 
         Resource resource = new Resource();
+        resource.setQuantity(3);
         resource.setIsAvailable(true);
 
         when(demandRepository.findById(1L)).thenReturn(Optional.of(demand));
         when(resourceRepository.findByName("Laptop")).thenReturn(Optional.of(resource));
         //Act & Assert
         assertThrows(IllegalStateException.class, () -> objectUnderTest.allocateResource(request));
+    }
+
+    @Test
+    void getDemandsByEmail_ShouldReturnDemandsSuccessfully() {
+        //Given
+        String existingEmail = "titi@gmail.com";
+        List<Demand> demandList = List.of(Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(1).urgency(URGENT).status(PENDING).build());
+        when(demandRepository.findAllByUserEmail(existingEmail)).thenReturn(demandList);
+
+        //When
+        objectUnderTest.getDemandsByEmail(existingEmail);
+        //Then
+        assertThat(demandList).hasSize(1);
+
+    }
+
+    @Test
+    void getDemandsByEmail_ShouldReturnEmptyList_WhenNorDemandsAreFound() {
+        //Given
+        String existingEmail = "titi@gmail.com";
+        when(demandRepository.findAllByUserEmail(existingEmail)).thenReturn(Collections.emptyList());
+        //When
+        List<DemandDTO> result = objectUnderTest.getDemandsByEmail(existingEmail);
+        //Then
+        assertNotNull(result);
+        assertThat(result).isEmpty();
     }
 }

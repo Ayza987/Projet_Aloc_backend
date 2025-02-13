@@ -177,6 +177,30 @@ paths:
                   $ref: '#/components/schemas/DemandDTO'
           '404':
             description: Not found
+  /requests/{userEmail}:
+    get:
+      tags:
+        - "Demand"
+      summary: "Get demands by email"
+      description: "Create an endpoint to get the demands by email"
+      operationId: getDemandsByEmail
+      parameters:
+        - name: userEmail
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemandDTO'
+        '404':
+          description: Not found
+        '400':
+          description: Bad request
   /request/{id}:
     patch:
       tags:

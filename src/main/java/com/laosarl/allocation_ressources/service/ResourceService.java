@@ -7,7 +7,6 @@ import com.laosarl.allocation_ressources.repository.ResourceRepository;
 import com.laosarl.allocation_ressources.service.mapper.ResourceMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -19,11 +18,16 @@ public class ResourceService {
 
     private final ResourceRepository resourceRepository;
     private final ResourceMapper resourceMapper;
-    @Value("${upload.directory}")
-    private String uploadDirectory;
+
 
     @Transactional
     public void createResource(CreateResourceRequestDTO request) {
+        if (resourceRepository.existsByName(request.getName())) {
+            throw new IllegalArgumentException("Resource already exists");
+        }
+        if (request.getQuantity() < 1) {
+            throw new RuntimeException("Resource needs quantity");
+        }
         resourceRepository.save(Resource.builder().name(request.getName()).type(request.getType()).description(request.getDescription()).isAvailable(request.getIsAvailable()).quantity(request.getQuantity()).build());
     }
 
@@ -55,8 +59,7 @@ public class ResourceService {
     }
 
     public Resource changeAvailability(Long id) {
-        Resource resource = resourceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Resource Not found"));
+        Resource resource = resourceRepository.findById(id).orElseThrow(() -> new RuntimeException("Resource Not found"));
         resource.setIsAvailable(!resource.getIsAvailable());
         return resourceRepository.save(resource);
     }

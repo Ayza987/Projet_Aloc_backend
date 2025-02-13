@@ -28,6 +28,12 @@ public class DemandResource {
         return ResponseEntity.ok(demandList);
     }
 
+    @GetMapping("/requests/{userEmail}")
+    public ResponseEntity<List<DemandDTO>> getDemandsByEmail(@PathVariable String userEmail) {
+        List<DemandDTO> demandList = demandService.getDemandsByEmail(userEmail);
+        return ResponseEntity.ok(demandList);
+    }
+
     @PatchMapping("/request/{id}")
     public ResponseEntity<Void> updateDemands(@PathVariable Long id, @RequestBody UpdateDemandDTO demandDTO) {
         demandService.updateDemand(id, demandDTO);
