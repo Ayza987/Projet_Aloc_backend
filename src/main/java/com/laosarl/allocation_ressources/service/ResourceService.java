@@ -63,4 +63,13 @@ public class ResourceService {
         resource.setIsAvailable(!resource.getIsAvailable());
         return resourceRepository.save(resource);
     }
+
+    public List<ResourceDTO> searchResources(String name) {
+        List<Resource> resources = resourceRepository.findByNameContainingIgnoreCase(name);
+
+        if (resources.isEmpty()) {
+            throw new RuntimeException("No results found");
+        }
+        return resources.stream().map(resourceMapper::toResourceDTO).toList();
+    }
 }

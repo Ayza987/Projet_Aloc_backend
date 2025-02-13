@@ -43,7 +43,7 @@ class AccountServiceTest {
 
         when(userRepository.existsByEmail(signupRequestDTO.getEmail())).thenReturn(false);
         when(objectUnderTest.generateSecurePassword()).thenReturn(generatedPassword);
-        doNothing().when(emailService).sendEmail(anyString(), anyString(), anyString());
+        //doNothing().when(emailService).sendEmail(anyString(), anyString(), anyString());
         //When
         objectUnderTest.createAccount(signupRequestDTO);
         //Then

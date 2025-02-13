@@ -163,4 +163,13 @@ public class DemandService {
         }
         return demands.stream().map(demandMapper::toDemandDTO).toList();
     }
+
+    public List<DemandDTO> searchDemands(String userEmail) {
+        List<Demand> demandList = demandRepository.findByUserEmailContainingIgnoreCase(userEmail);
+
+        if (demandList.isEmpty()) {
+            throw new RuntimeException("No results found");
+        }
+        return demandList.stream().map(demandMapper::toDemandDTO).toList();
+    }
 }

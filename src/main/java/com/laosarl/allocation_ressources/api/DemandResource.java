@@ -16,37 +16,37 @@ public class DemandResource {
 
     private final DemandService demandService;
 
-    @PostMapping("/createrequest")
+    @PostMapping("/createDemand")
     public ResponseEntity<Void> createDemand(@RequestBody CreateDemandRequestDTO requestDTO) {
         demandService.createDemand(requestDTO);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/requests")
+    @GetMapping("/demands")
     public ResponseEntity<List<DemandDTO>> getAllDemands() {
         List<DemandDTO> demandList = demandService.getAllDemands();
         return ResponseEntity.ok(demandList);
     }
 
-    @GetMapping("/requests/{userEmail}")
+    @GetMapping("/demands/{userEmail}")
     public ResponseEntity<List<DemandDTO>> getDemandsByEmail(@PathVariable String userEmail) {
         List<DemandDTO> demandList = demandService.getDemandsByEmail(userEmail);
         return ResponseEntity.ok(demandList);
     }
 
-    @PatchMapping("/request/{id}")
+    @PatchMapping("/demand/{id}")
     public ResponseEntity<Void> updateDemands(@PathVariable Long id, @RequestBody UpdateDemandDTO demandDTO) {
         demandService.updateDemand(id, demandDTO);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/requests/delete/{id}")
+    @DeleteMapping("/demands/delete/{id}")
     public ResponseEntity<Void> deleteDemand(@PathVariable Long id){
         demandService.deleteDemand(id);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/requests/updateUrgency/{id}")
+    @PatchMapping("/demands/updateUrgency/{id}")
     public ResponseEntity<Void> updateUrgency(@PathVariable Long id) {
         demandService.updateUrgency(id);
         return ResponseEntity.ok().build();
@@ -63,5 +63,11 @@ public class DemandResource {
             @RequestBody AllocateResourceRequestDTO request) {
         demandService.rejectDemand(request);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/demands/search")
+    public ResponseEntity<List<DemandDTO>> searchResources(@RequestParam String userEmail) {
+        List<DemandDTO> demandsList = demandService.searchDemands(userEmail);
+        return ResponseEntity.ok(demandsList);
     }
 }

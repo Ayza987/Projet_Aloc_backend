@@ -139,7 +139,7 @@ paths:
             description: "User deleted successfully"
           '404':
               description: "Not Found"
-  /createrequest:
+  /createDemand:
     post:
       tags:
         - "Demand"
@@ -161,7 +161,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequestDTO'
-  /requests:
+  /demands:
       get:
         tags:
           - "Demand"
@@ -177,7 +177,7 @@ paths:
                   $ref: '#/components/schemas/DemandDTO'
           '404':
             description: Not found
-  /requests/{userEmail}:
+  /demands/{userEmail}:
     get:
       tags:
         - "Demand"
@@ -201,7 +201,7 @@ paths:
           description: Not found
         '400':
           description: Bad request
-  /request/{id}:
+  /demand/{id}:
     patch:
       tags:
         - "Demand"
@@ -226,7 +226,7 @@ paths:
           description: Success
         '404':
           description: Not Found
-  /requests/delete/{id}:
+  /demands/delete/{id}:
     delete:
       tags:
         - "Demand"
@@ -244,7 +244,88 @@ paths:
           description: "Demand deleted successfully"
         '404':
           description: "Not Found"
-  /createresource:
+  /demands/updateUrgency/{id}:
+    patch:
+      tags:
+        - "Demand"
+      description: "Change the urgency of a demand"
+      operationId: updateUrgency
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Not found
+  /demand/allocate:
+    post:
+      tags:
+        - "Demands"
+      description: "Allocate a resource"
+      operationId: allocateResource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllocateResourceRequestDTO'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllocatedResourceDTO'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+  /demand/reject:
+    post:
+      tags:
+        - "Demands"
+      description: "Reject an allocation demand"
+      operationId: rejectDemand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllocateResourceRequestDTO'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+  /demands/search:
+    get:
+      tags:
+        - "Demand"
+      summary: "Search demands"
+      description: "Get the list of all the demands according to a research"
+      operationId: searchDemands
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemandDTO'
+        '404':
+          description: Not found
+  /createResource:
     post:
       tags:
         - "Resource"
@@ -363,14 +444,15 @@ paths:
                 $ref: '#/components/schemas/ResourceDTO'
         '404':
           description: Not found
-  /requests/updateUrgency/{id}:
-    patch:
+  /resources/search:
+    get:
       tags:
-        - "Demand"
-      description: "Change the urgency of a demand"
-      operationId: updateUrgency
+        - "Resource"
+      summary: "Search resources"
+      description: "Get the list of all the resources according to a research"
+      operationId: searchResources
       parameters:
-        - name: id
+        - name: userEmail
           in: path
           required: true
           schema:
@@ -378,50 +460,15 @@ paths:
       responses:
         '200':
           description: Success
-        '404':
-          description: Not found
-  /demand/allocate:
-    post:
-      tags:
-        - "Demands"
-      description: "Allocate a resource"
-      operationId: allocateResource
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AllocateResourceRequestDTO'
-      responses:
-        '200':
-          description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AllocatedResourceDTO'
-        '400':
-          description: Bad request
+                $ref: '#/components/schemas/ResourceDTO'
         '404':
           description: Not found
-  /demand/reject:
-    post:
-      tags:
-        - "Demands"
-      description: "Reject an allocation demand"
-      operationId: rejectDemand
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AllocateResourceRequestDTO'
-      responses:
-        '200':
-          description: Success
-        '400':
-          description: Bad request
-        '404':
-          description: Not found
+
+
+
 
 
 

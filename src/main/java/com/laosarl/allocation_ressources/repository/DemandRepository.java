@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface DemandRepository extends JpaRepository<Demand, Long> {
     List<Demand> findAllByUserEmail(String userEmail);
+
+    List<Demand> findByUserEmailContainingIgnoreCase(String userEmail);
 }

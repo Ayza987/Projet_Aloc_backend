@@ -53,4 +53,10 @@ public class ResourceResource {
         Resource updatedResource = resourceService.changeAvailability(id);
         return ResponseEntity.ok(resourceMapper.toDto(updatedResource));
     }
+
+    @GetMapping("/resources/search")
+    public ResponseEntity<List<ResourceDTO>> searchResources(@RequestParam String name) {
+        List<ResourceDTO> resourceList = resourceService.searchResources(name);
+        return ResponseEntity.ok(resourceList);
+    }
 }
