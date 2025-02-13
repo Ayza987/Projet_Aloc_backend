@@ -96,7 +96,7 @@ public class DemandService {
             throw new IllegalStateException("Resource not available");
         }
 
-        if (request.getQuantity() > demand.getQuantity()) {
+        if (request.getQuantity() > resource.getQuantity()) {
             throw new IllegalStateException("Requested quantity exceeds available stock");
         }
 
@@ -120,14 +120,7 @@ public class DemandService {
         }
         resourceRepository.save(resource);
 
-        AllocatedResourceDTO dto = new AllocatedResourceDTO();
-        dto.setId(savedAllocation.getId());
-        dto.setDemandId(savedAllocation.getDemandId());
-        dto.setUserEmail(savedAllocation.getUserEmail());
-        dto.setResourceName(savedAllocation.getResourceName());
-        dto.setQuantity(savedAllocation.getQuantity());
-        dto.setDemandDate(savedAllocation.getDemandDate().toString());
-        dto.setAllocationDate(savedAllocation.getAllocationDate().toString());
+        AllocatedResourceDTO dto = demandMapper.toAllocatedResourceDTO(savedAllocation);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String formattedDate = LocalDateTime.now().format(formatter);

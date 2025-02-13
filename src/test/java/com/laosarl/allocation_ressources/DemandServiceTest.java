@@ -202,10 +202,8 @@ public class DemandServiceTest {
     void allocateResource_ResourceNotAvailable() {
         //Arrange
         AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(1L).resourceName("Laptop");
-
         Demand demand = new Demand();
         demand.setStatus(DemandStatus.PENDING);
-
         Resource resource = new Resource();
         resource.setIsAvailable(false);
 
