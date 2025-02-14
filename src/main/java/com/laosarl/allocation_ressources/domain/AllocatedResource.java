@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import static com.laosarl.allocation_ressources.domain.AllocationStatus.*;
+
 @Entity
 @Table(name = "allocations")
 @Data
@@ -36,4 +38,9 @@ public class AllocatedResource {
 
     @Column(name = "allocation_date")
     private LocalDateTime allocationDate;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private AllocationStatus status = NOT_RETURNED;
 }

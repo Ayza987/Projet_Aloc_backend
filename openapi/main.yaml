@@ -488,6 +488,28 @@ paths:
                 $ref: '#/components/schemas/ResourceDTO'
         '404':
           description: Not found
+  /allocatedResources/search:
+    get:
+      tags:
+        - "Resource"
+      summary: "Search allocated resources"
+      description: "Get the list of all the allocated resources according to a research"
+      operationId: searchAllocatedResources
+      parameters:
+        - name: userEmail
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllocatedResourceDTO'
+        '404':
+          description: Not found
 
 
 
@@ -691,7 +713,7 @@ components:
         - HARDWARE
         - SOFTWARE
         - OTHER
-        -
+
     CreateResourceRequestDTO:
       type: object
       properties:
@@ -719,6 +741,13 @@ components:
           type: boolean
         quantity:
           type: integer
+
+    AllocationStatus:
+      type: string
+      enum:
+        - RETURNED
+        - NOT_RETURNED
+        - NON_RETURNABLE
 
     AllocateResourceRequestDTO:
       type: object
@@ -752,6 +781,8 @@ components:
           type: string
         allocation_date:
           type: string
+        status:
+            $ref: '#/components/schemas/AllocationStatus'
 
 
 

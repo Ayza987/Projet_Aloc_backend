@@ -81,7 +81,8 @@ public class DemandService {
     }
 
     @Transactional
-    public AllocatedResourceDTO allocateResource(AllocateResourceRequestDTO request) {
+    public AllocatedResourceDTO
+    allocateResource(AllocateResourceRequestDTO request) {
         Demand demand = demandRepository.findById((request.getDemandId()))
                 .orElseThrow(() -> new RuntimeException("Demand not found"));
 
