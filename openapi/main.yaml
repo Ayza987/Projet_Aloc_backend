@@ -491,10 +491,48 @@ paths:
   /allocatedResources/search:
     get:
       tags:
-        - "Resource"
+        - "Allocation"
       summary: "Search allocated resources"
       description: "Get the list of all the allocated resources according to a research"
       operationId: searchAllocatedResources
+      parameters:
+        - name: userEmail
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllocatedResourceDTO'
+        '404':
+          description: Not found
+  /allocatedResources:
+    get:
+      tags:
+        - "Allocation"
+      summary: "Get all allocated resources"
+      description: "Get the list of all the allocated resources"
+      operationId: getAllocatedResources
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllocatedResourceDTO'
+        '404':
+          description: Not found
+  /allocatedResource/{userEmail}:
+    get:
+      tags:
+        - "Allocation"
+      summary: "Get allocated resource by userEmail"
+      description: "Get an allocated resource using the userEmail"
+      operationId: getAllocatedResourceByUserEmail
       parameters:
         - name: userEmail
           in: path
