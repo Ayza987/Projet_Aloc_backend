@@ -264,4 +264,35 @@ public class DemandServiceTest {
         assertNotNull(result);
         assertThat(result).isEmpty();
     }
+
+    @Test
+    void rejectDemand_ShouldThrowException_WhenDemandNotFound() {
+        // Given
+        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO();
+        request.setDemandId(1L);
+
+        when(demandRepository.findById(1L)).thenReturn(Optional.empty());
+        // When & Then
+        assertThrows(RuntimeException.class, () -> objectUnderTest.rejectDemand(request));
+    }
+
+    @Test
+    void rejectDemand_ShouldSendEmailAndChangeStatus_WhenDemandIsPending() {
+        // Given
+        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO();
+        request.setDemandId(1L);
+        request.setResourceName("Laptop");
+        request.setUserEmail("test@example.com");
+
+        Demand demand = new Demand();
+        demand.setStatus(DemandStatus.PENDING);
+
+        when(demandRepository.findById(1L)).thenReturn(Optional.of(demand));
+        // When
+        objectUnderTest.rejectDemand(request);
+        // Then
+        verify(emailService).sendEmail(eq("test@example.com"), anyString(), anyString());
+        assertEquals(DemandStatus.REJECTED, demand.getStatus());
+        verify(demandRepository).save(demand);
+    }
 }

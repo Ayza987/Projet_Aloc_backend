@@ -19,8 +19,8 @@ import java.util.Optional;
 
 import static com.laosarl.allocation_ressources.model.ResourceType.HARDWARE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -107,5 +107,30 @@ public class ResourceServiceTest {
 
         //Then
         verify(resourceRepository).delete(existingResource);
+    }
+
+    @Test
+    void changeAvailability_ShouldToggleAvailability_WhenResourceExists() {
+        // Given
+        Long id = 1L;
+        Resource resource = new Resource();
+        resource.setIsAvailable(true);
+
+        when(resourceRepository.findById(id)).thenReturn(Optional.of(resource));
+        when(resourceRepository.save(any(Resource.class))).thenReturn(resource);
+        // When
+        Resource result = objectUnderTest.changeAvailability(id);
+        // Then
+        assertFalse(result.getIsAvailable());
+        verify(resourceRepository).save(resource);
+    }
+
+    @Test
+    void searchResources_ShouldThrowException_WhenNoResourcesFound() {
+        // Given
+        String name = "azert";
+        when(resourceRepository.findByNameContainingIgnoreCase(name)).thenReturn(Collections.emptyList());
+        // When & Then
+        assertThrows(RuntimeException.class, () -> objectUnderTest.searchResources(name));
     }
 }

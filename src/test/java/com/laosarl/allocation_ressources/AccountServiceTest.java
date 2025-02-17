@@ -163,7 +163,6 @@ class AccountServiceTest {
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
         //Act & Assert
-
         assertThrows(RuntimeException.class, () -> objectUnderTest.getUser(userId));
 
 
@@ -176,7 +175,6 @@ class AccountServiceTest {
         User existingUser = User.builder().email("johndoe@gmail.com").name("John").surname("Doe").build();
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
-
         //When
         objectUnderTest.deleteUser(userId);
         //Then
@@ -187,11 +185,19 @@ class AccountServiceTest {
     void deleteUser_ShouldThrowException_WhenUserIsNotFound() {
         //Arrange
         Long userId = 1L;
-
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
         //Act & Assert
         assertThrows(RuntimeException.class, () -> objectUnderTest.deleteUser(userId));
 
+    }
+
+    @Test
+    void searchUsers_ShouldThrowException_WhenNoUsersFound() {
+        // Given
+        String name = "John";
+        when(userRepository.findByNameContainingIgnoreCase(name)).thenReturn(Collections.emptyList());
+        // When & Then
+        assertThrows(RuntimeException.class, () -> objectUnderTest.searchUsers(name));
     }
 
 }
