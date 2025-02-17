@@ -1,12 +1,10 @@
 package com.laosarl.allocation_ressources.service;
 
+import com.laosarl.allocation_ressources.domain.PasswordResetToken;
 import com.laosarl.allocation_ressources.domain.User;
-import com.laosarl.allocation_ressources.exceptions.EmailAlreadyExistsException;
-import com.laosarl.allocation_ressources.exceptions.NoResultsFoundException;
-import com.laosarl.allocation_ressources.exceptions.ObjectNotFoundException;
-import com.laosarl.allocation_ressources.model.SignupRequestDTO;
-import com.laosarl.allocation_ressources.model.UpdateUserRequestDTO;
-import com.laosarl.allocation_ressources.model.UserDTO;
+import com.laosarl.allocation_ressources.exceptions.*;
+import com.laosarl.allocation_ressources.model.*;
+import com.laosarl.allocation_ressources.repository.PasswordResetTokenRepository;
 import com.laosarl.allocation_ressources.repository.UserRepository;
 import com.laosarl.allocation_ressources.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +24,7 @@ public class AccountService {
     private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final SecureRandom RANDOM = new SecureRandom();
     private final UserRepository userRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final UserMapper userMapper;
     private final EmailService emailService;
 
@@ -56,6 +57,59 @@ public class AccountService {
 
         return password.toString();
     }
+
+    @Transactional
+    public void createPasswordResetTokenForUser(PasswordResetRequestDTO request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new ObjectNotFoundException("User not found "));
+
+        String token = UUID.randomUUID().toString();
+        PasswordResetToken myToken =  PasswordResetToken.builder().token(token).user(user).build();
+        passwordResetTokenRepository.save(myToken);
+
+        String subject = "Réinitialisation de mot de passe";
+        String resetUrl = "http://aloc.com/reset-password?token=" + token;
+        String body = String.format("""
+            Bonjour %s %s,
+            
+            Vous avez demandé la réinitialisation de votre mot de passe.
+            Cliquez sur le lien ci-dessous pour réinitialiser votre mot de passe :
+            %s
+            
+            Ce lien est valable pendant 24 heures.
+            
+            Si vous n'avez pas demandé cette réinitialisation, veuillez ignorer cet email.
+            
+            Cordialement.
+            """, user.getName(), user.getSurname(), resetUrl);
+
+        emailService.sendEmail(user.getEmail(), subject, body);
+    }
+
+    @Transactional
+    public void validatePasswordResetToken(String token) {
+
+        PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token);
+        if (resetToken == null) {
+            throw new InvalidTokenException("Invalid token");
+        }
+
+        if (resetToken.getExpiryDate().before(new Date())) {
+            throw new TokenExpiredException("Token has expired");
+        }
+    }
+
+    @Transactional
+    public void resetPassword(PasswordResetDTO request) {
+        validatePasswordResetToken(request.getToken());
+        PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(request.getToken());
+        User user = resetToken.getUser();
+        user.setPassword(request.getNewPassword());
+        userRepository.save(user);
+
+        passwordResetTokenRepository.delete(resetToken);
+    }
+
 
     public void updateAccount(Long id, UpdateUserRequestDTO updateRequest) {
         User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User not found"));

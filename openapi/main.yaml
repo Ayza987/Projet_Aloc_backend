@@ -565,6 +565,37 @@ paths:
           description: Success
         '404':
           description: Not found
+  /password/reset-request:
+    post:
+      summary: Reset password request
+      operationId: requestPasswordReset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequestDTO'
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: User not found
+  /password/reset:
+    post:
+      summary: Reset password
+      operationId: passwordReset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetDTO'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+
 
 
 
@@ -839,6 +870,27 @@ components:
           type: string
         status:
             $ref: '#/components/schemas/AllocationStatus'
+
+    PasswordResetRequestDTO:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+
+    PasswordResetDTO:
+      type: object
+      required:
+        - token
+        - newPassword
+      properties:
+        token:
+          type: string
+        newPassword:
+          type: string
 
 
 

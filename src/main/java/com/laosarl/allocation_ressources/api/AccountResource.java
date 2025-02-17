@@ -21,6 +21,19 @@ public class AccountResource {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/password/reset-request")
+    public ResponseEntity<Void> requestPasswordReset(PasswordResetRequestDTO request) {
+        accountService.createPasswordResetTokenForUser(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/password/reset")
+    public ResponseEntity<Void> resetPassword(PasswordResetDTO request) {
+        accountService.resetPassword(request);
+        return ResponseEntity.ok().build();
+    }
+
+
     @PatchMapping("/user/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
         accountService.updateAccount(id, updateUserRequestDTO);

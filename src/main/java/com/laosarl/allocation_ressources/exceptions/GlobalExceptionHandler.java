@@ -43,4 +43,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException exception) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
     }
+
+    @ExceptionHandler({TokenExpiredException.class})
+    public ResponseEntity<Object> handleTokenExpiredException(TokenExpiredException exception) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler({InvalidTokenException.class})
+    public ResponseEntity<Object> handleInvalidTokenException(InvalidTokenException exception) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(exception.getMessage());
+    }
 }
