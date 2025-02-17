@@ -1,6 +1,7 @@
 package com.laosarl.allocation_ressources.service;
 
 import com.laosarl.allocation_ressources.domain.AllocatedResource;
+import com.laosarl.allocation_ressources.domain.AllocationStatus;
 import com.laosarl.allocation_ressources.model.AllocatedResourceDTO;
 import com.laosarl.allocation_ressources.repository.AllocatedResourceRepository;
 import com.laosarl.allocation_ressources.service.mapper.AllocationMapper;
@@ -48,4 +49,15 @@ public class AllocationService {
         }
         return allocationsList.stream().map(demandMapper::toAllocatedResourceDTO).toList();
     }
+
+    public void updateStatus(Long id) {
+        AllocatedResource resource = allocatedResourceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No allocated resource found"));
+
+        if (resource.getStatus() == AllocationStatus.NOT_RETURNED) {
+            resource.setStatus(AllocationStatus.RETURNED);
+            allocatedResourceRepository.save(resource);
+        }
+    }
+
 }

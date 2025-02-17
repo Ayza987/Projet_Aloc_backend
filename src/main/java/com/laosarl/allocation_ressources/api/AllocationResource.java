@@ -34,5 +34,11 @@ public class AllocationResource {
         return ResponseEntity.ok(allocationList);
     }
 
+    @PatchMapping("/allocatedResource/updateStatus/{id}")
+    public ResponseEntity<Void> updateStatus(@PathVariable Long id){
+        allocationService.updateStatus(id);
+        return ResponseEntity.ok().build();
+    }
+
 
 }

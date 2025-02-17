@@ -13,4 +13,6 @@ public interface AllocatedResourceRepository extends JpaRepository<AllocatedReso
     List<AllocatedResource> findByUserEmailContainingIgnoreCase(String userEmail);
 
     List<AllocatedResource> findAllByUserEmail(String userEmail);
+
+    AllocatedResource findByStatus(Long id);
 }
