@@ -548,6 +548,24 @@ paths:
                 $ref: '#/components/schemas/AllocatedResourceDTO'
         '404':
           description: Not found
+  /allocatedResource/updateStatus/{id}:
+    patch:
+      tags:
+        - "Allocation"
+      description: "Change the status of an allocated resource"
+      operationId: updateStatus
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Not found
+
 
 
 
