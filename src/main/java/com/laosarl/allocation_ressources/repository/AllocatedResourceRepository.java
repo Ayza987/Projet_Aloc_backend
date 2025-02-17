@@ -14,5 +14,4 @@ public interface AllocatedResourceRepository extends JpaRepository<AllocatedReso
 
     List<AllocatedResource> findAllByUserEmail(String userEmail);
 
-    AllocatedResource findByStatus(Long id);
 }

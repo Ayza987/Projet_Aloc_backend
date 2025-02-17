@@ -1,6 +1,9 @@
 package com.laosarl.allocation_ressources.service;
 
 import com.laosarl.allocation_ressources.domain.User;
+import com.laosarl.allocation_ressources.exceptions.EmailAlreadyExistsException;
+import com.laosarl.allocation_ressources.exceptions.NoResultsFoundException;
+import com.laosarl.allocation_ressources.exceptions.ObjectNotFoundException;
 import com.laosarl.allocation_ressources.model.SignupRequestDTO;
 import com.laosarl.allocation_ressources.model.UpdateUserRequestDTO;
 import com.laosarl.allocation_ressources.model.UserDTO;
@@ -28,7 +31,7 @@ public class AccountService {
     public void createAccount(SignupRequestDTO request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new EmailAlreadyExistsException("Email already exists");
         }
         String generatedPassword = generateSecurePassword();
 
@@ -55,7 +58,7 @@ public class AccountService {
     }
 
     public void updateAccount(Long id, UpdateUserRequestDTO updateRequest) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         if (updateRequest.getEmail() != null) {
             user.setEmail(updateRequest.getEmail());
@@ -81,13 +84,13 @@ public class AccountService {
     }
 
     public UserDTO getUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("No user found"));
+        User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("No user found"));
         return userMapper.toUserDTO(user);
     }
 
 
     public void deleteUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("No user found"));
+        User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("No user found"));
 
         userRepository.delete(user);
     }
@@ -96,7 +99,7 @@ public class AccountService {
         List<User> userList = userRepository.findByNameContainingIgnoreCase(name);
 
         if(userList.isEmpty()){
-            throw new RuntimeException("No results found");
+            throw new NoResultsFoundException("No results found");
         }
         return userList.stream().map(userMapper::toUserDTO).toList();
     }

@@ -2,6 +2,8 @@ package com.laosarl.allocation_ressources.service;
 
 import com.laosarl.allocation_ressources.domain.AllocatedResource;
 import com.laosarl.allocation_ressources.domain.AllocationStatus;
+import com.laosarl.allocation_ressources.exceptions.NoResultsFoundException;
+import com.laosarl.allocation_ressources.exceptions.ObjectNotFoundException;
 import com.laosarl.allocation_ressources.model.AllocatedResourceDTO;
 import com.laosarl.allocation_ressources.repository.AllocatedResourceRepository;
 import com.laosarl.allocation_ressources.service.mapper.AllocationMapper;
@@ -36,7 +38,7 @@ public class AllocationService {
         List<AllocatedResource> allocationList = allocatedResourceRepository.findByUserEmailContainingIgnoreCase(userEmail);
 
         if (allocationList.isEmpty()) {
-            throw new RuntimeException("No results found");
+            throw new NoResultsFoundException("No results found");
         }
         return allocationList.stream().map(demandMapper::toAllocatedResourceDTO).toList();
     }
@@ -52,7 +54,7 @@ public class AllocationService {
 
     public void updateStatus(Long id) {
         AllocatedResource resource = allocatedResourceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No allocated resource found"));
+                .orElseThrow(() -> new ObjectNotFoundException("No allocated resource found"));
 
         if (resource.getStatus() == AllocationStatus.NOT_RETURNED) {
             resource.setStatus(AllocationStatus.RETURNED);

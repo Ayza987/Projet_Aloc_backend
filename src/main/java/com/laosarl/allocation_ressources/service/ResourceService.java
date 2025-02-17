@@ -1,6 +1,9 @@
 package com.laosarl.allocation_ressources.service;
 
 import com.laosarl.allocation_ressources.domain.Resource;
+import com.laosarl.allocation_ressources.exceptions.NoResultsFoundException;
+import com.laosarl.allocation_ressources.exceptions.ObjectNotFoundException;
+import com.laosarl.allocation_ressources.exceptions.ResourceAlreadyExistsException;
 import com.laosarl.allocation_ressources.model.CreateResourceRequestDTO;
 import com.laosarl.allocation_ressources.model.ResourceDTO;
 import com.laosarl.allocation_ressources.repository.ResourceRepository;
@@ -23,10 +26,10 @@ public class ResourceService {
     @Transactional
     public void createResource(CreateResourceRequestDTO request) {
         if (resourceRepository.existsByName(request.getName())) {
-            throw new IllegalArgumentException("Resource already exists");
+            throw new ResourceAlreadyExistsException("Resource already exists");
         }
         if (request.getQuantity() < 1) {
-            throw new RuntimeException("Resource needs quantity");
+            throw new IllegalArgumentException("Resource needs quantity");
         }
         resourceRepository.save(Resource.builder().name(request.getName()).type(request.getType()).description(request.getDescription()).isAvailable(request.getIsAvailable()).quantity(request.getQuantity()).build());
     }
@@ -41,12 +44,12 @@ public class ResourceService {
     }
 
     public ResourceDTO getResource(Long id) {
-        Resource resource = resourceRepository.findById(id).orElseThrow(() -> new RuntimeException("No resource found"));
+        Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("No resource found"));
         return resourceMapper.toResourceDTO(resource);
     }
 
     public void updateResource(Long id, ResourceDTO resourceDTO) {
-        Resource resource = resourceRepository.findById(id).orElseThrow(() -> new RuntimeException("Demand Not found"));
+        Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Demand Not found"));
 
         resourceMapper.updateResourceFromDto(resourceDTO, resource);
 
@@ -54,12 +57,12 @@ public class ResourceService {
     }
 
     public void deleteDemand(Long id) {
-        Resource resource = resourceRepository.findById(id).orElseThrow(() -> new RuntimeException("Demand Not found"));
+        Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Demand Not found"));
         resourceRepository.delete(resource);
     }
 
     public Resource changeAvailability(Long id) {
-        Resource resource = resourceRepository.findById(id).orElseThrow(() -> new RuntimeException("Resource Not found"));
+        Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Resource Not found"));
         resource.setIsAvailable(!resource.getIsAvailable());
         return resourceRepository.save(resource);
     }
@@ -68,7 +71,7 @@ public class ResourceService {
         List<Resource> resources = resourceRepository.findByNameContainingIgnoreCase(name);
 
         if (resources.isEmpty()) {
-            throw new RuntimeException("No results found");
+            throw new NoResultsFoundException("No results found");
         }
         return resources.stream().map(resourceMapper::toResourceDTO).toList();
     }

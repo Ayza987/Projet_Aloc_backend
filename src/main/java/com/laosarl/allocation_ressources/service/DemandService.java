@@ -3,6 +3,9 @@ package com.laosarl.allocation_ressources.service;
 import com.laosarl.allocation_ressources.domain.AllocatedResource;
 import com.laosarl.allocation_ressources.domain.Demand;
 import com.laosarl.allocation_ressources.domain.Resource;
+import com.laosarl.allocation_ressources.exceptions.InvalidDateFormatException;
+import com.laosarl.allocation_ressources.exceptions.NoResultsFoundException;
+import com.laosarl.allocation_ressources.exceptions.ObjectNotFoundException;
 import com.laosarl.allocation_ressources.model.*;
 import com.laosarl.allocation_ressources.repository.AllocatedResourceRepository;
 import com.laosarl.allocation_ressources.repository.DemandRepository;
@@ -38,7 +41,7 @@ public class DemandService {
             try {
                 dueDateFormatted = LocalDate.parse(request.getDueDate(), formatter);
             } catch (DateTimeParseException e) {
-                throw new RuntimeException("Invalid Format Date");
+                throw new InvalidDateFormatException("Invalid Format Date");
             }
         }
         LocalDateTime currentDateTime = LocalDateTime.now();
@@ -57,7 +60,7 @@ public class DemandService {
     }
 
     public void updateDemand(Long id, UpdateDemandDTO updateRequest) {
-        Demand demand = demandRepository.findById(id).orElseThrow(() -> new RuntimeException("Demand Not found"));
+        Demand demand = demandRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Demand Not found"));
 
         demandMapper.updateDemandFromDto(updateRequest, demand);
 
@@ -65,13 +68,13 @@ public class DemandService {
     }
 
     public void deleteDemand(Long id) {
-        Demand demand = demandRepository.findById(id).orElseThrow(() -> new RuntimeException("Demand Not found"));
+        Demand demand = demandRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Demand Not found"));
         demandRepository.delete(demand);
     }
 
     public void updateUrgency(Long id) {
         Demand demand = demandRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Demand Not Found"));
+                .orElseThrow(() -> new ObjectNotFoundException("Demand Not Found"));
         if (demand.getUrgency() == DemandUrgency.URGENT) {
             demand.setUrgency(DemandUrgency.NOT_URGENT);
         } else if (demand.getUrgency() == DemandUrgency.NOT_URGENT) {
@@ -84,14 +87,14 @@ public class DemandService {
     public AllocatedResourceDTO
     allocateResource(AllocateResourceRequestDTO request) {
         Demand demand = demandRepository.findById((request.getDemandId()))
-                .orElseThrow(() -> new RuntimeException("Demand not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("Demand not found"));
 
         if (demand.getStatus() != DemandStatus.PENDING) {
             throw new IllegalStateException("Demand is not in PENDING status");
         }
 
         Resource resource = resourceRepository.findByName(request.getResourceName())
-                .orElseThrow(() -> new RuntimeException("Resource not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("Resource not found"));
 
         if (!resource.getIsAvailable()) {
             throw new IllegalStateException("Resource not available");
@@ -141,7 +144,7 @@ public class DemandService {
 
     public void rejectDemand(AllocateResourceRequestDTO request) {
         Demand demand = demandRepository.findById((request.getDemandId()))
-                .orElseThrow(() -> new RuntimeException("Demand not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("Demand not found"));
 
         if (demand.getStatus() != DemandStatus.PENDING) {
             throw new IllegalStateException("Demand is not in PENDING status");
@@ -169,7 +172,7 @@ public class DemandService {
         List<Demand> demandList = demandRepository.findByUserEmailContainingIgnoreCase(userEmail);
 
         if (demandList.isEmpty()) {
-            throw new RuntimeException("No results found");
+            throw new NoResultsFoundException("No results found");
         }
         return demandList.stream().map(demandMapper::toDemandDTO).toList();
     }
