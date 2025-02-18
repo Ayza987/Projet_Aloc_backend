@@ -1,9 +1,11 @@
 package com.laosarl.allocation_ressources.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Calendar;
 import java.util.Date;
 
 @Data
@@ -25,11 +27,7 @@ public class PasswordResetToken {
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
-    private Date expiryDate;
+    @Builder.Default
+    private Date expiryDate = new Date(System.currentTimeMillis() + EXPIRATION * 60 * 1000);
 
-    private Date calculateExpiryDate() {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, EXPIRATION);
-        return cal.getTime();
-    }
 }
