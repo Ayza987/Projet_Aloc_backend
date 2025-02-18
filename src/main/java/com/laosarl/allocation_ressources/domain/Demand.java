@@ -46,4 +46,6 @@ public class Demand {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private DemandStatus status = PENDING;
+    @Column(name = "reject_reason")
+    private String rejectReason;
 }

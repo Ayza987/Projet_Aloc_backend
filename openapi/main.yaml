@@ -39,16 +39,8 @@ paths:
                 $ref: '#/components/schemas/SignupResponseDTO'
         '403':
           description: Forbidden access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ForbiddenAccessDTO'
         '400':
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestDTO'
   /user/{id}:
     patch:
       tags:
@@ -73,10 +65,6 @@ paths:
           description: "User updated successfully"
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDTO'
   /users:
     get:
       tags:
@@ -92,10 +80,6 @@ paths:
                 $ref: '#/components/schemas/UserDTO'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDTO'
   /users/{id}:
     get:
       tags:
@@ -118,10 +102,6 @@ paths:
                 $ref: '#/components/schemas/UserDTO'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDTO'
   /users/delete/{id}:
       delete:
         tags:
@@ -179,10 +159,6 @@ paths:
           description: "Request created successfully"
         '400':
           description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestDTO'
   /demands:
       get:
         tags:
@@ -317,7 +293,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AllocateResourceRequestDTO'
+              $ref: '#/components/schemas/RejectDemandRequestDTO'
       responses:
         '200':
           description: Success
@@ -848,6 +824,24 @@ components:
           type: string
         quantity:
           type: integer
+
+    RejectDemandRequestDTO:
+      type: object
+      required:
+        - demand_id
+        - user_email
+        - resource_name
+        - reject_reason
+      properties:
+        demand_id:
+          type: integer
+          format: int64
+        user_email:
+          type: string
+        resource_name:
+          type: string
+        reject_reason:
+          type: string
 
     AllocatedResourceDTO:
       type: object

@@ -60,7 +60,7 @@ public class DemandResource {
 
     @PostMapping("/demand/reject")
     public ResponseEntity<Void> rejectDemand(
-            @RequestBody AllocateResourceRequestDTO request) {
+            @RequestBody RejectDemandRequestDTO request) {
         demandService.rejectDemand(request);
         return ResponseEntity.ok().build();
     }

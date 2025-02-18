@@ -31,6 +31,7 @@ public class DemandService {
     private final DemandRepository demandRepository;
     private final ResourceRepository resourceRepository;
     private final AllocatedResourceRepository allocatedResourceRepository;
+    private final NotificationService notificationService;
     private final DemandMapper demandMapper;
 
     public void createDemand(CreateDemandRequestDTO request) {
@@ -130,19 +131,25 @@ public class DemandService {
         String formattedDate = LocalDateTime.now().format(formatter);
 
         String subject = "Votre demande de ressource a été approuvée";
-        String body = "Bonjour,\n\nVotre demande de " + request.getResourceName() + " a été approuvée.\n"
-                + "Quantité allouée : " + request.getQuantity() + "\n"
-                + "Date et heure d'allocation : " + formattedDate + "\n\n"
-                + "Merci de récupérer votre ressource.";
+        String body = String.format("""
+                Bonjour,
+                
+                Votre demande de %s a été approuvée.
+                Quantité allouée : %s
+                Date et heure d'allocation: %s
+                
+                Merci de récupérer votre ressource.
+                """, request.getResourceName(), request.getQuantity(), formattedDate);
 
         emailService.sendEmail(request.getUserEmail(), subject, body);
+        notificationService.createApprovedNotification(request);
 
         return dto;
 
 
     }
 
-    public void rejectDemand(AllocateResourceRequestDTO request) {
+    public void rejectDemand(RejectDemandRequestDTO request) {
         Demand demand = demandRepository.findById((request.getDemandId()))
                 .orElseThrow(() -> new ObjectNotFoundException("Demand not found"));
 
@@ -151,11 +158,21 @@ public class DemandService {
         }
 
         String subject = "Votre demande de ressource a été rejetée";
-        String body = "Bonjour,\n\nVotre demande de " + request.getResourceName() + " a été rejetée.\n";
+        String body = String.format("""
+            Bonjour,
+            
+            Votre demande de %s a été rejetée par l'administration avec le motif suivant :
+            %s
+           
+            
+            Cordialement.
+            """, request.getResourceName(), request.getRejectReason());
+
 
         emailService.sendEmail(request.getUserEmail(), subject, body);
 
         demand.setStatus(DemandStatus.REJECTED);
+        demand.setRejectReason(request.getRejectReason());
         demandRepository.save(demand);
     }
 

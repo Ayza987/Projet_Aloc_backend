@@ -26,11 +26,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({InvalidDateFormatException.class})
     public ResponseEntity<Object> handleInvalidDateFormatException(InvalidDateFormatException exception) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
     @ExceptionHandler({NoResultsFoundException.class})
-    public ResponseEntity<Object> handleIllegalStateException(NoResultsFoundException exception) {
+    public ResponseEntity<Object> handleNoResultsFoundException(NoResultsFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({InvalidPasswordFormatException.class})
     public ResponseEntity<Object> handleInvalidPasswordFormatException(InvalidPasswordFormatException exception){
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage());
     }
 }
