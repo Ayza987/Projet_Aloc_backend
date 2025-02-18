@@ -105,7 +105,7 @@ public class AccountService {
     public void resetPassword(PasswordResetDTO request) {
         validatePasswordResetToken(request.getToken());
         if (!PASSWORD_PATTERN.matcher(request.getNewPassword()).matches()) {
-            throw new InvalidPasswordFormatException("Le mot de passe doit contenir au moins 8 caractères alphanumériques.");
+            throw new InvalidPasswordFormatException("Password does not respect constraints");
         }
         PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(request.getToken());
         User user = resetToken.getUser();
