@@ -11,7 +11,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({ObjectNotFoundException.class})
     public ResponseEntity<Object> handleObjectNotFoundException(ObjectNotFoundException exception) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
     @ExceptionHandler({EmailAlreadyExistsException.class})
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({NoResultsFoundException.class})
     public ResponseEntity<Object> handleIllegalStateException(NoResultsFoundException exception) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
     @ExceptionHandler({IllegalStateException.class})
@@ -53,6 +53,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({InvalidTokenException.class})
     public ResponseEntity<Object> handleInvalidTokenException(InvalidTokenException exception) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler({InvalidPasswordFormatException.class})
+    public ResponseEntity<Object> handleInvalidPasswordFormatException(InvalidPasswordFormatException exception){
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(exception.getMessage());

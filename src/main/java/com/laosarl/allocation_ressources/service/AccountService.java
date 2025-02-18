@@ -16,12 +16,14 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService {
 
     private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[A-Za-z0-9]{8,}$");
     private static final SecureRandom RANDOM = new SecureRandom();
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
@@ -102,6 +104,9 @@ public class AccountService {
     @Transactional
     public void resetPassword(PasswordResetDTO request) {
         validatePasswordResetToken(request.getToken());
+        if (!PASSWORD_PATTERN.matcher(request.getNewPassword()).matches()) {
+            throw new InvalidPasswordFormatException("Le mot de passe doit contenir au moins 8 caractères alphanumériques.");
+        }
         PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(request.getToken());
         User user = resetToken.getUser();
         user.setPassword(request.getNewPassword());
