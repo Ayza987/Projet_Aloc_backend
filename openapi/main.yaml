@@ -913,7 +913,7 @@ components:
         - userEmail
       properties:
         status:
-          type: string
+          type: DemandStatus
         user_email:
           type: string
         reject_reason:

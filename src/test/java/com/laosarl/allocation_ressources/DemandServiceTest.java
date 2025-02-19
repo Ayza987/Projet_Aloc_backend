@@ -24,10 +24,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.laosarl.allocation_ressources.model.DemandStatus.APPROVED;
-import static com.laosarl.allocation_ressources.model.DemandStatus.PENDING;
-import static com.laosarl.allocation_ressources.model.DemandUrgency.URGENT;
-import static com.laosarl.allocation_ressources.model.ResourceType.HARDWARE;
+import static com.laosarl.allocation_ressources.model.DemandStatus.*;
+import static com.laosarl.allocation_ressources.model.DemandUrgency.*;
+import static com.laosarl.allocation_ressources.model.ResourceType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
