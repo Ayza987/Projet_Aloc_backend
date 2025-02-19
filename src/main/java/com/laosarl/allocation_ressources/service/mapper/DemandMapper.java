@@ -13,7 +13,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring")
 public interface DemandMapper {
     DemandDTO toDemandDTO (Demand demand);
-    AllocatedResourceDTO toAllocatedResourceDTO (AllocatedResource allocatedResource);
+    AllocatedResourceDTO   toAllocatedResourceDTO (AllocatedResource allocatedResource);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateDemandFromDto(UpdateDemandDTO dto, @MappingTarget Demand demand);
 

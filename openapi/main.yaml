@@ -571,6 +571,27 @@ paths:
           description: Success
         '400':
           description: Bad Request
+  /notifications/{user_email}:
+    get:
+      summary: Get notifications of a user
+      operationId: getNotifications
+      parameters:
+        - name: user_email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+             schema:
+               $ref: '#/components/schemas/NotificationDTO'
+        '404':
+          description: Not found
+
+
 
 
 
@@ -884,6 +905,18 @@ components:
         token:
           type: string
         newPassword:
+          type: string
+
+    NotificationDTO:
+      type: object
+      required:
+        - userEmail
+      properties:
+        status:
+          type: string
+        user_email:
+          type: string
+        reject_reason:
           type: string
 
 

@@ -34,6 +34,9 @@ public class Notification {
     @Column(name = "status", nullable = false)
     private DemandStatus status;
 
+    @Column(name = "reject_reason")
+    private String rejectReason;
+
     @Column(name = "is_read")
     @Builder.Default
     private boolean isRead = false;

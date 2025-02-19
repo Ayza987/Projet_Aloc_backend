@@ -141,8 +141,8 @@ public class DemandService {
                 Merci de récupérer votre ressource.
                 """, request.getResourceName(), request.getQuantity(), formattedDate);
 
-        emailService.sendEmail(request.getUserEmail(), subject, body);
         notificationService.createApprovedNotification(request);
+        emailService.sendEmail(request.getUserEmail(), subject, body);
 
         return dto;
 
@@ -169,10 +169,11 @@ public class DemandService {
             """, request.getResourceName(), request.getRejectReason());
 
 
+        demand.setRejectReason(request.getRejectReason());
+        demand.setStatus(DemandStatus.REJECTED);
+        notificationService.createRejectedNotification(request);
         emailService.sendEmail(request.getUserEmail(), subject, body);
 
-        demand.setStatus(DemandStatus.REJECTED);
-        demand.setRejectReason(request.getRejectReason());
         demandRepository.save(demand);
     }
 
