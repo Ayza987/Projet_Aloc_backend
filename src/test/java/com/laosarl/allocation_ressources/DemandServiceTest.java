@@ -9,6 +9,7 @@ import com.laosarl.allocation_ressources.repository.DemandRepository;
 import com.laosarl.allocation_ressources.repository.ResourceRepository;
 import com.laosarl.allocation_ressources.service.DemandService;
 import com.laosarl.allocation_ressources.service.EmailService;
+import com.laosarl.allocation_ressources.service.NotificationService;
 import com.laosarl.allocation_ressources.service.mapper.DemandMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,6 +43,8 @@ public class DemandServiceTest {
     AllocatedResourceRepository allocatedResourceRepository;
     @Mock
     EmailService emailService;
+    @Mock
+    NotificationService notificationService;
     @Mock
     DemandMapper demandMapper;
     @InjectMocks
@@ -268,7 +271,7 @@ public class DemandServiceTest {
     @Test
     void rejectDemand_ShouldThrowException_WhenDemandNotFound() {
         // Given
-        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO();
+        RejectDemandRequestDTO request = new RejectDemandRequestDTO();
         request.setDemandId(1L);
 
         when(demandRepository.findById(1L)).thenReturn(Optional.empty());
@@ -279,10 +282,11 @@ public class DemandServiceTest {
     @Test
     void rejectDemand_ShouldSendEmailAndChangeStatus_WhenDemandIsPending() {
         // Given
-        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO();
+        RejectDemandRequestDTO request = new RejectDemandRequestDTO();
         request.setDemandId(1L);
         request.setResourceName("Laptop");
         request.setUserEmail("test@example.com");
+        request.setRejectReason("indisponible");
 
         Demand demand = new Demand();
         demand.setStatus(DemandStatus.PENDING);
@@ -292,6 +296,7 @@ public class DemandServiceTest {
         objectUnderTest.rejectDemand(request);
         // Then
         verify(emailService).sendEmail(eq("test@example.com"), anyString(), anyString());
+        verify(notificationService).createRejectedNotification(request);
         assertEquals(DemandStatus.REJECTED, demand.getStatus());
         verify(demandRepository).save(demand);
     }
