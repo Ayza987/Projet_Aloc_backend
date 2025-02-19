@@ -69,17 +69,19 @@ public class NotificationServiceTest {
 
     @Test
     void createApprovedNotification_DemandNotFound() {
+        //Given
         AllocateResourceRequestDTO request = new AllocateResourceRequestDTO();
         request.setUserEmail("example@ex.com");
         request.setDemandId(1L);
-
+        //When
         when(demandRepository.findById(1L)).thenReturn(Optional.empty());
-
+        //Then
         assertThrows(ObjectNotFoundException.class, () -> notificationService.createApprovedNotification(request));
     }
 
     @Test
     void createApprovedNotification_UserNotFound() {
+        //Given
         AllocateResourceRequestDTO request = new AllocateResourceRequestDTO();
         request.setUserEmail("user@example.com");
         request.setDemandId(1L);
@@ -89,7 +91,7 @@ public class NotificationServiceTest {
 
         when(demandRepository.findById(1L)).thenReturn(Optional.of(demand));
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.empty());
-
+        //When & Then
         assertThrows(ObjectNotFoundException.class, () -> notificationService.createApprovedNotification(request));
     }
 
