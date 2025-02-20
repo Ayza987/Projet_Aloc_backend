@@ -23,9 +23,8 @@ public class AccountResource {
 
     @PostMapping("/auth/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request){
-        System.out.println("Tentative de connexion pour : " + request.getEmail());
-        accountService.login(request);
-        return ResponseEntity.ok().build();
+        LoginResponseDTO response = accountService.login(request);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/password/reset-request")
