@@ -1,5 +1,6 @@
 package com.laosarl.allocation_ressources.service;
 
+import com.laosarl.allocation_ressources.configurations.JwtUtil;
 import com.laosarl.allocation_ressources.domain.PasswordResetToken;
 import com.laosarl.allocation_ressources.domain.User;
 import com.laosarl.allocation_ressources.exceptions.*;
@@ -8,6 +9,12 @@ import com.laosarl.allocation_ressources.repository.PasswordResetTokenRepository
 import com.laosarl.allocation_ressources.repository.UserRepository;
 import com.laosarl.allocation_ressources.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +35,9 @@ public class AccountService {
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final UserMapper userMapper;
+    private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
     @Transactional
@@ -59,6 +69,31 @@ public class AccountService {
 
         return password.toString();
     }
+
+    public LoginResponseDTO login(LoginRequestDTO request) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            User user = userRepository.findByEmail(request.getEmail())
+                    .orElseThrow(() -> new ObjectNotFoundException("User not found"));
+
+            String token = jwtUtil.generateToken(user.getEmail(), user.getIsAdmin());
+
+            LoginResponseDTO response = new LoginResponseDTO();
+            response.setToken(token);
+            response.setIsAdmin(user.getIsAdmin());
+
+            return response;
+
+        } catch (BadCredentialsException e) {
+            throw new IllegalArgumentException("Invalid email or password");
+        }
+    }
+
 
     @Transactional
     public void createPasswordResetTokenForUser(PasswordResetRequestDTO request) {
@@ -162,4 +197,6 @@ public class AccountService {
         }
         return userList.stream().map(userMapper::toUserDTO).toList();
     }
+
+
 }

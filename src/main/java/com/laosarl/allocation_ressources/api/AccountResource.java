@@ -15,9 +15,16 @@ import java.util.List;
 public class AccountResource {
     private final AccountService accountService;
 
-    @PostMapping("/signup")
+    @PostMapping("/auth/signup")
     public ResponseEntity<Void> signup(@RequestBody SignupRequestDTO request) {
         accountService.createAccount(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/auth/login")
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request){
+        System.out.println("Tentative de connexion pour : " + request.getEmail());
+        accountService.login(request);
         return ResponseEntity.ok().build();
     }
 

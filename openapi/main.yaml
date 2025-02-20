@@ -33,10 +33,28 @@ paths:
       responses:
         '200':
           description: Success
+        '403':
+          description: Forbidden access
+        '400':
+          description: Bad Request
+  /auth/login:
+    post:
+      summary: "Login"
+      description: "Create an endpoint to login the users"
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestDTO'
+      responses:
+        '200':
+          description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SignupResponseDTO'
+                $ref: '#/components/schemas/LoginResponseDTO'
         '403':
           description: Forbidden access
         '400':
@@ -613,7 +631,7 @@ paths:
 
 components:
   schemas:
-    AuthenticationRequestDTO:
+    LoginRequestDTO:
       type: object
       required:
         - email
@@ -627,7 +645,7 @@ components:
           type: string
           format: password
 
-    AuthenticationResponseDTO:
+    LoginResponseDTO:
       type: object
       properties:
         token:
@@ -662,15 +680,6 @@ components:
           type: string
           format: email
           example: "user@entreprise.com"
-
-    SignupResponseDTO:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-          example: "User created successfully"
 
     ForbiddenAccessDTO:
       type: object
