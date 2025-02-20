@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -99,7 +100,7 @@ public class NotificationServiceTest {
         //When
         notificationService.createRejectedNotification(request);
         //Then
-        verify(notificationRepository, times(1)).save(any(Notification.class));
+        verify(notificationRepository).save(any(Notification.class));
     }
 
     @Test
@@ -134,7 +135,7 @@ public class NotificationServiceTest {
         //When
         List<NotificationDTO> result = notificationService.getAllNotifications(userEmail);
 
-        assertEquals(1, result.size());
+        assertThat(result).hasSize(1);
     }
 
 
