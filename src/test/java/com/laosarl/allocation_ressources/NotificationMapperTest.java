@@ -8,6 +8,8 @@ import com.laosarl.allocation_ressources.service.mapper.NotificationMapper;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
+import java.util.UUID;
+
 import static com.laosarl.allocation_ressources.model.DemandStatus.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,7 +24,7 @@ public class NotificationMapperTest {
         user.setEmail("user@example.com");
 
         Notification notification = Notification.builder()
-                .id(1L)
+                .id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"))
                 .user(user)
                 .userEmail(user.getEmail())
                 .status(APPROVED)

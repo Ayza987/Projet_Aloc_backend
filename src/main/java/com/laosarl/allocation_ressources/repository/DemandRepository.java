@@ -5,9 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface DemandRepository extends JpaRepository<Demand, Long> {
+public interface DemandRepository extends JpaRepository<Demand, UUID> {
     List<Demand> findAllByUserEmail(String userEmail);
 
     List<Demand> findByUserEmailContainingIgnoreCase(String userEmail);

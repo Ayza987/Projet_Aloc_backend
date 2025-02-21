@@ -37,13 +37,22 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .userDetailsService(userDetailsService)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/account/auth/login").permitAll()
+                        .requestMatchers("/api/account/auth/login",
+                                "/api/account/password/**").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/v3/api-docs"
                         ).permitAll()
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers(
+                                "/api/account/user/**",
+                                "/api/demand/**",
+                                "/api/demands/**",
+                                "/api/createDemand",
+                                "/api/notifications/**").authenticated()
+                        .requestMatchers("/api/account/admin/**",
+                                "/api/admin/**",
+                                "/api/allocation/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

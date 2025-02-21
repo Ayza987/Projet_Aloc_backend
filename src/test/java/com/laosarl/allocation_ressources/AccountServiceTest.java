@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,7 +68,7 @@ class AccountServiceTest {
     @Test
     void updateAccount_shouldUpdateUserSuccessfully() {
         // Given
-        Long userId = 1L;
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
         User existingUser = new User();
         existingUser.setId(userId);
         existingUser.setEmail("old@email.com");
@@ -117,7 +118,7 @@ class AccountServiceTest {
     @Test
     void updateAccount_shouldThrowExceptionWhenUserNotFound() {
         // Arrange
-        Long userId = 1L;
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
         UpdateUserRequestDTO updateRequest = new UpdateUserRequestDTO();
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
@@ -139,10 +140,10 @@ class AccountServiceTest {
     @Test
     void getUser_WhenIdIsFound() {
         //Given
-        Long userId = 3L;
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
         User existingUser = User.builder().email("johndoe@gmail.com").name("John").surname("doe").build();
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(3L);
+        userDTO.setId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"));
         userDTO.setName("John");
         userDTO.setSurname("Doe");
         userDTO.setEmail("johndoe@gmail.com");
@@ -159,7 +160,7 @@ class AccountServiceTest {
     @Test
     void getUser_ShouldThrowException_WhenUserNotFound() {
         //Arrange
-        Long userId = 1L;
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
         //Act & Assert
@@ -171,7 +172,7 @@ class AccountServiceTest {
     @Test
     void deleteUser_WhenIdIsFound() {
         //Given
-        Long userId = 1L;
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
         User existingUser = User.builder().email("johndoe@gmail.com").name("John").surname("Doe").build();
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
@@ -184,7 +185,7 @@ class AccountServiceTest {
     @Test
     void deleteUser_ShouldThrowException_WhenUserIsNotFound() {
         //Arrange
-        Long userId = 1L;
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
         //Act & Assert
         assertThrows(RuntimeException.class, () -> objectUnderTest.deleteUser(userId));

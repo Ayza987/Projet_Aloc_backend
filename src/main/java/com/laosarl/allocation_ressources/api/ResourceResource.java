@@ -10,9 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/admin/")
 @RequiredArgsConstructor
 public class ResourceResource {
     private final ResourceService resourceService;
@@ -31,25 +32,25 @@ public class ResourceResource {
     }
 
     @GetMapping("/resources/{id}")
-    public ResponseEntity<ResourceDTO> getResource(@PathVariable Long id) {
+    public ResponseEntity<ResourceDTO> getResource(@PathVariable UUID id) {
         ResourceDTO resource = resourceService.getResource(id);
         return ResponseEntity.ok(resource);
     }
 
     @PatchMapping("/resource/{id}")
-    public ResponseEntity<Void> updateResource(@PathVariable Long id, @RequestBody ResourceDTO resource) {
+    public ResponseEntity<Void> updateResource(@PathVariable UUID id, @RequestBody ResourceDTO resource) {
         resourceService.updateResource(id, resource);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/resources/delete/{id}")
-    public ResponseEntity<Void> deleteResource(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteResource(@PathVariable UUID id) {
         resourceService.deleteDemand(id);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/resources/availability/{id}")
-    public ResponseEntity<ResourceDTO> updateAvailability(@PathVariable Long id) {
+    public ResponseEntity<ResourceDTO> updateAvailability(@PathVariable UUID id) {
         Resource updatedResource = resourceService.changeAvailability(id);
         return ResponseEntity.ok(resourceMapper.toDto(updatedResource));
     }

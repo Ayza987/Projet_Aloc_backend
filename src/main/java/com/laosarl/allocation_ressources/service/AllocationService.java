@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +53,7 @@ public class AllocationService {
         return allocationsList.stream().map(demandMapper::toAllocatedResourceDTO).toList();
     }
 
-    public void updateStatus(Long id) {
+    public void updateStatus(UUID id) {
         AllocatedResource resource = allocatedResourceRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("No allocated resource found"));
 

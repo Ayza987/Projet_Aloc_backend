@@ -23,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.laosarl.allocation_ressources.model.DemandStatus.*;
 import static com.laosarl.allocation_ressources.model.DemandUrgency.*;
@@ -73,7 +74,7 @@ public class DemandServiceTest {
     @Test
     void getAllDemands_ShouldReturnAListOfDemands() {
         //Given
-        List<Demand> demandsList = List.of(Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(1).urgency(URGENT).status(PENDING).build());
+        List<Demand> demandsList = List.of(Demand.builder().id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(1).urgency(URGENT).status(PENDING).build());
         when(demandRepository.findAll()).thenReturn(demandsList);
         //When
         objectUnderTest.getAllDemands();
@@ -95,9 +96,9 @@ public class DemandServiceTest {
     @Test
     void updateDemand_ShouldUpdateDemandSuccessfully() {
         //Given
-        Long userId = 1L;
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
         UpdateDemandDTO request = new UpdateDemandDTO().status(APPROVED);
-        Demand existingDemand = Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(1).urgency(URGENT).status(PENDING).build();
+        Demand existingDemand = Demand.builder().id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(1).urgency(URGENT).status(PENDING).build();
 
         when(demandRepository.findById(userId)).thenReturn(Optional.of(existingDemand));
         //When
@@ -110,7 +111,7 @@ public class DemandServiceTest {
     @Test
     void updateDemand_ShouldThrowException_WhenUserNotFound() {
         //Arrange
-        Long userId = 1L;
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
         UpdateDemandDTO request = new UpdateDemandDTO();
         when(demandRepository.findById(userId)).thenReturn(Optional.empty());
         //Act & Assert
@@ -120,8 +121,8 @@ public class DemandServiceTest {
     @Test
     void deleteDemand_ShouldDeleteTheDemand_WhenIdIsFound() {
         //Given
-        Long userId = 1L;
-        Demand existingDemand = Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(1).urgency(URGENT).status(PENDING).build();
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+        Demand existingDemand = Demand.builder().id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(1).urgency(URGENT).status(PENDING).build();
         when(demandRepository.findById(userId)).thenReturn(Optional.of(existingDemand));
         //When
         objectUnderTest.deleteDemand(userId);
@@ -132,19 +133,19 @@ public class DemandServiceTest {
     @Test
     void allocateResourceSuccessfully_WhenAllConditionsAreMet() {
         //Given
-        Long Id = 1L;
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
         String Name = "crayon";
-        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(1L).resourceName("crayon").userEmail("titi@gmail.com").quantity(2);
+        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).resourceName("crayon").userEmail("titi@gmail.com").quantity(2);
 
-        Demand existingDemand = Demand.builder().id(1L).resourceName("crayon").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(2).urgency(URGENT).status(PENDING).build();
+        Demand existingDemand = Demand.builder().id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).resourceName("crayon").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(2).urgency(URGENT).status(PENDING).build();
 
-        Resource existingResource = Resource.builder().id(1L).name("crayon").type(HARDWARE).description("").isAvailable(true).quantity(4).build();
+        Resource existingResource = Resource.builder().id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).name("crayon").type(HARDWARE).description("").isAvailable(true).quantity(4).build();
 
-        AllocatedResource allocatedResource = AllocatedResource.builder().id(1L).demandId(1L).resourceName("crayon").userEmail("titi@gmail.com").quantity(2).demandDate(LocalDateTime.of(2025, 2, 2, 12, 0)).allocationDate(LocalDateTime.of(2025, 2, 2, 12, 0)).build();
+        AllocatedResource allocatedResource = AllocatedResource.builder().id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).resourceName("crayon").userEmail("titi@gmail.com").quantity(2).demandDate(LocalDateTime.of(2025, 2, 2, 12, 0)).allocationDate(LocalDateTime.of(2025, 2, 2, 12, 0)).build();
 
-        AllocatedResourceDTO expectedDto = new AllocatedResourceDTO().id(1L).demandId(1L).resourceName("crayon").quantity(2).demandDate("2025/02/02").allocationDate("2025/02/02");
+        AllocatedResourceDTO expectedDto = new AllocatedResourceDTO().id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).resourceName("crayon").quantity(2).demandDate("2025/02/02").allocationDate("2025/02/02");
 
-        when(demandRepository.findById(Id)).thenReturn(Optional.of(existingDemand));
+        when(demandRepository.findById(userId)).thenReturn(Optional.of(existingDemand));
         when(resourceRepository.findByName(Name)).thenReturn(Optional.of(existingResource));
         when(allocatedResourceRepository.save(any())).thenReturn(allocatedResource);
         when(demandMapper.toAllocatedResourceDTO(any())).thenReturn(expectedDto);
@@ -172,9 +173,9 @@ public class DemandServiceTest {
     @Test
     void AllocateResource_ShouldThrowException_WhenResourceNotFound() {
         //Given
-        Long Id = 1L;
-        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(1L).resourceName("crayon").userEmail("titi@gmail.com").quantity(2);
-        when(demandRepository.findById(Id)).thenReturn(Optional.empty());
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).resourceName("crayon").userEmail("titi@gmail.com").quantity(2);
+        when(demandRepository.findById(userId)).thenReturn(Optional.empty());
         //When & Then
         assertThrows(RuntimeException.class, () -> objectUnderTest.allocateResource(request));
     }
@@ -183,12 +184,12 @@ public class DemandServiceTest {
     void allocateResource_DemandNotPending() {
         //Arrange
         AllocateResourceRequestDTO request = new AllocateResourceRequestDTO();
-        request.setDemandId(1L);
+        request.setDemandId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"));
 
         Demand demand = new Demand();
         demand.setStatus(DemandStatus.APPROVED);
 
-        when(demandRepository.findById(1L)).thenReturn(Optional.of(demand));
+        when(demandRepository.findById(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"))).thenReturn(Optional.of(demand));
         //Act & Assert
         assertThrows(IllegalStateException.class, () -> objectUnderTest.allocateResource(request));
     }
@@ -196,12 +197,12 @@ public class DemandServiceTest {
     @Test
     void allocateResource_ResourceNotFound() {
         //Arrange
-        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(1L).resourceName("Laptop");
+        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).resourceName("Laptop");
 
         Demand demand = new Demand();
         demand.setStatus(DemandStatus.PENDING);
 
-        when(demandRepository.findById(1L)).thenReturn(Optional.of(demand));
+        when(demandRepository.findById(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"))).thenReturn(Optional.of(demand));
         when(resourceRepository.findByName("Laptop")).thenReturn(Optional.empty());
         //Act & Assert
         assertThrows(RuntimeException.class, () -> objectUnderTest.allocateResource(request));
@@ -210,13 +211,13 @@ public class DemandServiceTest {
     @Test
     void allocateResource_ResourceNotAvailable() {
         //Arrange
-        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(1L).resourceName("Laptop");
+        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).resourceName("Laptop");
         Demand demand = new Demand();
         demand.setStatus(DemandStatus.PENDING);
         Resource resource = new Resource();
         resource.setIsAvailable(false);
 
-        when(demandRepository.findById(1L)).thenReturn(Optional.of(demand));
+        when(demandRepository.findById(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"))).thenReturn(Optional.of(demand));
         when(resourceRepository.findByName("Laptop")).thenReturn(Optional.of(resource));
         //Act & Assert
         assertThrows(IllegalStateException.class, () -> objectUnderTest.allocateResource(request));
@@ -225,7 +226,7 @@ public class DemandServiceTest {
     @Test
     void allocateResource_QuantityExceedsStock() {
         //Arrange
-        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(1L).resourceName("Laptop").quantity(3);
+        AllocateResourceRequestDTO request = new AllocateResourceRequestDTO().demandId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).resourceName("Laptop").quantity(3);
 
         Demand demand = new Demand();
         demand.setStatus(DemandStatus.PENDING);
@@ -235,7 +236,7 @@ public class DemandServiceTest {
         resource.setQuantity(3);
         resource.setIsAvailable(true);
 
-        when(demandRepository.findById(1L)).thenReturn(Optional.of(demand));
+        when(demandRepository.findById(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"))).thenReturn(Optional.of(demand));
         when(resourceRepository.findByName("Laptop")).thenReturn(Optional.of(resource));
         //Act & Assert
         assertThrows(IllegalStateException.class, () -> objectUnderTest.allocateResource(request));
@@ -245,7 +246,7 @@ public class DemandServiceTest {
     void getDemandsByEmail_ShouldReturnDemandsSuccessfully() {
         //Given
         String existingEmail = "titi@gmail.com";
-        List<Demand> demandList = List.of(Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(1).urgency(URGENT).status(PENDING).build());
+        List<Demand> demandList = List.of(Demand.builder().id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(1).urgency(URGENT).status(PENDING).build());
         when(demandRepository.findAllByUserEmail(existingEmail)).thenReturn(demandList);
 
         //When
@@ -271,9 +272,9 @@ public class DemandServiceTest {
     void rejectDemand_ShouldThrowException_WhenDemandNotFound() {
         // Given
         RejectDemandRequestDTO request = new RejectDemandRequestDTO();
-        request.setDemandId(1L);
+        request.setDemandId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"));
 
-        when(demandRepository.findById(1L)).thenReturn(Optional.empty());
+        when(demandRepository.findById(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"))).thenReturn(Optional.empty());
         // When & Then
         assertThrows(RuntimeException.class, () -> objectUnderTest.rejectDemand(request));
     }
@@ -282,7 +283,7 @@ public class DemandServiceTest {
     void rejectDemand_ShouldSendEmailAndChangeStatus_WhenDemandIsPending() {
         // Given
         RejectDemandRequestDTO request = new RejectDemandRequestDTO();
-        request.setDemandId(1L);
+        request.setDemandId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"));
         request.setResourceName("Laptop");
         request.setUserEmail("test@example.com");
         request.setRejectReason("indisponible");
@@ -290,7 +291,7 @@ public class DemandServiceTest {
         Demand demand = new Demand();
         demand.setStatus(DemandStatus.PENDING);
 
-        when(demandRepository.findById(1L)).thenReturn(Optional.of(demand));
+        when(demandRepository.findById(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"))).thenReturn(Optional.of(demand));
         // When
         objectUnderTest.rejectDemand(request);
         // Then

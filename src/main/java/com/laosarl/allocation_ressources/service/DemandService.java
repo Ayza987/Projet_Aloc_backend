@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +61,7 @@ public class DemandService {
         return demands.stream().map(demandMapper::toDemandDTO).toList();
     }
 
-    public void updateDemand(Long id, UpdateDemandDTO updateRequest) {
+    public void updateDemand(UUID id, UpdateDemandDTO updateRequest) {
         Demand demand = demandRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Demand Not found"));
 
         demandMapper.updateDemandFromDto(updateRequest, demand);
@@ -68,12 +69,12 @@ public class DemandService {
         demandRepository.save(demand);
     }
 
-    public void deleteDemand(Long id) {
+    public void deleteDemand(UUID id) {
         Demand demand = demandRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Demand Not found"));
         demandRepository.delete(demand);
     }
 
-    public void updateUrgency(Long id) {
+    public void updateUrgency(UUID id) {
         Demand demand = demandRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Demand Not Found"));
         if (demand.getUrgency() == DemandUrgency.URGENT) {

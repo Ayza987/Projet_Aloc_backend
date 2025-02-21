@@ -1,4 +1,5 @@
 package com.laosarl.allocation_ressources.domain;
+
 import com.laosarl.allocation_ressources.model.DemandUrgency;
 import com.laosarl.allocation_ressources.model.DemandStatus;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static com.laosarl.allocation_ressources.model.DemandStatus.PENDING;
 
@@ -20,9 +22,9 @@ import static com.laosarl.allocation_ressources.model.DemandStatus.PENDING;
 @Table(name = "demands")
 public class Demand {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Long id;
+    private UUID id;
     @Column(name = "resource_name")
     private String resourceName;
     @Column(name = "user_name")

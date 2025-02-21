@@ -654,15 +654,6 @@ components:
           type: boolean
           example: true
 
-    ErrorDTO:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-          example: "Invalid credentials"
-
     SignupRequestDTO:
       type: object
       required:
@@ -681,24 +672,6 @@ components:
           format: email
           example: "user@entreprise.com"
 
-    ForbiddenAccessDTO:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-          example: "User has not access"
-
-    BadRequestDTO:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-          example: "Invalid data"
-
     UpdateUserRequestDTO:
       type: object
       properties:
@@ -713,8 +686,8 @@ components:
      type: object
      properties:
        id:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
        name:
           type: string
        surname:
@@ -755,8 +728,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
         user_name:
           type: string
         user_email:
@@ -846,8 +819,8 @@ components:
       type: object
       properties:
         demand_id:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
         user_email:
           type: string
         resource_name:
@@ -864,8 +837,8 @@ components:
         - reject_reason
       properties:
         demand_id:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
         user_email:
           type: string
         resource_name:
@@ -877,11 +850,11 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
         demand_id:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
         user_email:
           type: string
         resource_name:

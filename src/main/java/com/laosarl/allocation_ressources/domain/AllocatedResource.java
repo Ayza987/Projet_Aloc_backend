@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static com.laosarl.allocation_ressources.domain.AllocationStatus.*;
 
@@ -18,11 +19,11 @@ import static com.laosarl.allocation_ressources.domain.AllocationStatus.*;
 @AllArgsConstructor
 public class AllocatedResource {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     @Column(name = "demand_id")
-    private Long demandId;
+    private UUID demandId;
 
     @Column(name = "user_email")
     private String userEmail;

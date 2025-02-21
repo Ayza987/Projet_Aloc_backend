@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -118,7 +119,7 @@ class AllocationServiceTest {
     @Test
     void updateStatus_WhenResourceExistsAndStatusNotReturned_ShouldUpdateStatus() {
         // Given
-        Long id = 1L;
+        UUID id = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
         AllocatedResource resource = new AllocatedResource();
         resource.setStatus(AllocationStatus.NOT_RETURNED);
         when(allocatedResourceRepository.findById(id)).thenReturn(Optional.of(resource));
@@ -134,7 +135,7 @@ class AllocationServiceTest {
     @Test
     void updateStatus_WhenResourceDoesNotExist_ShouldThrowException() {
         // Given
-        Long id = 1L;
+        UUID id = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
         when(allocatedResourceRepository.findById(id)).thenReturn(Optional.empty());
 
         // When/Then

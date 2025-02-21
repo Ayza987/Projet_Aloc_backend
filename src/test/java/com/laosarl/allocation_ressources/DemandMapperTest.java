@@ -7,6 +7,8 @@ import com.laosarl.allocation_ressources.service.mapper.DemandMapper;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
+import java.util.UUID;
+
 import static com.laosarl.allocation_ressources.model.DemandStatus.*;
 import static com.laosarl.allocation_ressources.model.DemandUrgency.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +21,7 @@ public class DemandMapperTest {
     @Test
     void toDemandDTO_ShouldMapDemandCorrectly() {
         //Given
-        Demand demandToMap = Demand.builder().id(1L).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(2).urgency(URGENT).status(PENDING).build();
+        Demand demandToMap = Demand.builder().id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(2).urgency(URGENT).status(PENDING).build();
         //When
         DemandDTO dto = demandMapper.toDemandDTO(demandToMap);
         //Then

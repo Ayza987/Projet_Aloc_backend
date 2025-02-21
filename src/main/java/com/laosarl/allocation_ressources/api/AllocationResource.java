@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/allocation")
@@ -16,7 +17,7 @@ public class AllocationResource {
 
     private final AllocationService allocationService;
 
-    @GetMapping("/allocatedResources")
+    @GetMapping("/admin/allocatedResources")
     public ResponseEntity<List<AllocatedResourceDTO>> getAllocatedResources() {
         return ResponseEntity.ok(allocationService.getAllocatedResources());
     }
@@ -33,8 +34,8 @@ public class AllocationResource {
         return ResponseEntity.ok(allocationList);
     }
 
-    @PatchMapping("/allocatedResource/updateStatus/{id}")
-    public ResponseEntity<Void> updateStatus(@PathVariable Long id) {
+    @PatchMapping("/admin/allocatedResource/updateStatus/{id}")
+    public ResponseEntity<Void> updateStatus(@PathVariable UUID id) {
         allocationService.updateStatus(id);
         return ResponseEntity.ok().build();
     }

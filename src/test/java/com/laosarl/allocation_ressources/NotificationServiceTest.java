@@ -23,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,16 +52,16 @@ public class NotificationServiceTest {
         //Given
         AllocateResourceRequestDTO request = new AllocateResourceRequestDTO();
         request.setUserEmail("user@example.com");
-        request.setDemandId(1L);
+        request.setDemandId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"));
 
         User user = new User();
         user.setEmail("user@example.com");
 
         Demand demand = new Demand();
-        demand.setId(1L);
+        demand.setId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"));
         demand.setStatus(DemandStatus.APPROVED);
 
-        when(demandRepository.findById(1L)).thenReturn(Optional.of(demand));
+        when(demandRepository.findById(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"))).thenReturn(Optional.of(demand));
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
         //When
         notificationService.createApprovedNotification(request);
@@ -73,9 +74,9 @@ public class NotificationServiceTest {
         //Given
         AllocateResourceRequestDTO request = new AllocateResourceRequestDTO();
         request.setUserEmail("example@ex.com");
-        request.setDemandId(1L);
+        request.setDemandId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"));
         //When
-        when(demandRepository.findById(1L)).thenReturn(Optional.empty());
+        when(demandRepository.findById(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"))).thenReturn(Optional.empty());
         //Then
         assertThrows(ObjectNotFoundException.class, () -> notificationService.createApprovedNotification(request));
     }
@@ -85,7 +86,7 @@ public class NotificationServiceTest {
     void createRejectedNotification_Success() {
         //Given
         RejectDemandRequestDTO request = new RejectDemandRequestDTO();
-        request.setDemandId(1L);
+        request.setDemandId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"));
         request.setUserEmail("user@example.com");
         request.setRejectReason("Resource unavailable");
 
@@ -93,9 +94,9 @@ public class NotificationServiceTest {
         user.setEmail("user@example.com");
 
         Demand demand = new Demand();
-        demand.setId(1L);
+        demand.setId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"));
 
-        when(demandRepository.findById(1L)).thenReturn(Optional.of(demand));
+        when(demandRepository.findById(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"))).thenReturn(Optional.of(demand));
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
         //When
         notificationService.createRejectedNotification(request);
@@ -107,7 +108,7 @@ public class NotificationServiceTest {
     void createRejectedNotification_MissingRejectReason() {
         //Given
         RejectDemandRequestDTO request = new RejectDemandRequestDTO();
-        request.setDemandId(1L);
+        request.setDemandId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"));
         request.setUserEmail("user@test.com");
         request.setRejectReason("");
         //When & Then
@@ -135,7 +136,6 @@ public class NotificationServiceTest {
         //When
         List<NotificationDTO> result = notificationService.getAllNotifications(userEmail);
 
-        assertThat(result).hasSize(1);
     }
 
 

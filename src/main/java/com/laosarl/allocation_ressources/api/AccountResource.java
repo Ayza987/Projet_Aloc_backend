@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -15,7 +16,7 @@ import java.util.List;
 public class AccountResource {
     private final AccountService accountService;
 
-    @PostMapping("/auth/signup")
+    @PostMapping("/admin/auth/signup")
     public ResponseEntity<Void> signup(@RequestBody SignupRequestDTO request) {
         accountService.createAccount(request);
         return ResponseEntity.ok().build();
@@ -41,30 +42,30 @@ public class AccountResource {
 
 
     @PatchMapping("/user/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
+    public ResponseEntity<Void> updateUser(@PathVariable UUID id, @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
         accountService.updateAccount(id, updateUserRequestDTO);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/users")
+    @GetMapping("/admin/users")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> user = accountService.getAllUsers();
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+    @GetMapping("/admin/users/{id}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable UUID id) {
         UserDTO userDTO = accountService.getUser(id);
         return ResponseEntity.ok(userDTO);
     }
 
-    @DeleteMapping("/users/delete/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    @DeleteMapping("/admin/users/delete/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
         accountService.deleteUser(id);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/users/search")
+    @GetMapping("/admin/users/search")
     public ResponseEntity<List<UserDTO>> searchUsers(@RequestParam String name) {
         List<UserDTO> List = accountService.searchUsers(name);
         return ResponseEntity.ok(List);

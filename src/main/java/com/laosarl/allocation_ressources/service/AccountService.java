@@ -47,8 +47,9 @@ public class AccountService {
             throw new EmailAlreadyExistsException("Email already exists");
         }
         String generatedPassword = generateSecurePassword();
+        String encodedPassword = passwordEncoder.encode(generatedPassword);
 
-        userRepository.save(User.builder().email(request.getEmail()).name(request.getName()).surname(request.getSurname()).password(generatedPassword).build());
+        userRepository.save(User.builder().email(request.getEmail()).name(request.getName()).surname(request.getSurname()).password(encodedPassword).build());
 
         String subject = "Nouveau compte Aloc";
         String body = "Bonjour" + " " + request.getName() + " " + request.getSurname() + "," + " "+ "votre compte Aloc vient d'être créé.\n"
@@ -80,7 +81,6 @@ public class AccountService {
 
             User user = userRepository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new ObjectNotFoundException("User not found"));
-
             String token = jwtUtil.generateToken(user.getEmail(), user.getIsAdmin());
 
             LoginResponseDTO response = new LoginResponseDTO();
@@ -151,7 +151,7 @@ public class AccountService {
     }
 
 
-    public void updateAccount(Long id, UpdateUserRequestDTO updateRequest) {
+    public void updateAccount(UUID id, UpdateUserRequestDTO updateRequest) {
         User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         if (updateRequest.getEmail() != null) {
@@ -177,13 +177,13 @@ public class AccountService {
         return users.stream().map(userMapper::toUserDTO).toList();
     }
 
-    public UserDTO getUser(Long id) {
+    public UserDTO getUser(UUID id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("No user found"));
         return userMapper.toUserDTO(user);
     }
 
 
-    public void deleteUser(Long id) {
+    public void deleteUser(UUID id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("No user found"));
 
         userRepository.delete(user);

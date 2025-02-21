@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -22,7 +23,7 @@ public class DemandResource {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/demands")
+    @GetMapping("/admin/demands")
     public ResponseEntity<List<DemandDTO>> getAllDemands() {
         List<DemandDTO> demandList = demandService.getAllDemands();
         return ResponseEntity.ok(demandList);
@@ -35,30 +36,30 @@ public class DemandResource {
     }
 
     @PatchMapping("/demand/{id}")
-    public ResponseEntity<Void> updateDemands(@PathVariable Long id, @RequestBody UpdateDemandDTO demandDTO) {
+    public ResponseEntity<Void> updateDemands(@PathVariable UUID id, @RequestBody UpdateDemandDTO demandDTO) {
         demandService.updateDemand(id, demandDTO);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/demands/delete/{id}")
-    public ResponseEntity<Void> deleteDemand(@PathVariable Long id){
+    public ResponseEntity<Void> deleteDemand(@PathVariable UUID id){
         demandService.deleteDemand(id);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/demands/updateUrgency/{id}")
-    public ResponseEntity<Void> updateUrgency(@PathVariable Long id) {
+    public ResponseEntity<Void> updateUrgency(@PathVariable UUID id) {
         demandService.updateUrgency(id);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/demand/allocate")
+    @PostMapping("/admin/demand/allocate")
     public ResponseEntity<AllocatedResourceDTO> allocateResource(
             @RequestBody AllocateResourceRequestDTO request) {
         return ResponseEntity.ok(demandService.allocateResource(request));
     }
 
-    @PostMapping("/demand/reject")
+    @PostMapping("/admin/demand/reject")
     public ResponseEntity<Void> rejectDemand(
             @RequestBody RejectDemandRequestDTO request) {
         demandService.rejectDemand(request);

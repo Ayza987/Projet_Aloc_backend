@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.laosarl.allocation_ressources.model.ResourceType.HARDWARE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,7 +51,7 @@ public class ResourceServiceTest {
     @Test
     void getAllResources_ShouldReturnAListOfResources() {
         //Given
-        List<Resource> resourceList = List.of(Resource.builder().id(1L).name("azert").type(HARDWARE).description("").isAvailable(true).quantity(2).build());
+        List<Resource> resourceList = List.of(Resource.builder().id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).name("azert").type(HARDWARE).description("").isAvailable(true).quantity(2).build());
         when(resourceRepository.findAll()).thenReturn(resourceList);
         //When
         objectUnderTest.getAllResources();
@@ -72,9 +73,9 @@ public class ResourceServiceTest {
     @Test
     void updateResource_ShouldUpdateDemandSuccessfully() {
         //Given
-        Long userId = 1L;
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
         ResourceDTO request = new ResourceDTO().isAvailable(false);
-        Resource existingResource = Resource.builder().id(1L).name("azert").type(HARDWARE).description("").isAvailable(true).quantity(2).build();
+        Resource existingResource = Resource.builder().id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).name("azert").type(HARDWARE).description("").isAvailable(true).quantity(2).build();
 
         when(resourceRepository.findById(userId)).thenReturn(Optional.of(existingResource));
         //When
@@ -87,7 +88,7 @@ public class ResourceServiceTest {
     @Test
     void updateDemand_ShouldThrowException_WhenUserNotFound() {
         //Arrange
-        Long userId = 1L;
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
         ResourceDTO request = new ResourceDTO();
         when(resourceRepository.findById(userId)).thenReturn(Optional.empty());
 
@@ -98,8 +99,8 @@ public class ResourceServiceTest {
     @Test
     void deleteDemand_ShouldDeleteTheDemand_WhenIdIsFound() {
         //Given
-        Long userId = 1L;
-        Resource existingResource = Resource.builder().id(1L).name("azert").type(HARDWARE).description("").isAvailable(true).quantity(2).build();
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+        Resource existingResource = Resource.builder().id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).name("azert").type(HARDWARE).description("").isAvailable(true).quantity(2).build();
         when(resourceRepository.findById(userId)).thenReturn(Optional.of(existingResource));
 
         //When
@@ -112,7 +113,7 @@ public class ResourceServiceTest {
     @Test
     void changeAvailability_ShouldToggleAvailability_WhenResourceExists() {
         // Given
-        Long id = 1L;
+        UUID id = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
         Resource resource = new Resource();
         resource.setIsAvailable(true);
 

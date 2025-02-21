@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -43,12 +44,12 @@ public class ResourceService {
         return resources.stream().map(resourceMapper::toResourceDTO).toList();
     }
 
-    public ResourceDTO getResource(Long id) {
+    public ResourceDTO getResource(UUID id) {
         Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("No resource found"));
         return resourceMapper.toResourceDTO(resource);
     }
 
-    public void updateResource(Long id, ResourceDTO resourceDTO) {
+    public void updateResource(UUID id, ResourceDTO resourceDTO) {
         Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Demand Not found"));
 
         resourceMapper.updateResourceFromDto(resourceDTO, resource);
@@ -56,12 +57,12 @@ public class ResourceService {
         resourceRepository.save(resource);
     }
 
-    public void deleteDemand(Long id) {
+    public void deleteDemand(UUID id) {
         Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Demand Not found"));
         resourceRepository.delete(resource);
     }
 
-    public Resource changeAvailability(Long id) {
+    public Resource changeAvailability(UUID id) {
         Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Resource Not found"));
         resource.setIsAvailable(!resource.getIsAvailable());
         return resourceRepository.save(resource);
