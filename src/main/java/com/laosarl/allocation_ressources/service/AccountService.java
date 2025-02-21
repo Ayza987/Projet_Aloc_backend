@@ -142,9 +142,10 @@ public class AccountService {
         if (!PASSWORD_PATTERN.matcher(request.getNewPassword()).matches()) {
             throw new InvalidPasswordFormatException("Password does not respect constraints");
         }
+        String encodedPassword = passwordEncoder.encode(request.getNewPassword());
         PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(request.getToken());
         User user = resetToken.getUser();
-        user.setPassword(request.getNewPassword());
+        user.setPassword(encodedPassword);
         userRepository.save(user);
 
         passwordResetTokenRepository.delete(resetToken);
