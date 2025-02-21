@@ -10,6 +10,7 @@ import com.laosarl.allocation_ressources.service.mapper.AllocationMapper;
 import com.laosarl.allocation_ressources.service.mapper.DemandMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -44,7 +45,11 @@ public class AllocationService {
         return allocationList.stream().map(demandMapper::toAllocatedResourceDTO).toList();
     }
 
-    public List<AllocatedResourceDTO> getAllocatedResourcesByUserEmail(String userEmail) {
+    public List<AllocatedResourceDTO> getAllocatedResourcesByUserEmail() {
+        String userEmail = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+
         List<AllocatedResource> allocationsList = allocatedResourceRepository.findAllByUserEmail(userEmail);
 
         if (allocationsList.isEmpty()) {

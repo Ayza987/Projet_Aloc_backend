@@ -95,7 +95,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDTO'
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
         '404':
           description: Not found
   /users/{id}:
@@ -156,7 +158,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDTO'
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
         '404':
           description: Not found
   /createDemand:
@@ -166,6 +170,8 @@ paths:
       summary: "Create a demand"
       description: "Create an endpoint for registering a demand"
       operationId: createDemand
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -190,29 +196,29 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/DemandDTO'
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/DemandDTO'
           '404':
             description: Not found
-  /demands/{userEmail}:
+  /demands/user:
     get:
       tags:
         - "Demand"
-      summary: "Get demands by email"
-      description: "Create an endpoint to get the demands by email"
-      operationId: getDemandsByEmail
-      parameters:
-        - name: userEmail
-          in: path
-          required: true
-          schema:
-            type: string
+      summary: "Get authenticated user demands"
+      description: "Create an endpoint to get the demands of an authenticated user"
+      operationId: getAuthenticatedUserDemands
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DemandDTO'
+                type: array
+                items:
+                   $ref: '#/components/schemas/DemandDTO'
         '404':
           description: Not found
         '400':
@@ -338,7 +344,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DemandDTO'
+                type: array
+                items:
+                   $ref: '#/components/schemas/DemandDTO'
         '404':
           description: Not found
   /createResource:
@@ -372,7 +380,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResourceDTO'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResourceDTO'
         '404':
           description: Not found
   /resources/{id}:
@@ -479,7 +489,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResourceDTO'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResourceDTO'
         '404':
           description: Not found
   /allocatedResources/search:
@@ -501,7 +513,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AllocatedResourceDTO'
+                type: array
+                items:
+                  $ref: '#/components/schemas/AllocatedResourceDTO'
         '404':
           description: Not found
   /allocatedResources:
@@ -517,22 +531,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AllocatedResourceDTO'
+                type: array
+                items:
+                  $ref: '#/components/schemas/AllocatedResourceDTO'
         '404':
           description: Not found
-  /allocatedResource/{userEmail}:
+  /allocatedResource/user:
     get:
       tags:
         - "Allocation"
-      summary: "Get allocated resource by userEmail"
-      description: "Get an allocated resource using the userEmail"
-      operationId: getAllocatedResourceByUserEmail
-      parameters:
-        - name: userEmail
-          in: path
-          required: true
-          schema:
-            type: string
+      summary: "Get allocated resources"
+      description: "Get allocated resources of an authenticated user"
+      operationId: getAuthenticatedUserAllocatedResources
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Success
@@ -561,7 +573,7 @@ paths:
           description: Not found
   /password/reset-request:
     post:
-      summary: Reset password request
+      summary: "Reset password request"
       operationId: requestPasswordReset
       requestBody:
         required: true
@@ -576,7 +588,7 @@ paths:
           description: User not found
   /password/reset:
     post:
-      summary: Reset password
+      summary: "Reset password"
       operationId: passwordReset
       requestBody:
         required: true
@@ -589,16 +601,12 @@ paths:
           description: Success
         '400':
           description: Bad Request
-  /notifications/{user_email}:
+  /notifications/user:
     get:
-      summary: Get notifications of a user
+      summary: "Get notifications of an authenticated user"
       operationId: getNotifications
-      parameters:
-        - name: user_email
-          in: path
-          required: true
-          schema:
-            type: string
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Success
@@ -630,6 +638,11 @@ paths:
 
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     LoginRequestDTO:
       type: object
@@ -898,7 +911,7 @@ components:
         - userEmail
       properties:
         status:
-          type: DemandStatus
+          $ref: '#/components/schemas/DemandStatus'
         user_email:
           type: string
         reject_reason:

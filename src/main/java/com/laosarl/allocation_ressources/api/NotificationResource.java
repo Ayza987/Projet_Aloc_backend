@@ -19,9 +19,9 @@ public class NotificationResource {
 
     private final NotificationService notificationService;
 
-    @GetMapping("/notifications/{userEmail}")
-    ResponseEntity<List<NotificationDTO>> getNotifications(@PathVariable String userEmail){
-        List<NotificationDTO> notificationList = notificationService.getAllNotifications(userEmail);
+    @GetMapping("/notifications/user")
+    ResponseEntity<List<NotificationDTO>> getNotifications(){
+        List<NotificationDTO> notificationList = notificationService.getAllNotifications();
         return ResponseEntity.ok(notificationList);
     }
 

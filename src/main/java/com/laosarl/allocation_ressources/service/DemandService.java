@@ -14,6 +14,7 @@ import com.laosarl.allocation_ressources.service.mapper.DemandMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,6 +37,9 @@ public class DemandService {
     private final DemandMapper demandMapper;
 
     public void createDemand(CreateDemandRequestDTO request) {
+        String email = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
         LocalDate dueDateFormatted = null;
@@ -48,7 +52,7 @@ public class DemandService {
         }
         LocalDateTime currentDateTime = LocalDateTime.now();
 
-        Demand demand = Demand.builder().resourceName(request.getResourceName()).quantity(request.getQuantity()).description(request.getDescription()).justification(request.getJustification()).urgency(request.getUrgency()).dueDate(dueDateFormatted).dateTime(currentDateTime).build();
+        Demand demand = Demand.builder().userEmail(email).resourceName(request.getResourceName()).quantity(request.getQuantity()).description(request.getDescription()).justification(request.getJustification()).urgency(request.getUrgency()).dueDate(dueDateFormatted).dateTime(currentDateTime).build();
         demandRepository.save(demand);
     }
 
@@ -178,14 +182,6 @@ public class DemandService {
         demandRepository.save(demand);
     }
 
-    public List<DemandDTO> getDemandsByEmail(String userEmail) {
-        List<Demand> demands = demandRepository.findAllByUserEmail(userEmail);
-
-        if (demands.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return demands.stream().map(demandMapper::toDemandDTO).toList();
-    }
 
     public List<DemandDTO> searchDemands(String userEmail) {
         List<Demand> demandList = demandRepository.findByUserEmailContainingIgnoreCase(userEmail);
@@ -194,5 +190,17 @@ public class DemandService {
             throw new NoResultsFoundException("No results found");
         }
         return demandList.stream().map(demandMapper::toDemandDTO).toList();
+    }
+
+    public List<DemandDTO> getAuthenticationUserDemands() {
+        String userEmail = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+        List<Demand> demands = demandRepository.findAllByUserEmail(userEmail);
+
+        if (demands.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return demands.stream().map(demandMapper::toDemandDTO).toList();
     }
 }

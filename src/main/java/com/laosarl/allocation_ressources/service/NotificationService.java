@@ -15,6 +15,7 @@ import com.laosarl.allocation_ressources.repository.UserRepository;
 import com.laosarl.allocation_ressources.service.mapper.NotificationMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,10 +53,10 @@ public class NotificationService {
     }
 
 
-    public List<NotificationDTO> getAllNotifications(String userEmail) {
-        if (!userRepository.existsByEmail(userEmail)) {
-            throw new ObjectNotFoundException("User not found");
-        }
+    public List<NotificationDTO> getAllNotifications() {
+        String userEmail = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
 
         List<Notification> list = notificationRepository.findByUserEmailAndIsReadFalse(userEmail);
         if (list.isEmpty()) {

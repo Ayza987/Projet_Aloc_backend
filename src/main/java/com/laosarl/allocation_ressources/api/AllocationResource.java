@@ -22,9 +22,9 @@ public class AllocationResource {
         return ResponseEntity.ok(allocationService.getAllocatedResources());
     }
 
-    @GetMapping("/allocatedResource/{userEmail}")
-    public ResponseEntity<List<AllocatedResourceDTO>> getAllocatedResourceByUserEmail(@PathVariable String userEmail) {
-        List<AllocatedResourceDTO> allocationList = allocationService.getAllocatedResourcesByUserEmail(userEmail);
+    @GetMapping("/allocatedResource/user")
+    public ResponseEntity<List<AllocatedResourceDTO>> getAuthenticatedUserAllocatedResources() {
+        List<AllocatedResourceDTO> allocationList = allocationService.getAllocatedResourcesByUserEmail();
         return ResponseEntity.ok(allocationList);
     }
 

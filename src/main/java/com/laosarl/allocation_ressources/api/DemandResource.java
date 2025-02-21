@@ -29,9 +29,9 @@ public class DemandResource {
         return ResponseEntity.ok(demandList);
     }
 
-    @GetMapping("/demands/{userEmail}")
-    public ResponseEntity<List<DemandDTO>> getDemandsByEmail(@PathVariable String userEmail) {
-        List<DemandDTO> demandList = demandService.getDemandsByEmail(userEmail);
+    @GetMapping("/demands/user")
+    public ResponseEntity<List<DemandDTO>> getAuthenticationUserDemands() {
+        List<DemandDTO> demandList = demandService.getAuthenticationUserDemands();
         return ResponseEntity.ok(demandList);
     }
 
