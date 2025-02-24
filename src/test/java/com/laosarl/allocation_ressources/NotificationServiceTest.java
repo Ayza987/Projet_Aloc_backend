@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -158,6 +159,44 @@ public class NotificationServiceTest {
         when(notificationRepository.findByUserEmailAndIsReadFalse(userEmail)).thenReturn(Collections.emptyList());
         //When & Then
         assertThrows(ObjectNotFoundException.class, () -> notificationService.getAllNotifications());
+    }
+
+    @Test
+    void countNotifications_ShouldReturnTheCorrectNumberOfNotifications(){
+        //Given
+        String userEmail = "user@example.com";
+
+        when(notificationRepository.countByUserEmailAndIsReadFalse(userEmail)).thenReturn(Integer.valueOf("1"));
+        //When
+        String result = notificationService.countNotifications();
+        //Then
+        assertThat(result).isEqualTo("1");
+    }
+
+    @Test
+    void countNotifications_NoNotificationsFound(){
+        //Given
+        String userEmail = "user@example.com";
+        when(notificationRepository.countByUserEmailAndIsReadFalse(userEmail)).thenReturn(Integer.valueOf("0"));
+
+        //When & Then
+        assertThrows(ObjectNotFoundException.class, () -> notificationService.countNotifications());
+    }
+
+    @Test
+    void markAsRead_ShouldMarkNotificationAsRead(){
+        //Given
+        UUID id = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+        Notification notification = Mockito.spy(Notification.class);
+        notification.setRead(false);
+
+        when(notificationRepository.findById(id)).thenReturn(Optional.of(notification));
+        when(notification.isRead()).thenReturn(false);
+        //When
+        notificationService.markAsRead(id);
+        //Then
+        verify(notificationRepository).save(any(Notification.class));
+        verify(notification).setRead(true);
     }
 
 
