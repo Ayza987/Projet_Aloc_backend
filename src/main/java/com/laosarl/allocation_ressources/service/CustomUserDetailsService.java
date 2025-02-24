@@ -1,7 +1,6 @@
 package com.laosarl.allocation_ressources.service;
 
 import com.laosarl.allocation_ressources.domain.User;
-import com.laosarl.allocation_ressources.exceptions.ObjectNotFoundException;
 import com.laosarl.allocation_ressources.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,8 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ObjectNotFoundException("User not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found:" + email));
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         if (user.getIsAdmin()) {
@@ -31,14 +29,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         authorities.add(new SimpleGrantedAuthority("USER"));
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                true,
-                true,
-                true,
-                true,
-                authorities
-        );
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), true, true, true, true, authorities);
     }
 }

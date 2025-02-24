@@ -907,8 +907,6 @@ components:
 
     NotificationDTO:
       type: object
-      required:
-        - userEmail
       properties:
         status:
           $ref: '#/components/schemas/DemandStatus'

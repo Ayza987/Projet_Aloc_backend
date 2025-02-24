@@ -28,6 +28,7 @@ public class Notification {
     @Column(name = "user_email", nullable = false)
     private String userEmail;
 
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "demand_id", nullable = false)
     private Demand demand;
