@@ -65,4 +65,16 @@ public class NotificationService {
 
         return list.stream().map(notificationMapper::toNotificationDTO).toList();
     }
+
+    public String countNotifications() {
+        String userEmail = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+        int number = notificationRepository.countByUserEmailAndIsReadFalse(userEmail);
+
+        if(number == 0){
+            throw new ObjectNotFoundException("No notifications found");
+        }
+        return String.valueOf(number);
+    }
 }

@@ -25,4 +25,9 @@ public class NotificationResource {
         return ResponseEntity.ok(notificationList);
     }
 
+    @GetMapping("/notifications/count")
+    ResponseEntity<String> countNotifications(){
+        return ResponseEntity.ok(notificationService.countNotifications());
+    }
+
 }

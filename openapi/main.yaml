@@ -616,6 +616,32 @@ paths:
                $ref: '#/components/schemas/NotificationDTO'
         '404':
           description: Not found
+        '403':
+          description: Unauthorized
+  /notifications/count:
+    get:
+      summary: "Get the number of unread notifications of an authenticated user"
+      operationId: countNotifications
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: string
+                    example: "5"
+        '404':
+          description: Not found
+        '403':
+          description: Unauthorized
+
+
+
 
 
 
