@@ -200,4 +200,22 @@ public class AccountService {
     }
 
 
+    public void updatePassword(UpdatePasswordDTO request) {
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new ObjectNotFoundException("User Not found"));
+
+        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
+            throw new InvalidPasswordException("Invalid Password");
+        }
+
+        if (!PASSWORD_PATTERN.matcher(request.getNewPassword()).matches()) {
+            throw new InvalidPasswordFormatException("Password does not respect constraints");
+        }
+
+        if(request.getPassword().equals(request.getNewPassword())){
+            throw new InvalidPasswordException("Invalid Password");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+    }
 }

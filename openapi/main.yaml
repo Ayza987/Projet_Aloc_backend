@@ -163,6 +163,28 @@ paths:
                   $ref: '#/components/schemas/UserDTO'
         '404':
           description: Not found
+  /users/updatePassword:
+    post:
+      tags:
+        - "User"
+      summary: "update password"
+      description: "Create an endpoint to update the password of an authenticated User"
+      operationId: updatePassword
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePasswordDTO'
+      responses:
+        '200':
+          description: Success
+        '403':
+          description: Forbidden access
+        '400':
+          description: Bad Request
   /createDemand:
     post:
       tags:
@@ -639,6 +661,23 @@ paths:
           description: Not found
         '403':
           description: Unauthorized
+  /notifications/markRead/{id}:
+    post:
+      summary: "Mark a notification as read"
+      operationId: markReadNotification
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Not found
+
+
 
 
 
@@ -710,6 +749,17 @@ components:
           type: string
           format: email
           example: "user@entreprise.com"
+
+    UpdatePasswordDTO:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        newPassword:
+          type: string
+
 
     UpdateUserRequestDTO:
       type: object

@@ -70,5 +70,11 @@ public class AccountResource {
         List<UserDTO> List = accountService.searchUsers(name);
         return ResponseEntity.ok(List);
     }
+
+    @PostMapping("/users/updatePassword")
+    public ResponseEntity<Void> updatePassword(@RequestBody UpdatePasswordDTO request){
+        accountService.updatePassword(request);
+        return ResponseEntity.ok().build();
+    }
 }
 

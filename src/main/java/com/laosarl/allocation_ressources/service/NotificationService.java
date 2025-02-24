@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -76,5 +77,16 @@ public class NotificationService {
             throw new ObjectNotFoundException("No notifications found");
         }
         return String.valueOf(number);
+    }
+
+    public void markAsRead(UUID id) {
+
+        Notification notification = notificationRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Notifications not found"));
+
+        if(notification.isRead()){
+            throw new IllegalArgumentException("Notification was already read");
+        }
+        notification.setRead(true);
+        notificationRepository.save(notification);
     }
 }

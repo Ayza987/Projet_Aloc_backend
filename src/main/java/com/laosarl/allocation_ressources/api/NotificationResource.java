@@ -5,12 +5,10 @@ import com.laosarl.allocation_ressources.model.NotificationDTO;
 import com.laosarl.allocation_ressources.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +26,12 @@ public class NotificationResource {
     @GetMapping("/notifications/count")
     ResponseEntity<String> countNotifications(){
         return ResponseEntity.ok(notificationService.countNotifications());
+    }
+
+    @PostMapping("/notifications/markRead/{id}")
+    ResponseEntity<Void> markReadNotification(@PathVariable UUID id){
+        notificationService.markAsRead(id);
+        return ResponseEntity.ok().build();
     }
 
 }
