@@ -163,7 +163,7 @@ paths:
                   $ref: '#/components/schemas/UserDTO'
         '404':
           description: Not found
-  /users/updatePassword:
+  /user/updatePassword:
     post:
       tags:
         - "User"

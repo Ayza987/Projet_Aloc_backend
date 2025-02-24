@@ -71,7 +71,7 @@ public class AccountResource {
         return ResponseEntity.ok(List);
     }
 
-    @PostMapping("/users/updatePassword")
+    @PostMapping("/user/updatePassword")
     public ResponseEntity<Void> updatePassword(@RequestBody UpdatePasswordDTO request){
         accountService.updatePassword(request);
         return ResponseEntity.ok().build();
