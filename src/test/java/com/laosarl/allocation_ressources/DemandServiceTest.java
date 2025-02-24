@@ -11,11 +11,16 @@ import com.laosarl.allocation_ressources.service.DemandService;
 import com.laosarl.allocation_ressources.service.EmailService;
 import com.laosarl.allocation_ressources.service.NotificationService;
 import com.laosarl.allocation_ressources.service.mapper.DemandMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,6 +54,15 @@ public class DemandServiceTest {
     DemandMapper demandMapper;
     @InjectMocks
     DemandService objectUnderTest;
+
+    @BeforeEach
+    void setUpSecurityContext() {
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user@example.com", null);
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(authentication);
+        SecurityContextHolder.setContext(securityContext);
+    }
 
     @Test
     void createDemand_WhenAllConditionsAreMet_ShouldCreateTheDemand() {

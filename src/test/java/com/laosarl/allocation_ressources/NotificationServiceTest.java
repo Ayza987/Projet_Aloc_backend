@@ -14,11 +14,16 @@ import com.laosarl.allocation_ressources.repository.NotificationRepository;
 import com.laosarl.allocation_ressources.repository.UserRepository;
 import com.laosarl.allocation_ressources.service.NotificationService;
 import com.laosarl.allocation_ressources.service.mapper.NotificationMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,8 +31,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,7 +48,13 @@ public class NotificationServiceTest {
     @InjectMocks
     private NotificationService notificationService;
 
-    public NotificationServiceTest() {
+    @BeforeEach
+    void setUpSecurityContext() {
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user@example.com", null);
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(authentication);
+        SecurityContextHolder.setContext(securityContext);
     }
 
     @Test
@@ -121,20 +131,21 @@ public class NotificationServiceTest {
         //Given
         String userEmail = "user@example.com";
 
-        User user = new User();
-        user.setEmail(userEmail);
-
         Notification notification = new Notification();
-        notification.setUser(user);
         notification.setUserEmail(userEmail);
 
         NotificationDTO notificationDTO = new NotificationDTO();
 
-        when(userRepository.existsByEmail(userEmail)).thenReturn(true);
+        //when(userRepository.existsByEmail(userEmail)).thenReturn(true);
         when(notificationRepository.findByUserEmailAndIsReadFalse(userEmail)).thenReturn(List.of(notification));
         when(notificationMapper.toNotificationDTO(notification)).thenReturn(notificationDTO);
         //When
         List<NotificationDTO> result = notificationService.getAllNotifications();
+        // Then
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
+        verify(notificationRepository).findByUserEmailAndIsReadFalse(userEmail);
+        verify(notificationMapper).toNotificationDTO(notification);
 
     }
 
@@ -144,7 +155,6 @@ public class NotificationServiceTest {
         //Given
         String userEmail = "user@example.com";
 
-        when(userRepository.existsByEmail(userEmail)).thenReturn(true);
         when(notificationRepository.findByUserEmailAndIsReadFalse(userEmail)).thenReturn(Collections.emptyList());
         //When & Then
         assertThrows(ObjectNotFoundException.class, () -> notificationService.getAllNotifications());

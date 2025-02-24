@@ -6,6 +6,7 @@ import com.laosarl.allocation_ressources.model.UpdateUserRequestDTO;
 import com.laosarl.allocation_ressources.model.UserDTO;
 import com.laosarl.allocation_ressources.repository.UserRepository;
 import com.laosarl.allocation_ressources.service.AccountService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import com.laosarl.allocation_ressources.service.EmailService;
 import com.laosarl.allocation_ressources.service.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,8 @@ class AccountServiceTest {
     private UserMapper userMapper;
     @Mock
     EmailService emailService;
+    @Mock
+    PasswordEncoder passwordEncoder;
     @InjectMocks
     private AccountService objectUnderTest;
 
@@ -41,14 +44,16 @@ class AccountServiceTest {
         objectUnderTest = spy(objectUnderTest);
         SignupRequestDTO signupRequestDTO = new SignupRequestDTO().email("test@gmail.com").name("john").surname("doe");
         String generatedPassword = "secure_password";
+        String encodedPassword = "ZERTYUIO234567898";
 
         when(userRepository.existsByEmail(signupRequestDTO.getEmail())).thenReturn(false);
         when(objectUnderTest.generateSecurePassword()).thenReturn(generatedPassword);
-        //doNothing().when(emailService).sendEmail(anyString(), anyString(), anyString());
+        when(passwordEncoder.encode(generatedPassword)).thenReturn(encodedPassword);
+
         //When
         objectUnderTest.createAccount(signupRequestDTO);
         //Then
-        verify(userRepository).save(argThat(user -> user.getEmail().equals(signupRequestDTO.getEmail()) && user.getName().equals(signupRequestDTO.getName()) && user.getSurname().equals(signupRequestDTO.getSurname()) && user.getPassword().equals(generatedPassword)));
+        verify(userRepository).save(argThat(user -> user.getEmail().equals(signupRequestDTO.getEmail()) && user.getName().equals(signupRequestDTO.getName()) && user.getSurname().equals(signupRequestDTO.getSurname()) && user.getPassword().equals(encodedPassword)));
         verify(emailService).sendEmail(eq("test@gmail.com"), anyString(), anyString());
 
     }

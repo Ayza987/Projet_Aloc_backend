@@ -15,7 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CustomUserDetailsServiceTest {
@@ -48,10 +49,8 @@ class CustomUserDetailsServiceTest {
         assertNotNull(userDetails);
         assertEquals("test@example.com", userDetails.getUsername());
         assertEquals("password123", userDetails.getPassword());
-        assertTrue(userDetails.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN")));
-        assertTrue(userDetails.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("USER")));
+        assertTrue(userDetails.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN")));
+        assertTrue(userDetails.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("USER")));
 
         verify(userRepository).findByEmail("test@example.com");
     }
@@ -59,13 +58,10 @@ class CustomUserDetailsServiceTest {
     @Test
     void loadUserByUsername_ShouldThrowException_WhenUserNotFound() {
         // Arrange
-        when(userRepository.findByEmail("unknown@example.com")).thenReturn(Optional.empty());
+        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.empty());
 
         // Act & Assert
-        verify(userRepository).findByEmail("unknown@example.com");
-        assertThrows(UsernameNotFoundException.class, () ->
-                objectUnderTest.loadUserByUsername("unknown@example.com")
-        );
+        assertThrows(UsernameNotFoundException.class, () -> objectUnderTest.loadUserByUsername("test@example.com"));
     }
 }
 

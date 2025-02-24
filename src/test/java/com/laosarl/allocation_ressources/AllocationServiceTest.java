@@ -7,11 +7,16 @@ import com.laosarl.allocation_ressources.repository.AllocatedResourceRepository;
 import com.laosarl.allocation_ressources.service.AllocationService;
 import com.laosarl.allocation_ressources.service.mapper.AllocationMapper;
 import com.laosarl.allocation_ressources.service.mapper.DemandMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +40,17 @@ class AllocationServiceTest {
 
     @InjectMocks
     private AllocationService allocationService;
+
+
+    @BeforeEach
+    void setUpSecurityContext() {
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@example.com", null);
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(authentication);
+        SecurityContextHolder.setContext(securityContext);
+    }
+
 
     @Test
     void getAllocatedResources_WhenAllocationsExist_ShouldReturnList() {
