@@ -97,7 +97,7 @@ class AllocationServiceTest {
         when(demandMapper.toAllocatedResourceDTO(any())).thenReturn(new AllocatedResourceDTO());
 
         // When
-        List<AllocatedResourceDTO> result = allocationService.getAllocatedResourcesByUserEmail(userEmail);
+        List<AllocatedResourceDTO> result = allocationService.getAllocatedResourcesByUserEmail();
 
         // Then
         assertFalse(result.isEmpty());
@@ -110,7 +110,7 @@ class AllocationServiceTest {
         when(allocatedResourceRepository.findAllByUserEmail(userEmail)).thenReturn(Collections.emptyList());
 
         // When
-        List<AllocatedResourceDTO> result = allocationService.getAllocatedResourcesByUserEmail(userEmail);
+        List<AllocatedResourceDTO> result = allocationService.getAllocatedResourcesByUserEmail();
 
         // Then
         assertTrue(result.isEmpty());

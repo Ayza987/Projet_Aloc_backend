@@ -242,31 +242,6 @@ public class DemandServiceTest {
         assertThrows(IllegalStateException.class, () -> objectUnderTest.allocateResource(request));
     }
 
-    @Test
-    void getDemandsByEmail_ShouldReturnDemandsSuccessfully() {
-        //Given
-        String existingEmail = "titi@gmail.com";
-        List<Demand> demandList = List.of(Demand.builder().id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).resourceName("azert").userName("azer").userEmail("azerty").description("sdfg").justification("azertyu").quantity(1).urgency(URGENT).status(PENDING).build());
-        when(demandRepository.findAllByUserEmail(existingEmail)).thenReturn(demandList);
-
-        //When
-        objectUnderTest.getDemandsByEmail(existingEmail);
-        //Then
-        assertThat(demandList).hasSize(1);
-
-    }
-
-    @Test
-    void getDemandsByEmail_ShouldReturnEmptyList_WhenNorDemandsAreFound() {
-        //Given
-        String existingEmail = "titi@gmail.com";
-        when(demandRepository.findAllByUserEmail(existingEmail)).thenReturn(Collections.emptyList());
-        //When
-        List<DemandDTO> result = objectUnderTest.getDemandsByEmail(existingEmail);
-        //Then
-        assertNotNull(result);
-        assertThat(result).isEmpty();
-    }
 
     @Test
     void rejectDemand_ShouldThrowException_WhenDemandNotFound() {

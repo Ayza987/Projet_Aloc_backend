@@ -134,7 +134,7 @@ public class NotificationServiceTest {
         when(notificationRepository.findByUserEmailAndIsReadFalse(userEmail)).thenReturn(List.of(notification));
         when(notificationMapper.toNotificationDTO(notification)).thenReturn(notificationDTO);
         //When
-        List<NotificationDTO> result = notificationService.getAllNotifications(userEmail);
+        List<NotificationDTO> result = notificationService.getAllNotifications();
 
     }
 
@@ -147,7 +147,7 @@ public class NotificationServiceTest {
         when(userRepository.existsByEmail(userEmail)).thenReturn(true);
         when(notificationRepository.findByUserEmailAndIsReadFalse(userEmail)).thenReturn(Collections.emptyList());
         //When & Then
-        assertThrows(ObjectNotFoundException.class, () -> notificationService.getAllNotifications(userEmail));
+        assertThrows(ObjectNotFoundException.class, () -> notificationService.getAllNotifications());
     }
 
 
