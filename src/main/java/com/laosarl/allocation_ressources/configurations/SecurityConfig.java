@@ -44,9 +44,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .userDetailsService(userDetailsService)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/account/auth/login",
-                                "/api/account/password/**").permitAll()
                         .requestMatchers(
+                                "/api/account/auth/login",
+                                "/api/account/password/**").permitAll()
+                        .requestMatchers("/api/account/admin/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/v3/api-docs"
@@ -57,7 +58,7 @@ public class SecurityConfig {
                                 "/api/demands/**",
                                 "/api/createDemand",
                                 "/api/notifications/**").authenticated()
-                        .requestMatchers("/api/account/admin/**",
+                        .requestMatchers(
                                 "/api/admin/**",
                                 "/api/allocation/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()

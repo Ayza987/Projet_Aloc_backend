@@ -18,3 +18,8 @@ services:
       POSTGRES_PASSWORD: Or!gam!554
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
