@@ -407,6 +407,24 @@ paths:
                   $ref: '#/components/schemas/ResourceDTO'
         '404':
           description: Not found
+  /resources/user:
+    get:
+      tags:
+        - "Resource"
+      summary: "Get all resources for user"
+      description: "Get the list of all the resources for the user interface"
+      operationId: getAllResourcesForUser
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResourceForUserDTO'
+        '404':
+          description: Not found
   /resources/{id}:
     get:
       tags:
@@ -676,10 +694,6 @@ paths:
           description: Success
         '404':
           description: Not found
-
-
-
-
 
 
 
@@ -977,6 +991,20 @@ components:
           type: string
         reject_reason:
           type: string
+
+    ResourceForUserDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/ResourceType'
+        description:
+          type: string
+
 
 
 
