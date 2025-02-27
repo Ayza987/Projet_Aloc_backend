@@ -11,6 +11,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,6 +37,7 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -46,8 +48,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/account/auth/login",
-                                "/api/account/password/**").permitAll()
-                        .requestMatchers("/api/account/admin/**",
+                                "/api/account/password/reset",
+                                "/api/account/password/reset-request").permitAll()
+
+                        .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/v3/api-docs"
@@ -58,7 +62,7 @@ public class SecurityConfig {
                                 "/api/demands/**",
                                 "/api/createDemand",
                                 "/api/notifications/**").authenticated()
-                        .requestMatchers(
+                        .requestMatchers("/api/account/admin/**",
                                 "/api/admin/**",
                                 "/api/allocation/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
