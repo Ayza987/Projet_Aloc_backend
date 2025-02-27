@@ -3,6 +3,7 @@ package com.laosarl.allocation_ressources;
 
 import com.laosarl.allocation_ressources.domain.Resource;
 import com.laosarl.allocation_ressources.model.ResourceDTO;
+import com.laosarl.allocation_ressources.model.ResourceForUserDTO;
 import com.laosarl.allocation_ressources.model.UserDTO;
 import com.laosarl.allocation_ressources.service.mapper.ResourceMapper;
 import org.junit.jupiter.api.Test;
@@ -56,6 +57,20 @@ public class ResourceMapperTest {
         assertThat(resource.getType()).isEqualTo(HARDWARE);
         assertThat(resource.getDescription()).isEqualTo("Nouvelle Description");
         assertThat(resource.getIsAvailable()).isTrue();
+    }
+
+    @Test
+    void toResourceForUserDTO_ShouldMapFieldsCorrectly(){
+        //Given
+        Resource resourceToMap = Resource.builder().name("azert").type(HARDWARE).description("").build();
+
+        //When
+        ResourceForUserDTO resourceMapped = resourceMapper.toResourceForUserDTO(resourceToMap);
+        //Then
+        assertNotNull(resourceMapped);
+        assertThat(resourceToMap.getName()).isEqualTo(resourceMapped.getName());
+        assertThat(resourceToMap.getType()).isEqualTo(resourceMapped.getType());
+        assertThat(resourceToMap.getDescription()).isEqualTo(resourceMapped.getDescription());
     }
 
 }

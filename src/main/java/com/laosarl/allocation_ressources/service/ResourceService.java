@@ -6,6 +6,7 @@ import com.laosarl.allocation_ressources.exceptions.ObjectNotFoundException;
 import com.laosarl.allocation_ressources.exceptions.ResourceAlreadyExistsException;
 import com.laosarl.allocation_ressources.model.CreateResourceRequestDTO;
 import com.laosarl.allocation_ressources.model.ResourceDTO;
+import com.laosarl.allocation_ressources.model.ResourceForUserDTO;
 import com.laosarl.allocation_ressources.repository.ResourceRepository;
 import com.laosarl.allocation_ressources.service.mapper.ResourceMapper;
 import jakarta.transaction.Transactional;
@@ -75,6 +76,15 @@ public class ResourceService {
             throw new NoResultsFoundException("No results found");
         }
         return resources.stream().map(resourceMapper::toResourceDTO).toList();
+    }
+
+    public List<ResourceForUserDTO> getAllResourceForUser() {
+        List<Resource> resources = resourceRepository.findAll();
+
+        if (resources.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return resources.stream().map(resourceMapper::toResourceForUserDTO).toList();
     }
 }
 

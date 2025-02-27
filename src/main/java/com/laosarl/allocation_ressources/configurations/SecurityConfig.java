@@ -58,6 +58,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(
                                 "/api/account/user/**",
+                                "/api/resources/**",
                                 "/api/demand/**",
                                 "/api/demands/**",
                                 "/api/createDemand",
