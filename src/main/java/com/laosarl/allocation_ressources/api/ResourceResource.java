@@ -24,7 +24,6 @@ public class ResourceResource {
         resourceService.createResource(requestDTO);
         return ResponseEntity.ok().build();
     }
-
     @GetMapping("/resources")
     public ResponseEntity<List<ResourceDTO>> getAllResources() {
         List<ResourceDTO> resourceList = resourceService.getAllResources();
