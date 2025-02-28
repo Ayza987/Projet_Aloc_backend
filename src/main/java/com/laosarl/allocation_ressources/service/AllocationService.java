@@ -6,7 +6,6 @@ import com.laosarl.allocation_ressources.exceptions.NoResultsFoundException;
 import com.laosarl.allocation_ressources.exceptions.ObjectNotFoundException;
 import com.laosarl.allocation_ressources.model.AllocatedResourceDTO;
 import com.laosarl.allocation_ressources.repository.AllocatedResourceRepository;
-import com.laosarl.allocation_ressources.service.mapper.AllocationMapper;
 import com.laosarl.allocation_ressources.service.mapper.DemandMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import java.util.UUID;
 public class AllocationService {
 
     private final AllocatedResourceRepository allocatedResourceRepository;
-    private final AllocationMapper allocationMapper;
     private final DemandMapper demandMapper;
 
     @Transactional

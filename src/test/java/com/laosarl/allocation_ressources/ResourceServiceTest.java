@@ -117,10 +117,14 @@ public class ResourceServiceTest {
         Resource resource = new Resource();
         resource.setIsAvailable(true);
 
+        ResourceDTO resourceDTO = new ResourceDTO();
+        resourceDTO.setIsAvailable(false);
+
         when(resourceRepository.findById(id)).thenReturn(Optional.of(resource));
+        when(resourceMapper.toResourceDTO(resource)).thenReturn(resourceDTO);
         when(resourceRepository.save(any(Resource.class))).thenReturn(resource);
         // When
-        Resource result = objectUnderTest.changeAvailability(id);
+        ResourceDTO result = objectUnderTest.changeAvailability(id);
         // Then
         assertFalse(result.getIsAvailable());
         verify(resourceRepository).save(resource);

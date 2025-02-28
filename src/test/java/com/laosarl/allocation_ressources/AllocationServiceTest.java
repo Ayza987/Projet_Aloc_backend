@@ -5,7 +5,6 @@ import com.laosarl.allocation_ressources.domain.AllocationStatus;
 import com.laosarl.allocation_ressources.model.AllocatedResourceDTO;
 import com.laosarl.allocation_ressources.repository.AllocatedResourceRepository;
 import com.laosarl.allocation_ressources.service.AllocationService;
-import com.laosarl.allocation_ressources.service.mapper.AllocationMapper;
 import com.laosarl.allocation_ressources.service.mapper.DemandMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,8 +31,6 @@ class AllocationServiceTest {
     @Mock
     private AllocatedResourceRepository allocatedResourceRepository;
 
-    @Mock
-    private AllocationMapper allocationMapper;
 
     @Mock
     private DemandMapper demandMapper;

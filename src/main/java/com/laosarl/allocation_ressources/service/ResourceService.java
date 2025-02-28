@@ -63,10 +63,12 @@ public class ResourceService {
         resourceRepository.delete(resource);
     }
 
-    public Resource changeAvailability(UUID id) {
+    public ResourceDTO changeAvailability(UUID id) {
         Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Resource Not found"));
         resource.setIsAvailable(!resource.getIsAvailable());
-        return resourceRepository.save(resource);
+        resourceRepository.save(resource);
+        return (resourceMapper.toResourceDTO(resource));
+
     }
 
     public List<ResourceDTO> searchResources(String name) {

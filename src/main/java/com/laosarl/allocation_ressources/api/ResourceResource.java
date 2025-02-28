@@ -58,8 +58,8 @@ public class ResourceResource {
 
     @PatchMapping("/admin/resources/availability/{id}")
     public ResponseEntity<ResourceDTO> updateAvailability(@PathVariable UUID id) {
-        Resource updatedResource = resourceService.changeAvailability(id);
-        return ResponseEntity.ok(resourceMapper.toDto(updatedResource));
+        resourceService.changeAvailability(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/admin/resources/search")

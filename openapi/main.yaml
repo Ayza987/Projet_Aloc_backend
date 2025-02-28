@@ -985,6 +985,9 @@ components:
     NotificationDTO:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
         status:
           $ref: '#/components/schemas/DemandStatus'
         user_email:
