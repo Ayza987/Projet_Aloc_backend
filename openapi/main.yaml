@@ -37,6 +37,26 @@ paths:
           description: Forbidden access
         '400':
           description: Bad Request
+  /auth/signupAsAdmin:
+    post:
+      tags:
+        - "User"
+      summary: "Create an admin account"
+      description: "Create an endpoint for signing up the admins"
+      operationId: signupAsAdmin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequestDTO'
+      responses:
+        '200':
+          description: Success
+        '403':
+          description: Forbidden access
+        '400':
+          description: Bad Request
   /auth/login:
     post:
       summary: "Login"

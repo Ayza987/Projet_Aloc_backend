@@ -22,6 +22,12 @@ public class AccountResource {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/auth/signupAsAdmin")
+    ResponseEntity<Void> signupAsAdmin(@RequestBody SignupRequestDTO request){
+        accountService.createAdminAccount(request);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/auth/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request){
         LoginResponseDTO response = accountService.login(request);

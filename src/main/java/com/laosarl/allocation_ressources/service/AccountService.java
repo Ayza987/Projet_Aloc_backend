@@ -62,6 +62,26 @@ public class AccountService {
         emailService.sendEmail(request.getEmail(), subject, body);
     }
 
+    public void createAdminAccount(SignupRequestDTO request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new EmailAlreadyExistsException("Email already exists");
+        }
+        String generatedPassword = generateSecurePassword();
+        String encodedPassword = passwordEncoder.encode(generatedPassword);
+
+        userRepository.save(User.builder().email(request.getEmail()).name(request.getName()).surname(request.getSurname()).password(encodedPassword).isAdmin(true).build());
+
+        String subject = "Nouveau compte Aloc";
+        String body = "Bonjour" + " " + request.getName() + " " + request.getSurname() + "," + " "+ "votre compte Administrateur Aloc vient d'être créé.\n"
+                + "Vos identifiants de connexion sont les suivants : " + "\n"
+                + "Email : " + request.getEmail() + "\n"
+                + "Mot de passe : " + generatedPassword + "\n\n"
+                + "Il vous est recommandé de changer ce mot de passe lors de votre première connexion."+ "\n\n\n"
+                + "Cordialement.";
+
+        emailService.sendEmail(request.getEmail(), subject, body);
+    }
+
     public String generateSecurePassword() {
         StringBuilder password = new StringBuilder(8);
         for (int i = 0; i < 8; i++) {
@@ -218,4 +238,6 @@ public class AccountService {
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }
+
+
 }

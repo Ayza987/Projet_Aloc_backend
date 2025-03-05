@@ -9,8 +9,7 @@ import com.laosarl.allocation_ressources.service.ResourceService;
 import com.laosarl.allocation_ressources.service.mapper.ResourceMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
@@ -23,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,6 +35,8 @@ public class ResourceServiceTest {
     ResourceMapper resourceMapper;
     @InjectMocks
     ResourceService objectUnderTest;
+@Captor
+    ArgumentCaptor<Resource> resourceArgumentCaptor;
 
     @Test
     void ShouldCreateResourceSuccessfully() {
@@ -77,7 +79,8 @@ public class ResourceServiceTest {
         ResourceDTO request = new ResourceDTO().isAvailable(false);
         Resource existingResource = Resource.builder().id(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")).name("azert").type(HARDWARE).description("").isAvailable(true).quantity(2).build();
 
-        when(resourceRepository.findById(userId)).thenReturn(Optional.of(existingResource));
+        given(resourceRepository.findById(userId)).willReturn(Optional.of(existingResource));
+
         //When
         objectUnderTest.updateResource(userId, request);
         //Then

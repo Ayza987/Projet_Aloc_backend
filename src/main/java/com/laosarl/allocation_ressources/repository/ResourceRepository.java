@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ResourceRepository extends JpaRepository<Resource, UUID> {
+public interface ResourceRepository extends JpaRepository<Resource, UUID>{
     Optional<Resource> findByName(String resourceName);
 
     boolean existsByName(String name);
