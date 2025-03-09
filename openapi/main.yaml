@@ -17,7 +17,7 @@ tags:
   - name: "Allocation"
     description: "Operations on allocations"
 paths:
-  /auth/signup:
+  /api/account/admin/auth/signup:
     post:
       tags:
         - "User"
@@ -37,7 +37,7 @@ paths:
           description: Forbidden access
         '400':
           description: Bad Request
-  /auth/signupAsAdmin:
+  /api/account/auth/signupAsAdmin:
     post:
       tags:
         - "User"
@@ -57,7 +57,7 @@ paths:
           description: Forbidden access
         '400':
           description: Bad Request
-  /auth/login:
+  /api/account/auth/login:
     post:
       summary: "Login"
       description: "Create an endpoint to login the users"
@@ -79,7 +79,7 @@ paths:
           description: Forbidden access
         '400':
           description: Bad Request
-  /user/{id}:
+  /api/account/user/{id}:
     patch:
       tags:
         - "User"
@@ -103,7 +103,7 @@ paths:
           description: "User updated successfully"
         '404':
           description: Not found
-  /users:
+  /api/account/admin/users:
     get:
       tags:
         - "User"
@@ -120,7 +120,7 @@ paths:
                   $ref: '#/components/schemas/UserDTO'
         '404':
           description: Not found
-  /users/{id}:
+  /api/account/admin/users/{id}:
     get:
       tags:
         - "User"
@@ -142,7 +142,7 @@ paths:
                 $ref: '#/components/schemas/UserDTO'
         '404':
           description: Not found
-  /users/delete/{id}:
+  /api/account/admin/users/delete/{id}:
       delete:
         tags:
           - "User"
@@ -159,7 +159,7 @@ paths:
             description: "User deleted successfully"
           '404':
               description: "Not Found"
-  /users/search:
+  /api/account/admin/users/search:
     get:
       tags:
         - "User"
@@ -183,7 +183,7 @@ paths:
                   $ref: '#/components/schemas/UserDTO'
         '404':
           description: Not found
-  /user/updatePassword:
+  /api/account/user/updatePassword:
     post:
       tags:
         - "User"
@@ -205,7 +205,7 @@ paths:
           description: Forbidden access
         '400':
           description: Bad Request
-  /createDemand:
+  /api/createDemand:
     post:
       tags:
         - "Demand"
@@ -225,7 +225,7 @@ paths:
           description: "Request created successfully"
         '400':
           description: "Bad Request"
-  /demands:
+  /api/admin/demands:
       get:
         tags:
           - "Demand"
@@ -243,7 +243,7 @@ paths:
                     $ref: '#/components/schemas/DemandDTO'
           '404':
             description: Not found
-  /demands/user:
+  /api/demands/user:
     get:
       tags:
         - "Demand"
@@ -265,7 +265,7 @@ paths:
           description: Not found
         '400':
           description: Bad request
-  /demand/{id}:
+  /api/demand/{id}:
     patch:
       tags:
         - "Demand"
@@ -290,7 +290,7 @@ paths:
           description: Success
         '404':
           description: Not Found
-  /demands/delete/{id}:
+  /api/demands/delete/{id}:
     delete:
       tags:
         - "Demand"
@@ -308,7 +308,7 @@ paths:
           description: "Demand deleted successfully"
         '404':
           description: "Not Found"
-  /demands/updateUrgency/{id}:
+  /api/demands/updateUrgency/{id}:
     patch:
       tags:
         - "Demand"
@@ -325,7 +325,7 @@ paths:
           description: Success
         '404':
           description: Not found
-  /demand/allocate:
+  /api/admin/demand/allocate:
     post:
       tags:
         - "Demands"
@@ -348,7 +348,7 @@ paths:
           description: Bad request
         '404':
           description: Not found
-  /demand/reject:
+  /api/admin/demand/reject:
     post:
       tags:
         - "Demands"
@@ -367,7 +367,7 @@ paths:
           description: Bad request
         '404':
           description: Not found
-  /demands/search:
+  /api/demands/search:
     get:
       tags:
         - "Demand"
@@ -391,7 +391,7 @@ paths:
                    $ref: '#/components/schemas/DemandDTO'
         '404':
           description: Not found
-  /createResource:
+  /api/admin/createresource:
     post:
       tags:
         - "Resource"
@@ -409,7 +409,7 @@ paths:
           description: "Resource created successfully"
         '400':
           description: "Bad Request"
-  /resources:
+  /api/admin/resources:
     get:
       tags:
         - "Resource"
@@ -427,7 +427,7 @@ paths:
                   $ref: '#/components/schemas/ResourceDTO'
         '404':
           description: Not found
-  /resources/user:
+  /api/resources/user:
     get:
       tags:
         - "Resource"
@@ -445,7 +445,7 @@ paths:
                   $ref: '#/components/schemas/ResourceForUserDTO'
         '404':
           description: Not found
-  /resources/{id}:
+  /api/admin/resources/{id}:
     get:
       tags:
         - "Resource"
@@ -467,7 +467,7 @@ paths:
                 $ref: '#/components/schemas/ResourceDTO'
         '404':
           description: Not found
-  /resource/{id}:
+  /api/admin/resource/{id}:
     patch:
       tags:
         - "Resource"
@@ -491,7 +491,7 @@ paths:
           description: Success
         '404':
           description: Not found
-  /resources/delete/{id}:
+  /api/admin/resources/delete/{id}}:
     delete:
       tags:
         - "Resource"
@@ -509,7 +509,7 @@ paths:
           description: "Resource deleted successfully"
         '404':
           description: "Not Found"
-  /resources/availability/{id}:
+  /api/admin/resources/availability/{id}:
     patch:
       tags:
         - "Resource"
@@ -530,7 +530,7 @@ paths:
                 $ref: '#/components/schemas/ResourceDTO'
         '404':
           description: Not found
-  /resources/search:
+  /api/admin/resources/search:
     get:
       tags:
         - "Resource"
@@ -554,7 +554,7 @@ paths:
                   $ref: '#/components/schemas/ResourceDTO'
         '404':
           description: Not found
-  /allocatedResources/search:
+  /api/allocation/allocatedResources/search:
     get:
       tags:
         - "Allocation"
@@ -578,7 +578,7 @@ paths:
                   $ref: '#/components/schemas/AllocatedResourceDTO'
         '404':
           description: Not found
-  /allocatedResources:
+  /api/allocation/admin/allocatedResources:
     get:
       tags:
         - "Allocation"
@@ -596,7 +596,7 @@ paths:
                   $ref: '#/components/schemas/AllocatedResourceDTO'
         '404':
           description: Not found
-  /allocatedResource/user:
+  /api/allocation/allocatedResource/user:
     get:
       tags:
         - "Allocation"
@@ -614,7 +614,7 @@ paths:
                 $ref: '#/components/schemas/AllocatedResourceDTO'
         '404':
           description: Not found
-  /allocatedResource/updateStatus/{id}:
+  /api/allocation/admin/allocatedResource/updateStatus/{id}:
     patch:
       tags:
         - "Allocation"
@@ -631,7 +631,7 @@ paths:
           description: Success
         '404':
           description: Not found
-  /password/reset-request:
+  /api/account/password/reset-request:
     post:
       summary: "Reset password request"
       operationId: requestPasswordReset
@@ -646,7 +646,7 @@ paths:
           description: Success
         '404':
           description: User not found
-  /password/reset:
+  /api/account/password/reset:
     post:
       summary: "Reset password"
       operationId: passwordReset
@@ -661,7 +661,7 @@ paths:
           description: Success
         '400':
           description: Bad Request
-  /notifications/user:
+  /api/notifications/user:
     get:
       summary: "Get notifications of an authenticated user"
       operationId: getNotifications
@@ -678,7 +678,7 @@ paths:
           description: Not found
         '403':
           description: Unauthorized
-  /notifications/count:
+  /api/notifications/count:
     get:
       summary: "Get the number of unread notifications of an authenticated user"
       operationId: countNotifications
@@ -699,7 +699,7 @@ paths:
           description: Not found
         '403':
           description: Unauthorized
-  /notifications/markRead/{id}:
+  /api/notifications/markRead/{id}:
     post:
       summary: "Mark a notification as read"
       operationId: markReadNotification
