@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .userDetailsService(userDetailsService)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("api/account/auth/signupAsAdmin",
+                        .requestMatchers("/api/account/auth/signupAsAdmin",
                                 "/api/account/auth/login",
                                 "/api/account/password/reset",
                                 "/api/account/password/reset-request").permitAll()
