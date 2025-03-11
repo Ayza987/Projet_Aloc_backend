@@ -773,6 +773,10 @@ components:
 
     UpdatePasswordDTO:
       type: object
+      required:
+        - email
+        - password
+        - newPassword
       properties:
         email:
           type: string
@@ -820,6 +824,13 @@ components:
 
     CreateDemandRequestDTO:
      type: object
+     required:
+       - resource_name
+       - quantity
+       - description
+       - justification
+       - urgency
+       - due_date
      properties:
        resource_name:
          type: string
@@ -892,6 +903,12 @@ components:
 
     CreateResourceRequestDTO:
       type: object
+      required:
+        - name
+        - type
+        - description
+        - isAvailable
+        - quantity
       properties:
         name:
           type: string
@@ -930,6 +947,11 @@ components:
 
     AllocateResourceRequestDTO:
       type: object
+      required:
+        - demand_id
+        - user_email
+        - resource_name
+        - quantity
       properties:
         demand_id:
           type: string
