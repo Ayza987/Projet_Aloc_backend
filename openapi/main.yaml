@@ -164,7 +164,7 @@ paths:
       tags:
         - "User"
       summary: "Search users"
-      description: "Get the list of all the users according to a research"
+      description: "Search users by name"
       operationId: searchUsers
       parameters:
         - name: name
@@ -372,10 +372,10 @@ paths:
       tags:
         - "Demand"
       summary: "Search demands"
-      description: "Get the list of all the demands according to a research"
+      description: "Search demands by userEmail"
       operationId: searchDemands
       parameters:
-        - name: name
+        - name: userEmail
           in: path
           required: true
           schema:
@@ -535,10 +535,10 @@ paths:
       tags:
         - "Resource"
       summary: "Search resources"
-      description: "Get the list of all the resources according to a research"
+      description: "Search resources by name"
       operationId: searchResources
       parameters:
-        - name: userEmail
+        - name: name
           in: path
           required: true
           schema:
@@ -559,7 +559,7 @@ paths:
       tags:
         - "Allocation"
       summary: "Search allocated resources"
-      description: "Get the list of all the allocated resources according to a research"
+      description: "Search allocated resources by userEmail"
       operationId: searchAllocatedResources
       parameters:
         - name: userEmail
