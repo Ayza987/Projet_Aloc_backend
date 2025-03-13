@@ -125,7 +125,7 @@ public class AccountService {
         passwordResetTokenRepository.save(myToken);
 
         String subject = "Réinitialisation de mot de passe";
-        String resetUrl = "http://aloc.com/reset-password?token=" + token;
+        String resetUrl = "http://localhost:5173/resetPasswordRequest?token=" + token;
         String body = String.format("""
             Bonjour %s %s,
             
