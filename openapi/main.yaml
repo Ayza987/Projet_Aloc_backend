@@ -673,7 +673,9 @@ paths:
           content:
             application/json:
              schema:
-               $ref: '#/components/schemas/NotificationDTO'
+               type: array
+               items:
+                 $ref: '#/components/schemas/NotificationDTO'
         '404':
           description: Not found
         '403':
