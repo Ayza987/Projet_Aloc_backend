@@ -1,6 +1,7 @@
 package com.laosarl.allocation_ressources.repository;
 
 import com.laosarl.allocation_ressources.domain.Demand;
+import com.laosarl.allocation_ressources.model.DemandStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +13,6 @@ public interface DemandRepository extends JpaRepository<Demand, UUID> {
     List<Demand> findAllByUserEmail(String userEmail);
 
     List<Demand> findByUserEmailContainingIgnoreCase(String userEmail);
+
+    long countByStatus(DemandStatus demandStatus);
 }

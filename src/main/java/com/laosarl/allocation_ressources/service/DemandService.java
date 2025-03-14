@@ -203,4 +203,10 @@ public class DemandService {
         }
         return demands.stream().map(demandMapper::toDemandDTO).toList();
     }
+
+    public String countPendingDemands() {
+        long number = demandRepository.countByStatus(DemandStatus.PENDING);
+
+        return String.valueOf(number);
+    }
 }

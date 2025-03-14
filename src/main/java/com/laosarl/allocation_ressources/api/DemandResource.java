@@ -71,4 +71,9 @@ public class DemandResource {
         List<DemandDTO> demandsList = demandService.searchDemands(userEmail);
         return ResponseEntity.ok(demandsList);
     }
+
+    @GetMapping("/admin/demands/CountPendingDemands")
+    public ResponseEntity<String> getPendingDemandsNumber(){
+        return ResponseEntity.ok(demandService.countPendingDemands());
+    }
 }
