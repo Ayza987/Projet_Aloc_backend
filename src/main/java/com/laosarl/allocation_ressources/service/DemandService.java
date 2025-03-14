@@ -209,4 +209,11 @@ public class DemandService {
 
         return String.valueOf(number);
     }
+
+    public String countApprovedDemands() {
+        LocalDateTime days = LocalDateTime.now().minusDays(15);
+        long number = demandRepository.countByDateTimeAfterAndStatus(days, DemandStatus.APPROVED);
+
+        return String.valueOf(number);
+    }
 }

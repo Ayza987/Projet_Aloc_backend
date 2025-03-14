@@ -413,6 +413,28 @@ paths:
           description: Not found
         '403':
           description: Unauthorized
+  /api/admin/demands/CountApprovedDemands:
+    get:
+      tags:
+        - "Demand"
+      summary: "Get the number of approved demands"
+      description: "Get the number of approved demands on the last 15 Days"
+      operationId: getApprovedDemandsNumber
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: string
+                    example: "5"
+        '404':
+          description: Not found
+        '403':
+          description: Unauthorized
   /api/admin/createresource:
     post:
       tags:

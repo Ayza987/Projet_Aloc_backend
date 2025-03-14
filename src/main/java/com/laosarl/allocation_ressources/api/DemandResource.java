@@ -76,4 +76,9 @@ public class DemandResource {
     public ResponseEntity<String> getPendingDemandsNumber(){
         return ResponseEntity.ok(demandService.countPendingDemands());
     }
+
+    @GetMapping("/admin/demands/CountApprovedDemands")
+    public ResponseEntity<String> getApprovedDemandsNumber(){
+        return ResponseEntity.ok(demandService.countApprovedDemands());
+    }
 }
