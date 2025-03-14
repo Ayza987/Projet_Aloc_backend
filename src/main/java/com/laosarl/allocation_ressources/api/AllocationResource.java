@@ -40,5 +40,10 @@ public class AllocationResource {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/admin/allocatedResources/count")
+    public ResponseEntity<String> getAllocatedResourcesCount(){
+        return ResponseEntity.ok(allocationService.countAllocatedResources());
+    }
+
 
 }

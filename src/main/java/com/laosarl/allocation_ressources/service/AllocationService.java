@@ -66,4 +66,9 @@ public class AllocationService {
         }
     }
 
+    public String countAllocatedResources() {
+        long number = allocatedResourceRepository.count();
+
+        return String.valueOf(number);
+    }
 }

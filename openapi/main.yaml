@@ -596,6 +596,28 @@ paths:
                   $ref: '#/components/schemas/AllocatedResourceDTO'
         '404':
           description: Not found
+  /api/allocation/admin/allocatedResources/count:
+    get:
+      tags:
+        - "Allocation"
+      summary: "Get the number of allocated resources"
+      description: "Get the number of allocated resources"
+      operationId: getAllocatedResourcesCount
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: string
+                    example: "5"
+        '404':
+          description: Not found
+        '403':
+          description: Unauthorized
   /api/allocation/allocatedResource/user:
     get:
       tags:
